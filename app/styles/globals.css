@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+/* Hide scrollbar for WebKit browsers */
+.hide-scrollbar-x::-webkit-scrollbar {
+    display: none; /* Hides scrollbar */
+  }
+  
+  /* Hide scrollbar for Internet Explorer and Edge */
+  .hide-scrollbar-x {
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+  }
+  
+  /* Hide scrollbar for Firefox */
+  .hide-scrollbar-x {
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  /* You can add styles for specific classes if needed */
+  .scrollable-container {
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
