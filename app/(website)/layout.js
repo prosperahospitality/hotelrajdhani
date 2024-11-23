@@ -2,10 +2,13 @@ import "@/app/styles/globals.css";
 import { NextUIProvider } from "@nextui-org/react";
 import NavBar from "@/_components/NavBar/NavBar";
 import Footer from "@/_components/Footer/Footer";
+import IMAGES from "@/public";
+import { Providers } from "@/app/providers";
 
 export const metadata = {
   title: "Hotel Rajdhani",
   description: "Best Family Hotel in Halol Near Pavagadh",
+  icons: IMAGES.sitelogo
 };
 
 export default function RootLayout({ children }) {
@@ -14,11 +17,11 @@ export default function RootLayout({ children }) {
       <body
         className={``}
       >
-        <NextUIProvider>
-          <NavBar />
-          {children}
-          <Footer />
-        </NextUIProvider>
+        <Providers>
+            <NavBar />
+            {children}
+            <Footer />
+        </Providers>
       </body>
     </html>
   );

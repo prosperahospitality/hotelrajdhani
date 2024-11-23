@@ -65,7 +65,7 @@ const NavBar = () => {
 
         {/* Links for large devices */}
         <div className="space-x-4 hidden lg:flex">
-          {links.map((link, index) => (
+          {links?.map((link, index) => (
             <div
               key={index}
               className="relative"
@@ -122,8 +122,8 @@ const NavBar = () => {
 
       {/* Mobile menu links (only visible when menu is open) */}
       {isMenuOpen && (
-        <div className="lg:hidden flex flex-col items-center bg-white py-4 space-y-4 absolute z-50 top-16 left-0 w-full h-screen">
-          {links.map((link, index) => (
+        <div className="lg:hidden flex flex-col items-center bg-white py-4 space-y-4 absolute z-50 top-32 left-0 w-full h-screen">
+          {links?.map((link, index) => (
             <div key={index} className="relative w-full text-start">
               {link.sublinks ? (
                 <button
@@ -184,7 +184,7 @@ export default NavBar;
 
 const links = [
   {
-    name: "Home",
+    name: "Home", url: "/home"
   },
   { name: "About", url: "/prices" },
   {
