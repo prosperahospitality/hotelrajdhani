@@ -92,7 +92,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
           </Button>
         </div>
       </div>
-
+{/* 
       <div className="space-y-4">
         {children?.map((child, index) => (
           <div key={child.id} className="flex items-center space-x-2">
@@ -110,7 +110,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
             </select>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -175,21 +175,15 @@ export default function RoomsAndGuests({
   const [rooms, setRooms] = useState(parseInt(roomsSelectParam));
   const [pets, setPets] = useState(0);
   const [buttonText, setButtonText] = useState("Add Guest");
-  // const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const handleDoneClick = () => {
     setButtonText(`Adults: ${adults}, Rooms: ${rooms}`);
-    // Close the popover and update the button text
-    // setIsPopoverOpen(true);
   };
 
   useEffect(() => {
     const checkAndCallFunction = (func, arg) => {
-
       if (typeof func === "function") {
         func(arg);
-      } else {
-        // console.error(`${func} is not a function.`);
       }
     };
 
@@ -200,28 +194,21 @@ export default function RoomsAndGuests({
 
   return (
     <div className="flex w-full justify-center items-center ">
-      <Popover
-        placement="bottom"
-        onVisibleChange={(visible) => setIsPopoverOpen(visible)}
-      >
-        <PopoverTrigger asChild className="text-black bg-white rounded-lg">
+      <Popover placement="bottom">
+        <PopoverTrigger asChild className="text-black bg-white rounded-xl">
           <Button
             variant="destructive"
             className={cn("w-full justify-center text-center font-normal")}
           >
             <PiUsersLight className="size-6 text-gray-500" />
-            <span className="font-semibold text-gray-500">{`Adults: ${adults}, Childrens: ${children}`}</span>
+            <span className="font-semibold text-gray-500">
+              {`Adults: ${adults}, Childrens: ${children}`}
+            </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="ml-2 lg:m-0 bg-white w-[80%] lg:w-full">
           <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={setAdults} value={adults} />
           <IncDecfunc title="Children" description="Ages 0–17" onChange={setChildren} value={children} ageSelect={ageSelect} />
-          {/* <IncDecfunc title="Infants" description="Under 2" onChange={setInfants} value={infants} /> */}
-          {/* <AdultsRoomfunc title="Rooms" description="Room Count" onChange={setRooms} value={rooms} /> */}
-          {/* <IncDecfunc title="Pets" description={<a href="/" className="hover:underline">Bringing a service animal?</a>} onChange={setPets} value={pets} /> */}
-          {/* <Button color="secondary" variant="shadow" size="md" >
-            Done
-          </Button> */}
         </PopoverContent>
       </Popover>
     </div>

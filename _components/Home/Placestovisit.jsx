@@ -13,9 +13,9 @@ const OurProcessData = [
     img: IMAGES.mahakalikatemple,
     title: "Mahakali Mata Temple",
     svg1: <Clock className="w-[20px] h-[20px] text-green-500" />,
-    para1: "30 mins by car",
+    para1: "15 mins by car",
     svg2: <MapPin className="w-[20px] h-[20px] text-green-500" />,
-    para2: "13.3 km from Hotel Rajdhani",
+    para2: "5 km from Hotel Rajdhani",
     summary:
       "The Mahakali Mata Temple in Pavagadh, near Halol, is a revered pilgrimage site steeped in history and spirituality. Situated atop the Pavagadh Hill in Gujarat's Panchmahal district, the temple is dedicated to Goddess Mahakali, a form of the Hindu Goddess Durga. This ancient temple is part of the UNESCO World Heritage Site of Champaner-Pavagadh Archaeological Park. Visitors embark on a divine journey through stone-carved steps and historic gates to reach the shrine, which exudes a serene and sacred ambiance. For convenience, a ropeway service is available, offering a breathtaking view of the lush surroundings.",
   },
@@ -35,9 +35,9 @@ const OurProcessData = [
     img: IMAGES.pavagadhpark,
     title: "Champaner-Pavagadh Archaeological Park",
     svg1: <Clock className="w-[20px] h-[20px] text-green-500" />,
-    para1: "18 mins by car",
+    para1: "16 mins by car",
     svg2: <MapPin className="w-[20px] h-[20px] text-green-500" />,
-    para2: "8.7 km from Hotel Rajdhani",
+    para2: "6.5 km from Hotel Rajdhani",
     summary:
       `The Champaner-Pavagadh Archaeological Park, a UNESCO World Heritage Site, is a treasure trove of history, culture, and architectural brilliance. Located near Halol in Gujarat, this park showcases a blend of Hindu and Islamic architectural styles, making it a unique representation of India’s rich heritage. It houses ancient temples, mosques, stepwells, palaces, and fortifications that date back to the 8th to 14th centuries.
 
@@ -48,9 +48,9 @@ const OurProcessData = [
     img: IMAGES.vadatalav,
     title: "Vadatalav Lake",
     svg1: <Dish className="w-[20px] h-[20px] text-green-500" />,
-    para1: "22 mins by car",
+    para1: "16 mins by car",
     svg2: <MapPin className="w-[20px] h-[20px] text-green-500" />,
-    para2: "12.1 km from Hotel Rajdhani",
+    para2: "6 km from Hotel Rajdhani",
     summary:
       `The calm waters of Vada Talav reflect the scenic beauty of the surroundings, creating a mesmerizing view at sunrise and sunset. Visitors often enjoy relaxing by the lakeside or exploring the nearby trails. The lake is also significant for its role in supporting local biodiversity and offering a refreshing retreat away from the hustle and bustle of city life. A visit to Vada Talav Lake is a rejuvenating experience, blending natural beauty with a serene atmosphere.`,
   },
@@ -59,9 +59,9 @@ const OurProcessData = [
     img: IMAGES.waterfall,
     title: "Hathni mata waterfall",
     svg1: <Clock className="w-[20px] h-[20px] text-green-500" />,
-    para1: "60 mins by car",
+    para1: "18 mins by car",
     svg2: <MapPin className="w-[20px] h-[20px] text-green-500" />,
-    para2: "37 km from Hotel Rajdhani",
+    para2: "7 km from Hotel Rajdhani",
     summary:
       "Hathni Mata Waterfall, nestled near Jambughoda in Gujarat, is a breathtaking natural wonder and a must-visit destination for nature enthusiasts. Surrounded by dense green forests and hills, the cascading waterfall offers a picturesque escape, especially during the monsoon season when it flows at its full glory. The name Hathni Mata is derived from a rock formation near the waterfall that resembles an elephant adding a touch of mystique to the site.",
   },

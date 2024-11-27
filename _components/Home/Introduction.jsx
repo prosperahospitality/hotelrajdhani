@@ -30,7 +30,7 @@ const Introduction = () => {
       <div className="h-full  w-[95%] mx-auto flex justify-center items-center flex-col lg:flex-row gap-5 ">
         <div className="flex flex-col w-full lg:w-[50%] justify-center h-full items-center gap-2 ">
           <p className="flex justify-start w-full text-green-500 text-2xl leading-relaxed">
-            Hotel Rajdhani
+            Hotel Rajdhani, The Best Hotel In Pavaghad And Halol
           </p>
           <div className="flex justify-start w-full ">
             <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Stay Close, Live Comfortably</h1>
@@ -38,7 +38,7 @@ const Introduction = () => {
           <div className="flex flex-col gap-8">
 
             <p className="mt-6 text-justify text-gray-800 leading-relaxed">
-              Welcome to Our Hotel in Halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
+              Welcome to Our Hotel in Halol, best hotel in pavaghad, best hotel in halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
             </p>
             <Link
               href={`/`}
@@ -142,7 +142,7 @@ const Introduction = () => {
           <div className="flex flex-col gap-8">
 
             <p className="mt-6 text-justify text-gray-800 leading-relaxed">
-            Enjoy delicious meals, secure parking, and essential amenities like CCTV, hot water, clean drinking water, and extra mattresses. Check-in and check-out are hassle-free at 11:00 AM. While staying with us, explore the nearby Pavagadh town, home to the ancient Kalika Mata Temple and the UNESCO-listed Pavagadh Archaeological Park. Experience a memorable blend of comfort and culture at Hotel Rajdhani.
+              Best hotel in halol GIDC, Enjoy delicious meals, secure parking, and essential amenities like CCTV, hot water, clean drinking water, and extra mattresses. Check-in and check-out are hassle-free at 11:00 AM. While staying with us, explore the nearby Pavagadh town, home to the ancient Kalika Mata Temple and the UNESCO-listed Pavagadh Archaeological Park. Experience a memorable blend of comfort and culture at Hotel Rajdhani.
             </p>
             <Link
               href={`/`}
@@ -151,7 +151,7 @@ const Introduction = () => {
                 Book Now
               </button>
             </Link>
-            </div>
+          </div>
           <div className="flex flex-col gap-8 w-full">
             {/* <div className="flex gap-5">
               <span className="size-12 flex justify-center items-center  rounded-lg bg-blue-100">

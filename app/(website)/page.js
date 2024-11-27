@@ -4,7 +4,7 @@ import Introduction from '@/_components/Home/Introduction'
 import Facilities from '@/_components/Home/Facilities'
 import Placestovisit from '@/_components/Home/Placestovisit'
 import Testimonials from '@/_components/Home/Testimonials'
-import SearchBar from '@/_components/Home/SearchBar'
+
 
 const Home = () => {
 
@@ -25,8 +25,6 @@ const Home = () => {
       <Facilities />
       <Placestovisit />
       <Testimonials />
-      <SearchBar />
-
     </div>
   )
 }

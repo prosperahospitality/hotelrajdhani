@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { Menu, X, ChevronUp, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion"
+import { Phone, Mail } from "lucide-react"
 
 const NavBar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -35,8 +36,22 @@ const NavBar = () => {
 
 
   return (
-    <div className="h-32 sticky top-0 bg-white z-50">
-      <div className="py-4 w-[90%] lg:w-[80%] mx-auto flex justify-between items-center">
+    <div className="h-[11rem] sticky top-0 bg-white z-50">
+      <div className="w-full border-b py-1">
+        <div className='flex w-full justify-center'>
+          <div className="flex justify-evenly items-center w-[95%]">
+            <div className='flex justify-between w-[50%] text-gray-400 text-md'>
+              Welcome to Hotel Rajdhani
+            </div>
+            <div className="flex justify-end items-center w-[50%] gap-4 text-gray-400 text-md">
+              <div className="inline-flex gap-2 items-center text-center"><Phone className="size-4" /> 98983 09244</div>
+              <div className="inline-flex gap-2 items-center text-center"><Mail className="size-4" /> hotelrajdhani22@gmail.com</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div className="py-4 w-[90%] lg:w-[95%] mx-auto flex justify-between items-center">
         <Link href="/" className="flex justify-center items-center gap-5">
           <img
             src={IMAGES.hotelrajdhanilogo}
@@ -110,7 +125,7 @@ const NavBar = () => {
         </div>
 
         {/* Contact button for large devices */}
-        <Link href="/contactus" className="hidden lg:flex">
+        <Link href="/filterpage" className="hidden lg:flex">
           <Button
             radius="full"
             className="bg-[#800000] text-white font-semibold px-4 tracking-wider "
@@ -176,6 +191,8 @@ const NavBar = () => {
         </div>
       )}
 
+
+
     </div>
   );
 };
@@ -184,22 +201,22 @@ export default NavBar;
 
 const links = [
   {
-    name: "Home", url: "/home"
+    name: "Home", url: "/"
   },
-  { name: "About", url: "/prices" },
+  { name: "About", url: "/aboutus" },
   {
     name: "Rooms",
     sublinks: [
-      { name: "Single Bed Non AC Room", url: "/services/web-development" },
-      { name: "Double Bed Non AC Room", url: "/services/digital-marketing" },
-      { name: "Double Bed AC Room", url: "/services/revenue-management" },
-      { name: "Triple Bed Non AC Room", url: "/services/revenue-management" },
-      { name: "Super Deluxe AC Room", url: "/services/revenue-management" },
+      { name: "Single Bed Non AC Room", url: "/rooms/single-bed-non-ac-room" },
+      { name: "Double Bed Non AC Room", url: "/rooms/double-bed-non-ac-room" },
+      { name: "Double Bed AC Room", url: "/rooms/double-bed-ac-room" },
+      { name: "Triple Bed Non AC Room", url: "/rooms/triple-bed-non-ac-room" },
+      { name: "Super Deluxe AC Room", url: "/rooms/super-deluxe-ac-room" },
     ],
   },
   { name: "Testimonials", url: "/testimonials" },
-  { name: "Blogs", url: "/blogs" },
-  { name: "Contact Us", url: "/blogs" },
+  { name: "Blogs", url: "/blog" },
+  { name: "Contact Us", url: "/contactus" },
 ];
 
 

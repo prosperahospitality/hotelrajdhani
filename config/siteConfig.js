@@ -34,7 +34,7 @@ export const siteConfig = {
   Hotel_Id: 123456,
   Hotel_name: "Hotel Rajdhani",
   hotelname: "Hotel Rajdhani",
-  description: "Welcome to Hotel Rajdhani, your perfect retreat in the heart of the city. Tailored for families and travelers alike, our hotel offers comfortable accommodations and contemporary amenities designed to make your stay delightful. Whether you're savoring our signature dishes at the in-house restaurant, unwinding in our cozy rooms, or exploring the vibrant local attractions, Hotel Rajdhani is committed to delivering warm hospitality and exceptional service, ensuring a memorable and relaxing stay for every guest.",
+  description: "Welcome to Hotel Rajdhani, best hotel in pavaghad, best hotel in halol, your perfect retreat in the heart of the city. Tailored for families and travelers alike, our hotel offers comfortable accommodations and contemporary amenities designed to make your stay delightful. Whether you're savoring our signature dishes at the in-house restaurant, unwinding in our cozy rooms, or exploring the vibrant local attractions, Hotel Rajdhani is committed to delivering warm hospitality and exceptional service, ensuring a memorable and relaxing stay for every guest.",
   hotellink: "https://www.hotelrajdhani.com/",
   favicon: "@/app/favicon.ico",
   ownername: "Atul",
@@ -65,7 +65,7 @@ export const siteConfig = {
 
     {
       label: "About",
-      href: "/",
+      href: "/aboutus",
     },
    
     {

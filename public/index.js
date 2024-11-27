@@ -19,7 +19,15 @@ const IMAGES = {
     jaintemple:'/img/jaintemple.jpeg',
     mahadevtemple: '/img/mahadevtemple.jpg',
     testimonialsBG: '/img/testimonialsBG.png',
-    profile: '/img/profile.jpg'
+    profile: '/img/profile.jpg',
+    aboutuscollage: '/img/aboutuscollage.png',
+    collage1: '/img/collage1.png',
+    aboutuslanding: '/img/aboutuslanding.png',
+    doublebedacroom1: '/img/double-bed-ac-room/1.jpeg',
+    doublebedacroom2: '/img/double-bed-ac-room/2.jpeg',
+    doublebedacroom3: '/img/double-bed-ac-room/3.jpeg',
+    contactus:'/img/contactus.jpg',
+    testimonialsbg: '/img/testimonialsbg.jpg'
 }
 
 export default IMAGES;
