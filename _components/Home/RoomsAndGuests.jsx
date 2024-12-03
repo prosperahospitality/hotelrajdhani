@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { handleAgeSelect } from "@/app/redux/slices/searchSlice";
 import { useSelector } from "react-redux";
 
-const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
+const IncDecfunc = ({ title, description, onChange, value, ageSelect, maxchilds }) => {
 
   const [children, setChildren] = useState(
     ageSelect.length === 0 ? [{ id: value, age: "" }] : ageSelect
@@ -86,6 +86,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
             variant="shadow"
             color="primary"
             size="sm"
+            isDisabled={value === Number(maxchilds)}
             onClick={increment}
           >
             <GoPlus />
@@ -115,7 +116,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
   );
 };
 
-const AdultsRoomfunc = ({ title, description, onChange, value }) => {
+const AdultsRoomfunc = ({ title, description, onChange, value, maxadults }) => {
   function increment() {
     onChange(value + 1);
   }
@@ -137,7 +138,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value }) => {
           variant="shadow"
           color="primary"
           size="sm"
-          isDisabled={value === 0}
+          isDisabled={value === 1}
           onClick={decrement}
         >
           <FiMinus />
@@ -148,6 +149,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value }) => {
           variant="shadow"
           color="primary"
           size="sm"
+          isDisabled={value === Number(maxadults)}
           onClick={increment}
         >
           <GoPlus />
@@ -156,6 +158,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value }) => {
     </div>
   );
 };
+
 
 export default function RoomsAndGuests({
   onAdultsSelect,
@@ -166,6 +169,8 @@ export default function RoomsAndGuests({
   roomsSelectParam,
   onChildAgeSelect,
   ageArray,
+  maxadults,
+  maxchilds
 }) {
   const ageSelect = useSelector((state) => state.search.ageSelect);
   
@@ -207,8 +212,8 @@ export default function RoomsAndGuests({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="ml-2 lg:m-0 bg-white w-[80%] lg:w-full">
-          <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={setAdults} value={adults} />
-          <IncDecfunc title="Children" description="Ages 0–17" onChange={setChildren} value={children} ageSelect={ageSelect} />
+          <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={setAdults} value={adults} maxadults={maxadults}/>
+          <IncDecfunc title="Children" description="Ages 0–17" onChange={setChildren} value={children} ageSelect={ageSelect} maxchilds={maxchilds}/>
         </PopoverContent>
       </Popover>
     </div>

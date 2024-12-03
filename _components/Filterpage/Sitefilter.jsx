@@ -200,7 +200,7 @@ const Placemodal = () => {
 
                 <div className='border border-[#c6cbd1] mt-3 rounded-sm'>
                   <Accordion>
-                    <AccordionItem key="3" aria-label="Indian Tours" title="Indian Tours" className='font-semibold pl-1'>
+                    <AccordionItem key="3" aria-label="Room Amenities" title="Room Amenities" className='font-semibold pl-1'>
                       <div className="flex flex-col gap-3 font-normal pb-3">
                         {noninternational &&
                           noninternational
@@ -478,7 +478,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
               </div>
             </AccordionItem>
 
-            <AccordionItem key="3" aria-label="Indian Tours" title="Indian Tours" className="font-semibold pl-1">
+            <AccordionItem key="3" aria-label="Room Amenities" title="Room Amenities" className="font-semibold pl-1">
               <div className="flex flex-col gap-3 font-normal pb-3">
                 {console.log("ABC:::::::>",noninternational[0] )}
                 {noninternational &&

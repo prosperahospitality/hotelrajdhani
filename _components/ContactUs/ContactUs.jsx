@@ -40,19 +40,29 @@ const ContactUs = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const whatsappMessage = `
-      Full Name: ${fullName}
-      Phone Number: ${phoneNumber}
-      Email: ${email}
-      Message: ${message}
-    `.trim();
+    let sendEmail = async () => {
+      const payload = {
+        operation: "sendcontactmail",
+        fullName: fullName,
+        phoneNumber: phoneNumber,
+        email: email,
+        message: message,
+      }
 
-    const fixedNumber = "7977929734";
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedNumber}&text=${encodeURIComponent(
-      whatsappMessage
-    )}`;
-    window.open(whatsappUrl, "_blank");
-    // Clear the form fields
+      const emailresponse = await fetch(`/api/send-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
+      const emailresult = await emailresponse.json();
+
+      alert("Request sent successfully!")
+    }
+
+    sendEmail()
+
     setFullName("");
     setPhoneNumber("");
     setEmail("");

@@ -87,21 +87,25 @@ export const siteConfig = {
       label: "Contact Us",
       href: "/contact",
     },
+    {
+      label: "My Bookings",
+      href: "/booking-history",
+    },
   ],
 
 
   PoliciesItems: [
     {
       label: "Terms & Conditions",
-      href: "/policy",
+      href: "/terms-and-conditions",
     },
     {
       label: "Privacy Policy",
-      href: "/policy",
+      href: "/policy-policy",
     },
     {
       label: "Refund Policy",
-      href: "/policy",
+      href: "/refund-policy",
     },
   ],
 

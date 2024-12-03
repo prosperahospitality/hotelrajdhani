@@ -3,21 +3,66 @@ import IMAGES from "@/public";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronUp, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion"
 import { Phone, Mail } from "lucide-react"
+import { today, getLocalTimeZone } from "@internationalized/date";
 
 const NavBar = () => {
+
+  let defaultDate = today(getLocalTimeZone());
+  const nextDay = defaultDate.add({ days: 1 });
+
+  const formatDate = (date) => {
+    const day = String(date.day).padStart(2, "0");
+    const month = String(date.month).padStart(2, "0");
+    const year = String(date.year);
+    return `${day}-${month}-${year}`;
+  };
+
+  const [checkindate, setCheckindate] = useState(formatDate(defaultDate));
+  const [checkoutdate, setCheckoutdate] = useState(formatDate(nextDay));
+
+  const [roomsData, setRoomsData] = useState([]);
+
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for the mobile menu
-  const [activeMobileDropdown, setActiveMobileDropdown] = useState(null); // State for mobile dropdowns
-  const pathname = usePathname(); // Get the current path
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
+  const pathname = usePathname();
+
+
+
+  const formatRoomNameToUrl = (roomName) => {
+    return roomName
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9\-]/g, '');
+  };
+  
+  const sublinks = roomsData.map(item => ({
+    name: item.room_name,
+    url: `/rooms/${formatRoomNameToUrl(item.room_name)}`
+  }));
+  
+  const links = [
+    {
+      name: "Home", url: "/"
+    },
+    { name: "About", url: "/aboutus" },
+    {
+      name: "Rooms",
+      sublinks: sublinks,
+    },
+    { name: "Testimonials", url: "/testimonials" },
+    { name: "Blogs", url: "/blog" },
+    { name: "Contact Us", url: "/contactus" },
+  ];
 
   const handleMouseEnter = (index) => setActiveDropdown(index);
   const handleMouseLeave = () => setActiveDropdown(null);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen); // Toggle mobile menu
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const toggleMobileDropdown = (index) => {
     setActiveMobileDropdown((prev) => (prev === index ? null : index));
@@ -31,8 +76,34 @@ const NavBar = () => {
   };
 
   const handleLinkClick = () => {
-    setIsMenuOpen(false); // Close the menu
+    setIsMenuOpen(false);
   };
+
+  const initialFxn = async () => {
+
+    try {
+
+      const response = await fetch(`/api/admin/property_master/room_details?hotelId=123456`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+
+      const allRoomInform = result.dataAllActive;
+
+      setRoomsData(allRoomInform)
+
+    } catch (error) {
+      console.log("Abc::::::::::>", error)
+    }
+
+  }
+
+  useEffect(() => {
+    initialFxn();
+  }, []);
 
 
   return (
@@ -125,7 +196,7 @@ const NavBar = () => {
         </div>
 
         {/* Contact button for large devices */}
-        <Link href="/filterpage" className="hidden lg:flex">
+        <Link href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=${"1"}&childSelect=${"0"}`} className="hidden lg:flex">
           <Button
             radius="full"
             className="bg-[#800000] text-white font-semibold px-4 tracking-wider "
@@ -199,25 +270,7 @@ const NavBar = () => {
 
 export default NavBar;
 
-const links = [
-  {
-    name: "Home", url: "/"
-  },
-  { name: "About", url: "/aboutus" },
-  {
-    name: "Rooms",
-    sublinks: [
-      { name: "Single Bed Non AC Room", url: "/rooms/single-bed-non-ac-room" },
-      { name: "Double Bed Non AC Room", url: "/rooms/double-bed-non-ac-room" },
-      { name: "Double Bed AC Room", url: "/rooms/double-bed-ac-room" },
-      { name: "Triple Bed Non AC Room", url: "/rooms/triple-bed-non-ac-room" },
-      { name: "Super Deluxe AC Room", url: "/rooms/super-deluxe-ac-room" },
-    ],
-  },
-  { name: "Testimonials", url: "/testimonials" },
-  { name: "Blogs", url: "/blog" },
-  { name: "Contact Us", url: "/contactus" },
-];
+
 
 
 

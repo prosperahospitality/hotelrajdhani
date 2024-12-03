@@ -6,8 +6,11 @@ import { PiUsersLight } from "react-icons/pi";
 import RoomsAndGuests from '@/_components/Home/RoomsAndGuests'
 import { Button } from '@nextui-org/react'
 import { today, getLocalTimeZone } from "@internationalized/date";
+import { useRouter } from 'next/navigation';
 
 const SearchBar = () => {
+
+    const router = useRouter();
 
     let defaultDate = today(getLocalTimeZone());
     const nextDay = defaultDate.add({ days: 1 });
@@ -21,23 +24,43 @@ const SearchBar = () => {
         return `${day}-${month}-${year}`;
     };
 
-    const [searchedDate, setSearchedDate] = useState(formatDate(defaultDate));
+    const [checkindate, setCheckindate] = useState(formatDate(defaultDate));
     const [checkoutdate, setCheckoutdate] = useState(formatDate(nextDay));
 
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
-
-    // const searchedDate = "25-11-2024";
-    // const checkoutdate = "26-11-2024";
+    const [adultsSelect, setAdultsSelect] = useState();
+    const [childSelect, setChildSelect] = useState();
 
     const differenceInDays = (date1, date2) => (new Date(date2.split('-').reverse().join('-')) - new Date(date1.split('-').reverse().join('-'))) / (1000 * 3600 * 24);
     const [initialDate, setInitialDate] = useState(
-        differenceInDays(searchedDate, checkoutdate)
+        differenceInDays(checkindate, checkoutdate)
     );
 
     const handleDateSelect = (val) => {
 
-        setSelectedDateRange(val);
+        const formatDate = (date) => {
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
+        const formattedStartDate = formatDate(val[0].startDate);
+        const formattedEndDate = formatDate(val[0].endDate);
+
+        setCheckindate(formattedStartDate);
+        setCheckoutdate(formattedEndDate)
     };
+
+    const handleAdultSelect = (value) => {
+        setAdultsSelect(value);
+    };
+    const handleChildSelect = (value) => {
+        setChildSelect(value);
+    };
+
+
+    const searchAction = () => {
+        router.push(`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=${adultsSelect}&childSelect=${childSelect}`)
+      };
 
 
     return (
@@ -64,7 +87,7 @@ const SearchBar = () => {
                             className=""
                             initialDate={initialDate}
                             onDateValue={handleDateSelect}
-                            checkindate={searchedDate}
+                            checkindate={checkindate}
                         />
                     </div>
 
@@ -75,15 +98,10 @@ const SearchBar = () => {
                                 Guests
                             </p>
                             <RoomsAndGuests
-                                adultsSelectParam={"2"}
-                                childSelectParam={"2"}
-                                roomsSelectParam={"2"}
-                            // onAdultsSelect={handleAdultSelect}
-                            // onChildSelect={handleChildSelect}
-                            // onRoomsSelect={handleRoomSelect}
-                            // childPolicyOverview={childPolicyOverview}
-                            // childRates={childRates}
-                            // ageArray={ageArray}
+                                adultsSelectParam={"1"}
+                                childSelectParam={"0"}
+                                onAdultsSelect={handleAdultSelect}
+                                onChildSelect={handleChildSelect}
                             />
                         </div>
                     </div>

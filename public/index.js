@@ -3,7 +3,7 @@ const IMAGES = {
     // hotelrajdhanilogo: '/img/hotelrajdhanilogo.jpg',
     landing1: '/img/landing1.jpeg',
     landing2: '/img/landing2.jpeg',
-    landing3: '/img/landing3.jpeg',
+    landing3: '/img/landing3.jpg',
     sitelogo: '/img/sitelogo.png',
     reception: '/img/reception.jpeg',
     reception2: '/img/reception2.jpeg',
@@ -27,7 +27,11 @@ const IMAGES = {
     doublebedacroom2: '/img/double-bed-ac-room/2.jpeg',
     doublebedacroom3: '/img/double-bed-ac-room/3.jpeg',
     contactus:'/img/contactus.jpg',
-    testimonialsbg: '/img/testimonialsbg.jpg'
+    testimonialsbg: '/img/testimonialsbg.jpg',
+    Adminloginbg:'/img/Adminloginbg.jpg',
+    logowithoutbg: '/img/logowithoutbg.png',
+    parking1: '/img/parking1.jpg',
+    parking2: '/img/parking2.jpg'
 }
 
 export default IMAGES;

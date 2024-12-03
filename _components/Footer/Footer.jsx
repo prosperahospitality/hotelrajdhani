@@ -105,7 +105,7 @@ export default function Footer() {
                     +91 - 9898309244,
                   </Link>
                   <Link href="tel:7285899244" className="text-gray-500">
-                    +91 - 7285899244
+                    +91 - 7016984862
                   </Link>
                   {/* <Link href="tel:9136434899" className="text-gray-500">
                     +91 - 9136434899

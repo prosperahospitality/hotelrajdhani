@@ -13,7 +13,7 @@ import SearchBar from '@/_components/Home/SearchBar'
 
 const Landing = (props) => {
     return (
-        <div className="relative w-full h-[37rem]">
+        <div className="relative w-full h-[38rem]">
 
             <div className="absolute top-4 right-4 text-gray-600 z-20 font-serif">
                 <span className="text-sm text-red-900 px-4 italic">
@@ -23,9 +23,29 @@ const Landing = (props) => {
 
 
             <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 drop-shadow-2xl z-20 font-serif mb-8">
-                <span className="text-4xl bg-black text-gray-100 p-2 rounded-lg px-4 bg-opacity-30">Your Gateway to Relaxation.</span>
-                <span className="text-2xl bg-black text-gray-100 mt-4 p-2 rounded-lg px-4 bg-opacity-30">20+ Years of Exceptional Service</span>
-            </div>
+    <span
+        className="text-4xl bg-black text-gray-100 p-2 rounded-lg px-4 bg-opacity-30"
+        style={{
+            fontFamily: "Times New Roman, Georgia, serif",
+            // fontStyle: "italic",
+            fontWeight: "bold",
+        }}
+    >
+        Your Gateway to Relaxation.
+    </span>
+    <span
+        className="text-2xl bg-black text-gray-100 mt-4 p-2 rounded-lg px-4 bg-opacity-30"
+        style={{
+            fontFamily: "Times New Roman, Georgia, serif",
+            fontStyle: "italic",
+        }}
+    >
+        20+ Years of Exceptional Service
+    </span>
+</div>
+
+
+
 
             {/* SearchBar Section */}
             <div className="absolute inset-0 flex justify-center items-end mb-16 z-20">
@@ -46,6 +66,9 @@ const Landing = (props) => {
                     speed={1000}
                     className="mySwiper w-full h-full"
                 >
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing3} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
                         <Image src={IMAGES.landing1} alt="landing-bg" fill className="object-cover" />
                     </SwiperSlide>

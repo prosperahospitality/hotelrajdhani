@@ -7,7 +7,17 @@ import RoomsAndGuests from '@/_components/Home/RoomsAndGuests'
 import { Button } from '@nextui-org/react'
 import { today, getLocalTimeZone } from "@internationalized/date";
 
-const SearchBar = () => {
+const SearchBar = ({ checkindateParam,
+    checkoutdateParam,
+    adultsSelectParam,
+    childSelectParam,
+    allRoomsDet, 
+    onFilteredResults,
+    onCheckindate,
+    onCheckoutdate,
+    onAdultsSelect,
+    onChildSelect,
+    onSelectedDateRange}) => {
 
     let defaultDate = today(getLocalTimeZone());
     const nextDay = defaultDate.add({ days: 1 });
@@ -21,23 +31,70 @@ const SearchBar = () => {
         return `${day}-${month}-${year}`;
     };
 
-    const [searchedDate, setSearchedDate] = useState(formatDate(defaultDate));
-    const [checkoutdate, setCheckoutdate] = useState(formatDate(nextDay));
+    const [checkindate, setCheckindate] = useState(checkindateParam);
+    const [checkoutdate, setCheckoutdate] = useState(checkoutdateParam);
 
     const [selectedDateRange, setSelectedDateRange] = useState(null);
 
-    // const searchedDate = "25-11-2024";
-    // const checkoutdate = "26-11-2024";
+    const [adultsSelect, setAdultsSelect] = useState();
+    const [childSelect, setChildSelect] = useState();
 
     const differenceInDays = (date1, date2) => (new Date(date2.split('-').reverse().join('-')) - new Date(date1.split('-').reverse().join('-'))) / (1000 * 3600 * 24);
     const [initialDate, setInitialDate] = useState(
-        differenceInDays(searchedDate, checkoutdate)
+        differenceInDays(checkindate, checkoutdate)
     );
 
     const handleDateSelect = (val) => {
 
+        const formatDate = (date) => {
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
+        const formattedStartDate = formatDate(val[0].startDate);
+        const formattedEndDate = formatDate(val[0].endDate);
+
+        setCheckindate(formattedStartDate);
+        setCheckoutdate(formattedEndDate);
         setSelectedDateRange(val);
+
+        onCheckindate(formattedStartDate);
+        onCheckoutdate(formattedEndDate);
+        onSelectedDateRange(val);
     };
+
+    const handleAdultSelect = (value) => {
+        setAdultsSelect(value);
+        onAdultsSelect(value);
+    };
+    const handleChildSelect = (value) => {
+        setChildSelect(value);
+        onChildSelect(value);
+    };
+
+    const searchAction = () => {
+        try {
+
+            const filteredRooms = allRoomsDet.filter((item) => {
+
+                const isAdultValid = item.base_adult <= adultsSelect && item.max_adult >= adultsSelect;
+
+                const isChildValid = (item.base_child <= childSelect && item.max_child >= childSelect) || (childSelect === 0 && item.base_child >= 1);
+
+                return isAdultValid && isChildValid;
+
+            });
+
+            onFilteredResults(filteredRooms)
+
+            console.log("Filtered result::::::>", filteredRooms, allRoomsDet)
+
+        } catch (error) {
+            console.log("Error:::::>", error)
+        }
+
+    }
 
 
     return (
@@ -64,7 +121,7 @@ const SearchBar = () => {
                             className=""
                             initialDate={initialDate}
                             onDateValue={handleDateSelect}
-                            checkindate={searchedDate}
+                            checkindate={checkindate}
                         />
                     </div>
 
@@ -75,15 +132,10 @@ const SearchBar = () => {
                                 Guests
                             </p>
                             <RoomsAndGuests
-                                adultsSelectParam={"2"}
-                                childSelectParam={"2"}
-                                roomsSelectParam={"2"}
-                            // onAdultsSelect={handleAdultSelect}
-                            // onChildSelect={handleChildSelect}
-                            // onRoomsSelect={handleRoomSelect}
-                            // childPolicyOverview={childPolicyOverview}
-                            // childRates={childRates}
-                            // ageArray={ageArray}
+                                adultsSelectParam={adultsSelectParam}
+                                childSelectParam={childSelectParam}
+                                onAdultsSelect={handleAdultSelect}
+                                onChildSelect={handleChildSelect}
                             />
                         </div>
                     </div>
