@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PrivacyPolicy from "@/_components/PrivacyPolicy/PrivacyPolicy";
 
 const PrivacyPolicyy = () => {

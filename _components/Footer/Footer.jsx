@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Divider } from "@nextui-org/react";
 import { siteConfig } from "@/config/siteConfig";
 import { Link } from "@nextui-org/link";
@@ -8,9 +8,23 @@ import { usePathname } from "next/navigation";
 import { FiFacebook } from "react-icons/fi";
 import { FaInstagram } from "react-icons/fa6";
 import { RiTwitterXFill } from "react-icons/ri";
+import { today, getLocalTimeZone } from "@internationalized/date";
 
 export default function Footer() {
   const pathname = usePathname();
+
+  let defaultDate = today(getLocalTimeZone());
+  const nextDay = defaultDate.add({ days: 1 });
+
+  const formatDateee = (date) => {
+    const day = String(date.day).padStart(2, "0");
+    const month = String(date.month).padStart(2, "0");
+    const year = String(date.year);
+    return `${day}-${month}-${year}`;
+  };
+
+  const [checkindate, setCheckindate] = useState(formatDateee(defaultDate));
+  const [checkoutdate, setCheckoutdate] = useState(formatDateee(nextDay));
 
   const itemClasses = {
     base: "w-full",
@@ -62,10 +76,10 @@ export default function Footer() {
           <div className="flex mt-6 lg:mt-0 justify-between items-center gap-4 text-white">
             <h4 className="text-gray-600">Let&apos;s Grow Together !</h4>
             <Link
-              href={`/booknow?hotelName=${hotelName}&hotelId=${"123456"}&checkindate=${currentDate}&checkoutdate=${checkoutDate}&adultsSelect=1&childSelect=0&roomsSelect=1`}
+              href={`/filterpage?checkindate=04-12-2024&checkoutdate=05-12-2024&adultsSelect=1&childSelect=0`}
             >
-              <button className="border border-blue-700 px-8 py-2  lg:py-3 rounded-full text-blue-700 flex-1 font-medium hover:bg-blue-700 hover:text-white">
-                Submit
+              <button className="border border-black-900 bg-green-700 px-8 py-2  lg:py-2 rounded-full text-white flex-1 font-medium hover:bg-red-900 hover:text-white">
+                Book Now
               </button>
             </Link>
 

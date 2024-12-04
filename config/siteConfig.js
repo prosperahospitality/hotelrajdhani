@@ -101,12 +101,12 @@ export const siteConfig = {
     },
     {
       label: "Privacy Policy",
-      href: "/policy-policy",
+      href: "/privacy-policy",
     },
-    {
-      label: "Refund Policy",
-      href: "/refund-policy",
-    },
+    // {
+    //   label: "Refund Policy",
+    //   href: "/refund-policy",
+    // },
   ],
 
   socialItems : [

@@ -64,7 +64,7 @@ const SearchBar = () => {
 
 
     return (
-        <div className="my-4 w-[45rem]">
+        <div className="lg:my-4 w-[45rem] mt-8">
 
             {/* <div class="p-6 rounded-lg shadow-md">
                 <span class="flex items-center justify-center text-center text-3xl font-bold text-green-500 drop-shadow-2xl">
@@ -75,9 +75,9 @@ const SearchBar = () => {
 
 
 
-            <div className="flex-col h-full lg:flex-row w-full gap-2 flex items-center m-auto  transition-all duration-200 delay-200 ease-in-out text-black ">
-                <div className="flex w-full bg-black/20 flex-col lg:flex-row p-4 rounded-xl gap-5 backdrop-blur-sm">
-                    <div className="w-full gap-2 flex-2">
+            <div className="flex-col h-full lg:flex-row w-full gap-2 flex items-center m-auto  transition-all duration-200 delay-200 ease-in-out text-black lg:p-0 p-4">
+                <div className="flex w-full bg-transparent lg:bg-black/20 flex-col lg:flex-row justify-center items-center p-4 rounded-xl gap-2 lg:gap-5 lg:backdrop-blur-sm">
+                    <div className="lg:w-full w-[70%] gap-2 flex-2">
                         <p className="flex gap-2 justify-center items-center pb-2 text-white">
                             <CalendarRange className="size-8" />
                             Check In-Check Out
@@ -105,7 +105,7 @@ const SearchBar = () => {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-center  items-center  lg:items-end flex-1 w-full ">
+                    <div className="flex justify-center  items-center  lg:items-end lg:self-end lg:mt-0 mt-4 flex-1 w-full ">
                         <Button
                             isIconOnly
                             // color="secondary"

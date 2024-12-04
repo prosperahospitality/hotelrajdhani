@@ -88,6 +88,13 @@ const SearchBar = ({ checkindateParam,
 
             onFilteredResults(filteredRooms)
 
+            onFilteredResults(filteredRooms)
+            onCheckindate(checkindate);
+            onCheckoutdate(checkoutdate);
+            onSelectedDateRange(selectedDateRange);
+            onAdultsSelect(adultsSelect);
+            onChildSelect(childSelect);
+
             console.log("Filtered result::::::>", filteredRooms, allRoomsDet)
 
         } catch (error) {
@@ -99,19 +106,13 @@ const SearchBar = ({ checkindateParam,
 
     return (
         <div className="my-4 w-full">
+            <div className="flex-col lg:flex-row w-full gap-4 flex items-center m-auto transition-all duration-200 delay-200 ease-in-out text-black">
 
-            {/* <div class="p-6 rounded-lg shadow-md">
-                <span class="flex items-center justify-center text-center text-3xl font-bold text-green-500 drop-shadow-2xl">
-                    Experience Royal Comfort, Modern Luxury, and Unmatched Hospitality at Hotel Rajdhani
-                </span>
-            </div> */}
-
-
-
-
-            <div className="flex-col h-full lg:flex-row w-full gap-2 flex items-center m-auto  transition-all duration-200 delay-200 ease-in-out text-black ">
+                {/* Search Bar Container */}
                 <div className="flex w-full bg-black/10 flex-col lg:flex-row p-4 rounded-xl gap-5 backdrop-blur-sm">
-                    <div className="w-[50%] gap-2">
+
+                    {/* Check-in / Check-out Date Range */}
+                    <div className="w-full lg:w-[50%] gap-2">
                         <p className="flex gap-2 justify-center items-center pb-2 text-black">
                             <CalendarRange className="size-8" />
                             Check In-Check Out
@@ -125,7 +126,8 @@ const SearchBar = ({ checkindateParam,
                         />
                     </div>
 
-                    <div className="flex justify-center items-center flex-col lg:flex-row gap-5 lg:gap-0 w-[30%]">
+                    {/* Guests Selector */}
+                    <div className="flex justify-center items-center flex-col lg:flex-row gap-5 lg:gap-0 w-full lg:w-[30%]">
                         <div className="w-full gap-2">
                             <p className="flex gap-2 justify-center items-center pb-2 text-black">
                                 <PiUsersLight className="size-8" />
@@ -139,13 +141,13 @@ const SearchBar = ({ checkindateParam,
                             />
                         </div>
                     </div>
-                    <div className="flex justify-center  items-center  lg:items-end w-[30%]">
+
+                    {/* Search Button */}
+                    <div className="flex justify-center items-center lg:items-end w-full lg:w-[30%]">
                         <Button
                             isIconOnly
-                            // color="secondary"
-                            // variant="shadow"
                             size="md"
-                            onClick={(e) => searchAction()}
+                            onClick={searchAction}
                             className="w-full p-4 bg-[#800000]"
                         >
                             <Search className="text-white" />
@@ -158,4 +160,4 @@ const SearchBar = ({ checkindateParam,
     )
 }
 
-export default SearchBar
+export default SearchBar;

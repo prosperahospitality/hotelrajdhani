@@ -318,12 +318,12 @@ const SelectMonth = ({
                                             onClick={(e) => handleCheckout()}
                                             className="w-full p-4 bg-[#800000] hover:bg-red-700 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
                                         >
-                                            
-                                                <div className='flex flex-row gap-2 justify-center items-center'>
-                                                    <NotebookPen className="text-white size-5" />
-                                                    <span className="text-white">Book Now</span>
-                                                </div>
-                                            
+
+                                            <div className='flex flex-row gap-2 justify-center items-center'>
+                                                <NotebookPen className="text-white size-5" />
+                                                <span className="text-white">Book Now</span>
+                                            </div>
+
                                         </Button>
                                     </div>
                                 </div>
@@ -351,7 +351,7 @@ const Facilities = ({ roomservices }) => {
             <div className="w-[95%]">
                 <div className="flex flex-col items-start justify-center gap-8">
                     <div className="text-3xl font-semibold">Room Services</div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full mt-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full mt-4">
                         {roomservices?.map((item, index) => (
                             <Card className="w-full h-full p-4" key={index.toString()}>
                                 <div className="flex flex-col items-center justify-center gap-2 text-center">
@@ -381,16 +381,30 @@ const SimilarRooms = ({ similarrooms }) => {
                     }}
                     loop={true}
                     spaceBetween={20}
-                    slidesPerView={4}
+                    slidesPerView={1}
                     navigation={true}
                     thumbs={{ swiper: thumbsSwiper }}
                     modules={[Navigation, Thumbs]}
                     className="mySwiper3"
+                    breakpoints={{
+                        // When window width is >= 320px (Mobile)
+                        320: {
+                            slidesPerView: 1, // Number of slides for small screens (mobiles)
+                        },
+                        // When window width is >= 768px (Tablet)
+                        768: {
+                            slidesPerView: 2, // Number of slides for tablets
+                        },
+                        // When window width is >= 1024px (Desktop)
+                        1024: {
+                            slidesPerView: 4, // Number of slides for large screens (desktops)
+                        },
+                    }}
                 >
                     {similarrooms?.map((item, index) => (
                         <SwiperSlide key={index.toString()}>
-                            <Card className="min-h-[12rem] flex flex-col justify-between">
-                                <div className="w-full h-[200px] overflow-hidden rounded-lg">
+                            <Card className="lg:min-h-[12rem] min-h-[20rem] w-[450px] flex flex-col justify-between">
+                                <div className="w-full h-[228px] lg:h-[200px] overflow-hidden rounded-lg">
                                     <Image
                                         src={item.roomimages[0] ? item.roomimages[0] : IMAGES.Adminloginbg}
                                         className="w-full h-full object-cover"
@@ -1174,40 +1188,45 @@ const RoomsTemplate = (props) => {
 
 
     return (
-        <div className='w-full'>
-            <div className="w-full flex flex-row justify-center items-center h-[10rem] bg-rose-50 mb-16">
-                <div className='w-[80%] flex flex-col justify-center items-center'>
-                    <div className=" px-8 font-semibold text-4xl w-full"
+        <div className="w-full">
+            <div className="w-full flex flex-col md:flex-row justify-center items-center h-auto md:h-[10rem] bg-rose-50 lg:mb-16 mb-8 lg:pb-0 lg:pt-0 pb-4 pt-8">
+                <div className="w-full md:w-[80%] flex flex-col justify-center items-center">
+                    <div
+                        className="px-4 md:px-8 font-semibold text-2xl md:text-4xl w-full text-left"
                         style={{
                             fontFamily: "Times New Roman, Georgia, serif",
-                            // fontStyle: "italic",
                             fontWeight: "bold",
-                        }}>
+                        }}
+                    >
                         {roomDetails.roomname}
                     </div>
-                    <div className=" px-8 pt-4 text-md w-full">
+                    <div className="px-4 md:px-8 pt-2 md:pt-4 text-sm md:text-md w-full text-left">
                         Home / Rooms / {roomDetails.roomname}
                     </div>
                 </div>
-                <div className='flex flex-col w-[20%]'>
-                    <div className='flex gap-2'>
-                        <div className='flex justify-end text-end self-end'>starts from</div>
-                        <div className='text-3xl inline-flex  font-bold text-gray-600'
-                            style={{
-                                fontFamily: "Times New Roman, Georgia, serif",
-                                // fontStyle: "italic",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            <IndianRupee className='flex justify-center text-center self-center' />{finalPrice()}
+                <div className="flex flex-row lg:flex-col w-[90%] md:w-[20%] mt-4 md:mt-0 items-center md:items-end">
+                    <div className='w-full flex lg:flex-col flex-row justify-end items-center lg:items-end lg:pr-8 lg:gap-0 gap-2'>
+                        <div className="flex gap-2 items-end lg-items-center">
+                            <div className="text-sm md:text-base text-gray-600">starts from</div>
+                            <div
+                                className="flex flex-row text-2xl md:text-3xl font-bold text-gray-600"
+                                style={{
+                                    fontFamily: "Times New Roman, Georgia, serif",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                <IndianRupee className="flex justify-center text-center self-center" />
+                                {finalPrice()}
+                            </div>
                         </div>
+                        <div className="flex lg:justify-end lg:items-center text-sm md:text-base text-gray-500 mt-2">per night</div>
                     </div>
-                    <div className='flex w-[65%] justify-end '>per night</div>
                 </div>
             </div>
 
-            <div className='w-full grid grid-cols-12 gap-2'>
-                <div className='col-span-9'>
+            <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4">
+                {/* Main Image and Swiper */}
+                <div className="col-span-12 md:col-span-9">
                     <Swiper
                         key="swipers"
                         style={{
@@ -1228,25 +1247,31 @@ const RoomsTemplate = (props) => {
                                     alt={`Room Image ${index}`}
                                     width={1000}
                                     height={1000}
-                                    className="w-full h-full object-cover rounded-lg"
+                                    className="w-full h-[200px] md:h-full object-cover rounded-lg"
                                     priority={index === 0}
                                 />
                             </SwiperSlide>
                         ))}
                     </Swiper>
 
-                    {/* Thumbnail Swiper */}
+
                     <Swiper
                         onSwiper={setThumbsSwiper}
                         loop={true}
                         spaceBetween={10}
-                        slidesPerView={4}
+                        slidesPerView={3}
                         freeMode={true}
                         watchSlidesProgress={true}
                         observer={true}
                         observeParents={true}
                         modules={[FreeMode, Navigation, Thumbs]}
                         className="mySwiper"
+                        breakpoints={{
+                            // When window width is >= 768px
+                            768: {
+                                slidesPerView: 4, // Number of slides for medium screens (tablets)
+                            },
+                        }}
                     >
                         {roomDetails?.images?.filter(Boolean).map((item, index) => (
                             <SwiperSlide key={`thumb-${index}`} className="rounded-xl">
@@ -1255,69 +1280,98 @@ const RoomsTemplate = (props) => {
                                     alt={`Thumbnail ${index}`}
                                     width={200}
                                     height={200}
-                                    className="w-full h-full object-cover rounded-xl"
+                                    className="w-full h-[100px] md:h-[200px] object-cover rounded-xl"
                                     priority={index === 0}
                                 />
                             </SwiperSlide>
                         ))}
                     </Swiper>
 
-                    <div className='flex justify-center items-center mt-8 w-full'>
-                        <div className='w-[95%] text-gray-800 text-lg grid grid-cols-4 gap-4'>
-                            <div className='grid grid-cols-4 gap-2'>
-                                <div className='flex justify-center items-center col-span-1'><UsersRound className='size-8' /></div>
-                                <div className='grid grid-rows-2 col-span-3'>
+
+                    <div className="flex justify-center items-center mt-8 w-full">
+                        <div className="w-[95%] text-gray-800 text-sm md:text-lg grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {/* Guest Info */}
+                            <div className="grid grid-cols-4 gap-2">
+                                <div className="flex justify-center items-center col-span-1">
+                                    <UsersRound className="text-lg md:text-xl" />
+                                </div>
+                                <div className="grid grid-rows-2 col-span-3">
                                     <div>Max. Guests</div>
-                                    <div className='font-semibold'>{roomDetails.max_adults} Adults / {roomDetails.max_childs} Children</div>
+                                    <div className="font-semibold">
+                                        {roomDetails.max_adults} Adults / {roomDetails.max_childs} Children
+                                    </div>
                                 </div>
                             </div>
-                            <div className='grid grid-cols-4 gap-2'>
-                                <div className='flex justify-center items-center col-span-1'><Moon className="size-8" /></div>
-                                <div className='grid grid-rows-2 col-span-3'>
+                            {/* Booking Nights */}
+                            <div className="grid grid-cols-4 gap-2">
+                                <div className="flex justify-center items-center col-span-1">
+                                    <Moon className="text-lg md:text-xl" />
+                                </div>
+                                <div className="grid grid-rows-2 col-span-3">
                                     <div>Booking Nights</div>
-                                    <div className='font-semibold'>{numberOfNights ? numberOfNights : 1} Night</div>
+                                    <div className="font-semibold">
+                                        {numberOfNights ? numberOfNights : 1} Night
+                                    </div>
                                 </div>
                             </div>
-                            <div className='grid grid-cols-4 gap-2'>
-                                <div className='flex justify-center items-center col-span-1'><BedDouble className='size-8' /></div>
-                                <div className='grid grid-rows-2 col-span-3'>
+                            {/* Bed Type */}
+                            <div className="grid grid-cols-4 gap-2">
+                                <div className="flex justify-center items-center col-span-1">
+                                    <BedDouble className="text-lg md:text-xl" />
+                                </div>
+                                <div className="grid grid-rows-2 col-span-3">
                                     <div>Bed Type</div>
-                                    <div className='font-semibold'>{roomDetails.bed_type}</div>
+                                    <div className="font-semibold">{roomDetails.bed_type}</div>
                                 </div>
                             </div>
-                            <div className='grid grid-cols-4 gap-2'>
-
-                                <div className='flex justify-center items-center col-span-1'><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2m16.002 14H5V5h14z"></path><path fill="currentColor" d="M15 12h2V7h-5v2h3zm-3 3H9v-3H7v5h5z"></path></svg></div>
-                                <div className='grid grid-rows-2 col-span-3'>
-                                    <div>Area</div>
-                                    <div className='font-semibold'>168 sq. ft.</div>
+                            {/* Area */}
+                            <div className="grid grid-cols-4 gap-2">
+                                <div className="flex justify-center items-center col-span-1">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1.5em"
+                                        height="1.5em"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="currentColor"
+                                            d="M3 5v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2m16.002 14H5V5h14z"
+                                        ></path>
+                                        <path
+                                            fill="currentColor"
+                                            d="M15 12h2V7h-5v2h3zm-3 3H9v-3H7v5h5z"
+                                        ></path>
+                                    </svg>
                                 </div>
-
-
+                                <div className="grid grid-rows-2 col-span-3">
+                                    <div>Area</div>
+                                    <div className="font-semibold">168 sq. ft.</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className='flex justify-center items-center mt-8'>
-                        <div className='w-[95%] text-gray-800 text-lg text-justify'>
+                    <div className="flex justify-center items-center mt-8">
+                        <div className="w-[95%] text-gray-800 text-sm md:text-lg text-justify">
                             {roomDetails?.description}
                         </div>
                     </div>
 
-                    <div className='w-full mt-16'>
+                    <div className="w-full lg:mt-16 mt-8">
                         <Facilities roomservices={roomDetails?.roomservices} />
                     </div>
 
-                    <div className='w-full pt-16'>
+                    <div className="w-full pt-16">
                         <SimilarRooms similarrooms={roomDetails?.similarrooms} />
                     </div>
 
-                    <div className='w-full pt-16'>
+                    <div className="w-full pt-16 md:mb-16 lg:mb-0">
                         <BookingProcess />
                     </div>
                 </div>
-                <div className="col-span-3">
-                    <div className="sticky top-[11rem] w-[90%]">
+                {/* Sidebar */}
+                <div className="flex justify-center items-center w-full mt-16 mb-16 col-span-12 md:col-span-3 md:block md:mt-0 md:mb-0">
+                    <div className="sticky top-[11rem] w-[95%] md:w-[90%]">
                         <SelectMonth
                             allRoomsDet={allRoomsDet}
                             onFilteredResults={setFilteredRoomDetails}
@@ -1335,11 +1389,10 @@ const RoomsTemplate = (props) => {
                         />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
+
 }
 
 export default RoomsTemplate

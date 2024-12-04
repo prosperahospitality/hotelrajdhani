@@ -40,10 +40,19 @@
 }
 
 .mySwiper {
-  height: 8%;
-  width: 95%;
-  box-sizing: border-box;
-  padding: 10px 0;
+  @apply w-[95%] h-[5%] box-border p-[10px_0]; /* Default for mobile */
+}
+
+@media (min-width: 768px) {
+  .mySwiper {
+    @apply w-[90%] h-[6%]; /* For tablets */
+  }
+}
+
+@media (min-width: 1024px) {
+  .mySwiper {
+    @apply w-[95%] h-[8%]; /* For desktop screens */
+  }
 }
 
 .mySwiper .swiper-slide {

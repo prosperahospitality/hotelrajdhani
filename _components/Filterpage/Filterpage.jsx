@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     BedDouble, Bus, Camera, Plane, Utensils, UsersRound, Moon, Wifi, Cctv,
     Droplets,
@@ -216,41 +216,20 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
 };
 
 
-const ThemeSwitch = (props) => {
-    const {
-        Component,
-        slots,
-        isSelected,
-        getBaseProps,
-        getInputProps,
-        getWrapperProps
-    } = useSwitch(props);
-
+const SimpleSwitch = ({ isSelected, onValueChange }) => {
     return (
         <div className="flex flex-col gap-2 w-[33%]">
-            <Component {...getBaseProps()}>
-                <VisuallyHidden>
-                    <input {...getInputProps()} />
-                </VisuallyHidden>
-                <div
-                    {...getWrapperProps()}
-                    className={slots.wrapper({
-                        className: [
-                            "w-[100px] h-[47px]",
-                            "flex items-center justify-center",
-                            "rounded-lg",
-                            isSelected
-                                ? "bg-green-500 hover:bg-green-600"
-                                : "bg-default-100 hover:bg-default-200",
-                        ],
-                    })}
-                >
-                    {isSelected ? "Add Room" : "Remove"}
-                </div>
-            </Component>
+            <button
+                onClick={() => onValueChange(!isSelected)} // Toggle the value when clicked
+                className={`w-[100px] h-[47px] flex items-center justify-center rounded-lg ${isSelected ? "bg-green-500 hover:bg-green-600" : "bg-default-100 hover:bg-default-200"
+                    }`}
+            >
+                {isSelected ? "Add Room" : "Remove"}
+            </button>
         </div>
     );
 };
+
 
 
 const Filterpage = () => {
@@ -269,11 +248,16 @@ const Filterpage = () => {
     const childSelectParam = searchParams.get("childSelect");
     const bookId = searchParams.get("bookId");
     const [filteredRoomDetails, setFilteredRoomDetails] = useState([]);
+    const [newFilteredRoomDetails, setNewFilteredRoomDetails] = useState([]);
 
     const [searchedCheckInDate, setSearchedCheckInDate] = useState('');
     const [searchedCheckOutDate, setSearchedCheckOutDate] = useState('');
     const [adultsSelectCompp, setSelectedAdultCount] = useState('');
     const [childSelectCompp, setSelectedChildCount] = useState('');
+    const [selectedPrice, setSelectedPrice] = useState();
+
+
+
 
     function formatDate(dateString) {
         const [day, month, year] = dateString.split("-");
@@ -425,6 +409,8 @@ const Filterpage = () => {
             setAllRoomsDet(allRoomInform)
 
             setFilteredRoomDetails(allRoomInform)
+
+            setNewFilteredRoomDetails(allRoomInform)
 
             console.log("Book Id::::::::>", bookId)
 
@@ -593,6 +579,152 @@ const Filterpage = () => {
     }, [filteredRoomDetails, searchedCheckInDate, searchedCheckOutDate])
 
 
+    useEffect(() => {
+        console.log("Abc selectedPrice", selectedPrice)
+
+        const filteredRooms = filteredRoomDetails
+            ?.map((item, index) => {
+                let sum = 0;
+                let abvvvvv = [];
+                let ccc = [];
+
+                if (pricePerGuest !== undefined && manageInventory !== undefined) {
+                    let abc = pricePerGuest[item.id];
+
+                    if (abc === undefined) {
+                        ccc = manageInventory[item.id]
+                            ?.map((item) => {
+                                if (item.status === "soldout") {
+                                    return item.room_id;
+                                }
+                            })
+                            .filter((item) => item !== undefined);
+
+                        let fff = manageInventory[item.id]?.map((item) => item.rate_24hr);
+
+                        fff?.map((it) => {
+                            abvvvvv.push(Math.round(it));
+                        });
+                    } else {
+                        let abcd;
+
+                        if (adultsSelectComp === undefined || adultsSelectCompp !== undefined) {
+                            abcd = abc
+                                ?.map((item2) => {
+                                    if (item2.occupancy === adultsSelectCompp?.toString()) {
+                                        return item2;
+                                    }
+                                })
+                                .filter((item) => item !== undefined);
+                        } else {
+                            abcd = abc
+                                ?.map((item2) => {
+                                    if (item2.occupancy === adultsSelectComp?.toString()) {
+                                        return item2;
+                                    }
+                                })
+                                .filter((item) => item !== undefined);
+                        }
+
+                        ccc = manageInventory[item.id]
+                            ?.map((item) => {
+                                if (item.status === "soldout") {
+                                    return item.room_id;
+                                }
+                            })
+                            .filter((item) => item !== undefined);
+
+                        let fff = manageInventory[item.id]?.map((item) => item.rate_24hr);
+
+                        fff?.map((item4) => {
+                            abcd?.map((item5) => {
+                                if (item.id === item5.roomid) {
+                                    let priceToDisplay;
+
+                                    if (item5.reduction === "Normal price reduced by" && item5.isActive === true) {
+                                        if (item5.type === "INR") {
+                                            priceToDisplay = parseInt(item4) - parseInt(item5.amount);
+                                        }
+
+                                        if (item5.type === "%") {
+                                            const discount = parseInt(item4) * (parseInt(item5.amount) / 100);
+                                            const newPrice = parseInt(item4) - discount;
+                                            priceToDisplay = newPrice.toFixed(2);
+                                        }
+
+                                        abvvvvv.push(Math.round(priceToDisplay));
+                                    } else if (
+                                        item5.reduction === "Normal price increased by" &&
+                                        item5.isActive === true
+                                    ) {
+                                        if (item5.type === "INR") {
+                                            priceToDisplay = parseInt(item4) + parseInt(item5.amount);
+                                            abvvvvv.push(Math.round(priceToDisplay));
+                                        }
+
+                                        if (item5.type === "%") {
+                                            const increase = parseInt(item4) * (parseInt(item5.amount) / 100);
+                                            const newPrice = parseInt(item4) + increase;
+                                            priceToDisplay = newPrice.toFixed(2);
+                                            abvvvvv.push(Math.round(priceToDisplay));
+                                        }
+                                    } else if (item5.reduction === "Normal price" && item5.isActive === true) {
+                                        priceToDisplay = parseInt(item4);
+                                        abvvvvv.push(Math.round(priceToDisplay));
+                                    } else {
+                                        priceToDisplay = parseInt(item4);
+                                        abvvvvv.push(Math.round(priceToDisplay));
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
+
+                sum = abvvvvv.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+                return {
+                    ...item,
+                    sum, // Add the calculated sum to the item object
+                };
+            })
+            .filter((item) => item.sum <= selectedPrice);
+
+        console.log("Filter Rooms:::::::::::::::::::::>", filteredRooms)
+
+        setNewFilteredRoomDetails(filteredRooms)
+
+        if (filteredRooms.length === 0 && selectedPrice !== 0) {
+            setNewFilteredRoomDetails(filteredRoomDetails)
+        }
+
+
+
+
+
+    }, [selectedPrice, filteredRoomDetails, manageInventory, pricePerGuest, adultsSelectComp, adultsSelectCompp])
+
+    useEffect(() => {
+
+        if (newFilteredRoomDetails.length > 0) {
+
+            console.log("New Filtered Result:::::::>", newFilteredRoomDetails)
+
+        }
+
+    }, [newFilteredRoomDetails])
+
+    const handleFilteredResults = (val) => {
+
+        setFilteredRoomDetails(val)
+
+        setNewFilteredRoomDetails(val)
+
+    }
+
+    const handleSelectedPrice = (price) => {
+        setSelectedPrice(price);
+    };
 
 
 
@@ -606,7 +738,7 @@ const Filterpage = () => {
                         adultsSelectParam={adultsSelectParam}
                         childSelectParam={childSelectParam}
                         allRoomsDet={allRoomsDet}
-                        onFilteredResults={setFilteredRoomDetails}
+                        onFilteredResults={handleFilteredResults}
                         onCheckindate={setSearchedCheckInDate}
                         onCheckoutdate={setSearchedCheckOutDate}
                         onAdultsSelect={setSelectedAdultCount}
@@ -616,7 +748,7 @@ const Filterpage = () => {
                 </div>
                 <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-5 pt-4">
                     <div className="col-span-1 lg:h-full">
-                        <Sitefilter />
+                        <Sitefilter onselectedprice={handleSelectedPrice} />
                     </div>
 
                     <div className="col-span-1 lg:col-span-3">
@@ -624,15 +756,16 @@ const Filterpage = () => {
                             <div className="w-full flex justify-between items-center">
                                 <div className="w-full lg:w-[55%]">
                                     <p className="font-semibold mt-2 text-xl text-gray-600">
-                                        ({filteredRoomDetails.length} Rooms Available)
+                                        ({newFilteredRoomDetails.length} Rooms Available)
                                     </p>
                                 </div>
                             </div>
+                            {console.log("newFilteredRoomDetails:::::::>", newFilteredRoomDetails)}
 
                             {loading ? (
                                 <SkeletonCard />
                             ) : (
-                                filteredRoomDetails && filteredRoomDetails?.map((item, index) => {
+                                newFilteredRoomDetails && newFilteredRoomDetails?.map((item, index) => {
 
 
                                     let sum = 0;
@@ -797,7 +930,7 @@ const Filterpage = () => {
 
                                                     <div>
                                                         <div className="flex justify-start items-center mt-2 w-full pt-2">
-                                                            <div className="w-full text-gray-800 text-lg flex justify-between gap-8 pr-8">
+                                                            <div className="w-full text-gray-800 text-lg grid grid-cols-2 md:grid-cols-4 gap-8">
                                                                 {/* Max Guests */}
                                                                 <div className="flex items-center gap-2">
                                                                     <div className="flex justify-center items-center">
@@ -848,89 +981,170 @@ const Filterpage = () => {
                                                         </div>
                                                     </div>
 
+
+
                                                 </div>
 
-                                                <div className="flex justify-between items-end w-full pb-4">
-                                                    <div>
-                                                        <div className="mt-4 w-full flex items-center gap-5 flex-wrap">
-                                                            <div className="flex justify-center items-center flex-col">
-                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-large flex justify-center items-center">
-                                                                    <Wifi className="w-[25px] h-[25px] text-red-700" />
-                                                                </div>
-                                                                <p className="text-sm font-semibold mt-1">Wifi</p>
-                                                            </div>
-
-                                                            <div className="flex justify-center items-center flex-col">
-                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-large flex justify-center items-center">
-                                                                    <Cctv className="w-[25px] h-[25px] text-red-700" />
-                                                                </div>
-                                                                <p className="text-sm font-semibold mt-1">CCTV Cameras</p>
-                                                            </div>
-
-                                                            <div className="flex justify-center items-center flex-col">
-                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-large flex justify-center items-center">
-                                                                    <Droplets className="w-[25px] h-[25px] text-red-700" />
-                                                                </div>
-                                                                <p className="text-sm font-semibold mt-1">Hot & Cold Water</p>
-                                                            </div>
-
-                                                            <div className="flex justify-center items-center flex-col">
-                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-large flex justify-center items-center">
-                                                                    <CircleParking className="w-[25px] h-[25px] text-red-700" />
-                                                                </div>
-                                                                <p className="text-sm font-semibold mt-1">Parking</p>
-                                                            </div>
-
-                                                            <div className="flex justify-center items-center flex-col">
-                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-large flex justify-center items-center">
-                                                                    <GlassWater className="w-[25px] h-[25px] text-red-700" />
-                                                                </div>
-                                                                <p className="text-sm font-semibold mt-1">Mineral Water</p>
-                                                            </div>
-                                                            <div className="flex justify-center items-center flex-col">
-                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-large flex justify-center items-center">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512"><path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path></svg>
-                                                                </div>
-                                                                <p className="text-sm font-semibold mt-1">Extra Matress</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div>
-                                                        <div className="flex flex-col justify-end">
-                                                            {
-                                                                ccc?.includes(item.id) ? <p className="text-end p-4">Soldout</p> :
-                                                                    <div>
-                                                                        <div className="flex mt-2 mb-2">
-                                                                            <div className="w-full">
-                                                                                <p className="text-xs font-extralight">Start From</p>
-                                                                                <p className="font-semibold text-2xl mt-2">
-                                                                                    &#8377; {sum ? sum : "0"}*
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <ThemeSwitch
-                                                                            isSelected={isSelected?.find(sel => sel.id === item.id)?.value ?? true}
-                                                                            onValueChange={(value) => {
-                                                                                console.log("Value:::::::::>", value)
-                                                                                setIsSelected(prevval => {
-                                                                                    const existingIndex = prevval?.findIndex(sel => sel.id === item.id);
-
-                                                                                    if (existingIndex !== -1) {
-                                                                                        const updatedArray = [...prevval];
-                                                                                        updatedArray[existingIndex] = { id: item.id, name: item.room_name, value: value, amount: sum, adultCount: adultsSelectCompp, childCount: childSelectCompp, roomimage: item.roomimages[0]  };
-                                                                                        return updatedArray;
-                                                                                    } else {
-                                                                                        return [...prevval, { id: item.id, name: item.room_name, value: value, amount: sum, adultCount: adultsSelectCompp, childCount: childSelectCompp, roomimage: item.roomimages[0]  }];
-                                                                                    }
-                                                                                })
-                                                                            }}
-                                                                        />
+                                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full pb-4">
+                                                    <div className="col-span-10 w-full">
+                                                        <div className="hidden lg:block w-full h-full">
+                                                            <div className="mt-4 w-full h-full flex items-center gap-5 flex-wrap justify-center lg:justify-start lg:content-end pb-4">
+                                                                <div className="flex justify-start items-center flex-col">
+                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                        <Wifi className="w-[25px] h-[25px] text-red-700" />
                                                                     </div>
-                                                            }
+                                                                    <p className="text-sm font-semibold mt-1">Wifi</p>
+                                                                </div>
+
+                                                                <div className="flex justify-center items-center flex-col ">
+                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                        <Cctv className="w-[25px] h-[25px] text-red-700" />
+                                                                    </div>
+                                                                    <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
+                                                                </div>
+
+                                                                <div className="flex justify-center items-center flex-col ">
+                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                        <Droplets className="w-[25px] h-[25px] text-red-700" />
+                                                                    </div>
+                                                                    <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
+                                                                </div>
+
+                                                                <div className="flex justify-center items-center flex-col ">
+                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                        <CircleParking className="w-[25px] h-[25px] text-red-700" />
+                                                                    </div>
+                                                                    <p className="text-sm font-semibold mt-1">Parking</p>
+                                                                </div>
+
+                                                                <div className="flex justify-center items-center flex-col ">
+                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                        <GlassWater className="w-[25px] h-[25px] text-red-700" />
+                                                                    </div>
+                                                                    <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
+                                                                </div>
+
+                                                                <div className="flex justify-center items-center flex-col ">
+                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
+                                                                            <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
+                                                                        </svg>
+                                                                    </div>
+                                                                    <p className="text-sm font-semibold mt-1 text-center">Extra Mattress</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="lg:hidden block w-full h-full">
+                                                            <div className="w-full h-full">
+                                                                <div className="mt-8 w-full h-full grid grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-4 justify-center lg:justify-start">
+                                                                    <div className="flex justify-center items-center flex-col">
+                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <Wifi className="w-[25px] h-[25px] text-red-700" />
+                                                                        </div>
+                                                                        <p className="text-sm font-semibold mt-1 text-center">Wifi</p>
+                                                                    </div>
+
+                                                                    <div className="flex justify-center items-center flex-col">
+                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <Cctv className="w-[25px] h-[25px] text-red-700" />
+                                                                        </div>
+                                                                        <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
+                                                                    </div>
+
+                                                                    <div className="flex justify-center items-center flex-col">
+                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <Droplets className="w-[25px] h-[25px] text-red-700" />
+                                                                        </div>
+                                                                        <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
+                                                                    </div>
+
+                                                                    <div className="flex justify-center items-center flex-col">
+                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <CircleParking className="w-[25px] h-[25px] text-red-700" />
+                                                                        </div>
+                                                                        <p className="text-sm font-semibold mt-1 text-center">Parking</p>
+                                                                    </div>
+
+                                                                    <div className="flex justify-center items-center flex-col">
+                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <GlassWater className="w-[25px] h-[25px] text-red-700" />
+                                                                        </div>
+                                                                        <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
+                                                                    </div>
+
+                                                                    <div className="flex justify-center items-center flex-col">
+                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
+                                                                                <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
+                                                                            </svg>
+                                                                        </div>
+                                                                        <p className="text-sm font-semibold mt-1 text-center">Extra Mattress</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div className="col-span-2 w-full">
+                                                        <div className="flex flex-col justify-end">
+                                                            {ccc?.includes(item.id) ? (
+                                                                <p className="text-end p-4">Soldout</p>
+                                                            ) : (
+                                                                <div>
+                                                                    <div className="flex mt-2 mb-2">
+                                                                        <div className="w-full">
+                                                                            <p className="text-xs font-extralight">Start From</p>
+                                                                            <p className="font-semibold text-2xl mt-2">
+                                                                                &#8377; {sum ? sum : "0"}*
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <SimpleSwitch
+                                                                        isSelected={isSelected?.find(sel => sel.id === item.id)?.value ?? true}
+                                                                        onValueChange={(value) => {
+                                                                            console.log("Value:::::::::>", value);
+                                                                            setIsSelected(prevval => {
+                                                                                const existingIndex = prevval?.findIndex(sel => sel.id === item.id);
+
+                                                                                if (existingIndex !== -1) {
+                                                                                    const updatedArray = [...prevval];
+                                                                                    updatedArray[existingIndex] = {
+                                                                                        id: item.id,
+                                                                                        name: item.room_name,
+                                                                                        value: value,
+                                                                                        amount: sum,
+                                                                                        adultCount: adultsSelectCompp,
+                                                                                        childCount: childSelectCompp,
+                                                                                        roomimage: item.roomimages[0]
+                                                                                    };
+                                                                                    return updatedArray;
+                                                                                } else {
+                                                                                    return [
+                                                                                        ...prevval,
+                                                                                        {
+                                                                                            id: item.id,
+                                                                                            name: item.room_name,
+                                                                                            value: value,
+                                                                                            amount: sum,
+                                                                                            adultCount: adultsSelectCompp,
+                                                                                            childCount: childSelectCompp,
+                                                                                            roomimage: item.roomimages[0]
+                                                                                        }
+                                                                                    ];
+                                                                                }
+                                                                            });
+                                                                        }}
+                                                                    />
+
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
+
+
 
 
                                             </div>

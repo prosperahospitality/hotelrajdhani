@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Privacy Policy</h1>
 
-      <p className="text-lg mb-4"><strong>Effective Date:</strong> [Insert Date]</p>
+      <p className="text-lg mb-4"><strong>Effective Date:</strong> 01-12-2004</p>
 
       <p className="mb-4">
         Welcome to <strong>Hotel Rajdhani</strong>, located in Halol, Gujarat. We value your privacy and are committed to
@@ -72,7 +72,7 @@ const PrivacyPolicy = () => {
         <li>Opt-out of receiving marketing communications.</li>
       </ul>
       <p className="mb-4">
-        To exercise these rights, please contact us at [Insert Contact Information].
+        To exercise these rights, please contact us at 9898309244.
       </p>
 
       <h2 className="text-2xl font-semibold mt-6 mb-4">7. Third-Party Links</h2>
