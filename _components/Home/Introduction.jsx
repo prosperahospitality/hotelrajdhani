@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Milestone, SendHorizontal } from "lucide-react";
 import IMAGES from '@/public';
 import Link from "next/link";
+import { today, getLocalTimeZone } from "@internationalized/date";
 
 const Introduction = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -18,6 +19,20 @@ const Introduction = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+
+  let defaultDate = today(getLocalTimeZone());
+  const nextDay = defaultDate.add({ days: 1 });
+
+  const formatDate = (date) => {
+    const day = String(date.day).padStart(2, "0");
+    const month = String(date.month).padStart(2, "0");
+    const year = String(date.year);
+    return `${day}-${month}-${year}`;
+  };
+
+  const [checkindate, setCheckindate] = useState(formatDate(defaultDate));
+  const [checkoutdate, setCheckoutdate] = useState(formatDate(nextDay));
 
   // Set a maximum value for the Y axis movement (e.g., 100 pixels)
   const maxY = 100;
@@ -41,7 +56,7 @@ const Introduction = () => {
               Welcome to Our Hotel in Halol, best hotel in pavaghad, best hotel in halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
             </p>
             <Link
-              href={`/`}
+              href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
             >
               <button className="bg-[#800000] px-6  py-3 rounded-full text-white flex-1 font-semibold mt-5">
                 Book Now
@@ -145,7 +160,7 @@ const Introduction = () => {
               Best hotel in halol GIDC, Enjoy delicious meals, secure parking, and essential amenities like CCTV, hot water, clean drinking water, and extra mattresses. Check-in and check-out are hassle-free at 11:00 AM. While staying with us, explore the nearby Pavagadh town, home to the ancient Kalika Mata Temple and the UNESCO-listed Pavagadh Archaeological Park. Experience a memorable blend of comfort and culture at Hotel Rajdhani.
             </p>
             <Link
-              href={`/`}
+              href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
             >
               <button className="bg-[#800000] px-6  py-3 rounded-full text-white flex-1 font-semibold mt-5">
                 Book Now
