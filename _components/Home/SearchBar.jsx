@@ -60,67 +60,108 @@ const SearchBar = () => {
 
     const searchAction = () => {
         router.push(`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=${adultsSelect}&childSelect=${childSelect}`)
-      };
+    };
 
 
     return (
-        <div className="lg:my-4 w-[45rem] mt-8">
+        <>
+            <div className="hidden lg:block lg:my-4 w-[45rem] mt-8">
 
-            {/* <div class="p-6 rounded-lg shadow-md">
-                <span class="flex items-center justify-center text-center text-3xl font-bold text-green-500 drop-shadow-2xl">
-                    Experience Royal Comfort, Modern Luxury, and Unmatched Hospitality at Hotel Rajdhani
-                </span>
-            </div> */}
-
-
-
-
-            <div className="flex-col h-full lg:flex-row w-full gap-2 flex items-center m-auto  transition-all duration-200 delay-200 ease-in-out text-black lg:p-0 p-4">
-                <div className="flex w-full bg-transparent lg:bg-black/20 flex-col lg:flex-row justify-center items-center p-4 rounded-xl gap-2 lg:gap-5 lg:backdrop-blur-sm">
-                    <div className="lg:w-full w-[70%] gap-2 flex-2">
-                        <p className="flex gap-2 justify-center items-center pb-2 text-white">
-                            <CalendarRange className="size-8" />
-                            Check In-Check Out
-                        </p>
-
-                        <Daterangepickerreact
-                            className=""
-                            initialDate={initialDate}
-                            onDateValue={handleDateSelect}
-                            checkindate={checkindate}
-                        />
-                    </div>
-
-                    <div className="flex justify-center items-center flex-col lg:flex-row gap-5 lg:gap-0 flex-2">
-                        <div className="w-full gap-2">
+                <div className="flex-col h-full lg:flex-row w-full gap-2 flex items-center m-auto  transition-all duration-200 delay-200 ease-in-out text-black lg:p-0 p-4">
+                    <div className="flex w-full bg-transparent lg:bg-black/20 flex-col lg:flex-row justify-center items-center p-4 rounded-xl gap-2 lg:gap-5 lg:backdrop-blur-sm">
+                        <div className="lg:w-full w-[70%] gap-2 flex-2">
                             <p className="flex gap-2 justify-center items-center pb-2 text-white">
-                                <PiUsersLight className="size-8" />
-                                Guests
+                                <CalendarRange className="size-8" />
+                                Check In-Check Out
                             </p>
-                            <RoomsAndGuests
-                                adultsSelectParam={"1"}
-                                childSelectParam={"0"}
-                                onAdultsSelect={handleAdultSelect}
-                                onChildSelect={handleChildSelect}
-                            />
+
+                            <Daterangepickerreact
+                                className=""
+                                initialDate={initialDate}
+                                onDateValue={handleDateSelect}
+                                checkindate={checkindate} />
                         </div>
-                    </div>
-                    <div className="flex justify-center  items-center  lg:items-end lg:self-end lg:mt-0 mt-4 flex-1 w-full ">
-                        <Button
-                            isIconOnly
-                            // color="secondary"
-                            // variant="shadow"
-                            size="lg"
-                            onClick={(e) => searchAction()}
-                            className="w-full p-4 bg-[#800000]"
-                        >
-                            <Search className="text-white" />
-                            <p className="text-white ml-2">Check Availability</p>
-                        </Button>
+
+                        <div className="flex justify-center items-center flex-col lg:flex-row gap-5 lg:gap-0 flex-2">
+                            <div className="w-full gap-2">
+                                <p className="flex gap-2 justify-center items-center pb-2 text-white">
+                                    <PiUsersLight className="size-8" />
+                                    Guests
+                                </p>
+                                <RoomsAndGuests
+                                    adultsSelectParam={"1"}
+                                    childSelectParam={"0"}
+                                    onAdultsSelect={handleAdultSelect}
+                                    onChildSelect={handleChildSelect} />
+                            </div>
+                        </div>
+                        <div className="flex justify-center  items-center  lg:items-end lg:self-end lg:mt-0 mt-4 flex-1 w-full ">
+                            <Button
+                                isIconOnly
+                                // color="secondary"
+                                // variant="shadow"
+                                size="lg"
+                                onClick={(e) => searchAction()}
+                                className="w-full p-4 bg-[#F5F5DC] font-semibold"
+                            >
+                                <Search className="text-[#333333]" />
+                                <p className="text-[#333333] ml-2">Search</p>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+
+
+            <div className='block lg:hidden w-full'>
+                <div className="grid grid-rows-1 gap-4 w-full p-4 text-black">
+                    <div className="flex flex-col items-center lg:bg-black/20 p-4 rounded-xl gap-4 backdrop-blur-sm">
+                        <div className="grid grid-cols-12 w-full gap-2">
+                            <p className="col-span-4 flex gap-2 justify-center items-center text-slate-100 font-extrabold text-md text-center">
+                                {/* <CalendarRange className="size-8" /> */}
+                                Check In-Check Out
+                            </p>
+                            <Daterangepickerreact
+                                className="col-span-8"
+                                initialDate={initialDate}
+                                onDateValue={handleDateSelect}
+                                checkindate={checkindate}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-12 w-full gap-2">
+                            <p className="col-span-4 flex gap-2 justify-center items-center pb-2 text-slate-100 font-extrabold text-md text-center">
+                                <PiUsersLight className="size-8" />
+                                Guests
+                            </p>
+                            <div className="col-span-8">
+                                <RoomsAndGuests
+                                    adultsSelectParam={"1"}
+                                    childSelectParam={"0"}
+                                    onAdultsSelect={handleAdultSelect}
+                                    onChildSelect={handleChildSelect}
+                                />
+                            </div>
+
+                        </div>
+
+                        <div className="flex justify-center items-center w-[40%]">
+                            <Button
+                                isIconOnly
+                                size="lg"
+                                onClick={(e) => searchAction()}
+                                className="w-full bg-[#F5F5DC] font-semibold"
+                            >
+                                <Search className="text-[#333333]" />
+                                <p className="text-[#333333] ml-2">Search</p>
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </>
     )
 }
 

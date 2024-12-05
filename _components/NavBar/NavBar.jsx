@@ -92,9 +92,14 @@ const NavBar = () => {
     <div className="h-auto sticky top-0 bg-white z-50 border-b">
       {/* Top Info Bar */}
       <div className="w-full border-b py-1">
-        <div className="flex justify-between items-center w-[95%] mx-auto text-sm text-gray-400">
-          <span>Welcome to Hotel Rajdhani</span>
-          <div className="flex gap-4 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 w-[95%] mx-auto text-sm text-gray-400">
+          {/* Welcome Message */}
+          <span className="justify-self-center md:justify-self-start">
+            Welcome to Hotel Rajdhani
+          </span>
+
+          {/* Contact Information */}
+          <div className="flex justify-center md:justify-end gap-4 items-center">
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4" /> 98983 09244
             </div>
@@ -104,6 +109,7 @@ const NavBar = () => {
           </div>
         </div>
       </div>
+
 
       {/* Main Navbar */}
       <div className="w-[95%] mx-auto py-4 flex justify-between items-center">
@@ -134,11 +140,10 @@ const NavBar = () => {
             >
               <Link
                 href={link.url || "#"}
-                className={`p-2 ${
-                  isLinkActive(link)
+                className={`p-2 ${isLinkActive(link)
                     ? "text-black font-bold"
                     : "text-gray-500 hover:text-black"
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
@@ -170,7 +175,7 @@ const NavBar = () => {
         >
           <Button
             radius="full"
-            className="bg-[#800000] text-white font-semibold px-4"
+            className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
           >
             Book Now
           </Button>
@@ -220,16 +225,16 @@ const NavBar = () => {
             </div>
           ))}
           <Link
-          href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
-          className="flex mt-4 pb-4"
-        >
-          <Button
-            radius="full"
-            className="bg-[#800000] text-white font-semibold px-4"
+            href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
+            className="flex mt-4 pb-4"
           >
-            Book Now
-          </Button>
-        </Link>
+            <Button
+              radius="full"
+              className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
+            >
+              Book Now
+            </Button>
+          </Link>
         </div>
       )}
     </div>

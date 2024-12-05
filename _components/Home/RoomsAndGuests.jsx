@@ -205,7 +205,7 @@ export default function RoomsAndGuests({
             variant="destructive"
             className={cn("w-full justify-center text-center font-normal")}
           >
-            <PiUsersLight className="size-6 text-gray-500" />
+            <PiUsersLight className="hidden lg:block size-6 text-gray-500" />
             <span className="font-semibold text-gray-500">
               {`Adults: ${adults}, Childrens: ${children}`}
             </span>

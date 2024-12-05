@@ -65,11 +65,16 @@ export default function Footer() {
   const checkoutDate = addOneDay(currentDate);
 
   return (
-    <footer className="w-full h-fit relative bg-white text-black mb-10">
+    <footer className="w-full h-fit relative bg-white text-black mb-10 lg:mt-16">
       <div className="w-[95%] mx-auto">
         <div className="mx-auto lg:flex w-full items-center justify-between py-2">
           <div className="md:flex items-center md:justify-between gap-4">
-            <p className="text-3xl lg:text-4xl text-green-500 font-semibold antialiased">
+            <p className="text-3xl lg:text-4xl text-[#333333] font-semibold antialiased"
+            style={{
+              fontFamily: "Times New Roman, Georgia, serif",
+              fontWeight: "bold",
+          }}
+            >
               {siteConfig.hotelname}
             </p>
           </div>
@@ -78,7 +83,7 @@ export default function Footer() {
             <Link
               href={`/filterpage?checkindate=04-12-2024&checkoutdate=05-12-2024&adultsSelect=1&childSelect=0`}
             >
-              <button className="border border-black-900 bg-green-700 px-8 py-2  lg:py-2 rounded-full text-white flex-1 font-medium hover:bg-red-900 hover:text-white">
+              <button className="border border-black-900 bg-[#F5F5DC] px-8 py-2  lg:py-2 rounded-full text-[#333333] flex-1 font-medium hover:bg-red-900 hover:text-white">
                 Book Now
               </button>
             </Link>
@@ -99,7 +104,7 @@ export default function Footer() {
 
         <div className="py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0lg:gap-10 place-content-center">
           <div className=" flex flex-col gap-5 p-5 lg:py-5">
-            <h2 className="text-xl font-medium text-green-500">
+            <h2 className="text-xl font-medium text-[#333333]">
               Contact Information:
             </h2>
             <div className="flex flex-col gap-2">
@@ -152,7 +157,7 @@ export default function Footer() {
           </div>
 
           <div className=" flex flex-col gap-5 p-5">
-            <h2 className="text-xl font-medium text-green-500">Quick Links:</h2>
+            <h2 className="text-xl font-medium text-[#333333]">Quick Links:</h2>
             {siteConfig.navItems.map((item) => (
               <div className="" key={item.label}>
                 <Link
@@ -166,7 +171,7 @@ export default function Footer() {
           </div>
 
           <div className=" flex flex-col gap-5 p-5">
-            <h2 className="text-xl font-medium text-green-500">
+            <h2 className="text-xl font-medium text-[#333333]">
               Legal Policies:
             </h2>
             {siteConfig.PoliciesItems.map((item) => (
@@ -182,7 +187,7 @@ export default function Footer() {
           </div>
 
           <div className=" flex flex-col gap-5 p-5">
-            <h2 className="text-xl font-medium text-green-500">Socials:</h2>
+            <h2 className="text-xl font-medium text-[#333333]">Socials:</h2>
             <div className="flex  items-center gap-5">
               {siteConfig.socialItems.map(({ label, href, icon: Icon }) => (
                 <Link
@@ -191,9 +196,9 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-gray-800 hover:text-blue-500 transition-colors bg-blue-100 p-2 rounded-full "
+                  className="text-gray-800 hover:text-blue-500 transition-colors bg-[#F5F5DC] p-2 rounded-full "
                 >
-                  <Icon className="w-6 h-6 text-green-700" />
+                  <Icon className="w-6 h-6 text-[#333333]" />
                 </Link>
               ))}
             </div>

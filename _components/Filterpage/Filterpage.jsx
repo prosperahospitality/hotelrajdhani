@@ -14,8 +14,12 @@ import SearchBar from "@/_components/Filterpage/SearchBar";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { format, parse, eachDayOfInterval } from "date-fns";
-
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { FreeMode, Navigation } from 'swiper/modules';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import '@/app/styles/rooms.css';
 
 const generateUniqueID = async () => {
     const response = await fetch("/api/userApi/booking_details", {
@@ -895,34 +899,77 @@ const Filterpage = () => {
                                     return (
                                         <div
                                             key={index}
-                                            className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] mb-16"
+                                            className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] mb-16"
                                         >
                                             <div className="col-span-1">
-                                                <div className="w-full h-44 relative">
-                                                    <Image
-                                                        alt={"abc"}
-                                                        src={item.roomimages[0]}
-                                                        fill
-                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                        className="rounded-lg"
-                                                        style={{ objectFit: "cover" }}
-                                                    />
+
+                                                <div className="hidden lg:block">
+                                                    <div className="w-full h-44 relative">
+                                                        <Image
+                                                            alt={"abc"}
+                                                            src={item.roomimages[0]}
+                                                            fill
+                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                            className="rounded-lg object-fill"
+                                                        // style={{ objectFit: "cover" }}
+                                                        />
+                                                    </div>
+                                                    <div className="w-full h-44 relative mt-2">
+                                                        <Image
+                                                            alt={"abc"}
+                                                            src={item.roomimages[1]}
+                                                            fill
+                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                            className="rounded-lg object-fill"
+                                                        // style={{ objectFit: "cover" }}
+                                                        />
+                                                    </div>
                                                 </div>
-                                                <div className="w-full h-44 relative mt-2">
-                                                    <Image
-                                                        alt={"abc"}
-                                                        src={item.roomimages[1]}
-                                                        fill
-                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                        className="rounded-lg"
-                                                        style={{ objectFit: "cover" }}
-                                                    />
+
+                                                <div className="block lg:hidden">
+                                                    <Swiper
+                                                        spaceBetween={50}
+                                                        slidesPerView={1}
+                                                        modules={[FreeMode, Navigation]}
+                                                        loop={true}
+                                                        navigation={true}
+                                                        className="mySwiper4"
+                                                    >
+                                                        <SwiperSlide key={`${index}-${item.roomimages[0]}`}>
+                                                            <div className="w-full h-64 relative">
+                                                                <Image
+                                                                    alt={"abc"}
+                                                                    src={item.roomimages[0]}
+                                                                    fill
+                                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                                    className="rounded-lg object-fill"
+                                                                />
+                                                            </div>
+                                                        </SwiperSlide>
+                                                        <SwiperSlide key={`${index}-${item.roomimages[1]}`}>
+                                                            <div className="w-full h-64 relative">
+                                                                <Image
+                                                                    alt={"abc"}
+                                                                    src={item.roomimages[1]}
+                                                                    fill
+                                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                                    className="rounded-lg object-fill"
+                                                                />
+                                                            </div>
+                                                        </SwiperSlide>
+                                                    </Swiper>
                                                 </div>
+
                                             </div>
 
                                             <div className="col-span-1 lg:col-span-3 flex flex-col justify-between">
                                                 <div>
-                                                    <p className="text-xl font-semibold mt-4">
+                                                    <p className="text-xl lg:text-2xl font-semibold mt-4"
+                                                    style={{
+                                                        fontFamily: "Times New Roman, Georgia, serif",
+                                                        fontWeight: "bold",
+                                                    }}
+                                                    >
                                                         {item.room_name}
                                                     </p>
 
@@ -1096,7 +1143,11 @@ const Filterpage = () => {
                                                                     <div className="flex mt-2 mb-2">
                                                                         <div className="w-full">
                                                                             <p className="text-xs font-extralight">Start From</p>
-                                                                            <p className="font-semibold text-2xl mt-2">
+                                                                            <p className="font-semibold text-2xl mt-2"
+                                                                            style={{
+                                                                                fontFamily: "Times New Roman, Georgia, serif",
+                                                                                fontWeight: "bold",
+                                                                            }}>
                                                                                 &#8377; {sum ? sum : "0"}*
                                                                             </p>
                                                                         </div>

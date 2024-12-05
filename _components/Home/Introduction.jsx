@@ -41,24 +41,29 @@ const Introduction = () => {
   const limitY = (animateY) => Math.min(Math.max(animateY, -maxY), maxY);
 
   return (
-    <div className="flex flex-col gap-20 py-10 lg:py-20">
+    <div className="flex flex-col gap-20 py-5 lg:pb-10">
       <div className="h-full  w-[95%] mx-auto flex justify-center items-center flex-col lg:flex-row gap-5 ">
         <div className="flex flex-col w-full lg:w-[50%] justify-center h-full items-center gap-2 ">
-          <p className="flex justify-start w-full text-green-500 text-2xl leading-relaxed">
-            Hotel Rajdhani, The Best Hotel In Pavaghad And Halol
+          <p className="flex justify-start w-full text-[#333333] text-2xl leading-relaxed"
+          style={{
+            fontFamily: "Times New Roman, Georgia, serif",
+            fontWeight: "bold",
+        }}
+          >
+            Hotel Rajdhani, The Best Family Hotel In Pavaghad And Halol
           </p>
           <div className="flex justify-start w-full ">
-            <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Stay Close, Live Comfortably</h1>
+            <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Where Luxury Meets Comfort</h1>
           </div>
           <div className="flex flex-col gap-8">
 
             <p className="mt-6 text-justify text-gray-800 leading-relaxed">
-              Welcome to Our Hotel in Halol, best hotel in pavaghad, best hotel in halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
+              Welcome to Our Hotel in Halol, best family hotel in pavaghad, best family hotel in halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
             </p>
             <Link
               href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
             >
-              <button className="bg-[#800000] px-6  py-3 rounded-full text-white flex-1 font-semibold mt-5">
+              <button className="bg-[#F5F5DC] px-6  py-3 rounded-full text-[#333333] flex-1 font-semibold mt-5">
                 Book Now
               </button>
             </Link>
@@ -120,7 +125,7 @@ const Introduction = () => {
       </div>
 
       <div className="h-full w-[95%] mx-auto flex justify-center items-center flex-col-reverse lg:flex-row gap-5">
-        <div className="flex w-full lg:w-[50%] h-full  justify-center items-center relative mt-24 lg:my-0">
+        <div className="flex w-full lg:w-[50%] h-full  justify-center items-center relative mt-24 lg:mt-10">
           <div className="flex justify-center items-center h-full w-full translate-x-2 lg:translate-x-16 z-10 mx-auto">
             <motion.div
               className="w-full h-full  text-white flex items-center justify-center "
@@ -156,13 +161,13 @@ const Introduction = () => {
           </div>
           <div className="flex flex-col gap-8">
 
-            <p className="mt-6 text-justify text-gray-800 leading-relaxed">
+            <p className="text-justify text-gray-800 leading-relaxed">
               Best hotel in halol GIDC, Enjoy delicious meals, secure parking, and essential amenities like CCTV, hot water, clean drinking water, and extra mattresses. Check-in and check-out are hassle-free at 11:00 AM. While staying with us, explore the nearby Pavagadh town, home to the ancient Kalika Mata Temple and the UNESCO-listed Pavagadh Archaeological Park. Experience a memorable blend of comfort and culture at Hotel Rajdhani.
             </p>
             <Link
               href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
             >
-              <button className="bg-[#800000] px-6  py-3 rounded-full text-white flex-1 font-semibold mt-5">
+              <button className="bg-[#F5F5DC] px-6  py-3 rounded-full text-text-[#333333] flex-1 font-semibold mt-5">
                 Book Now
               </button>
             </Link>

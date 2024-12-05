@@ -84,11 +84,11 @@ export default function Daterangepickerreact({
             id="date"
             variant={"destructive"}
             className={cn(
-              "flex justify-center text-center font-normal",
+              "flex justify-center text-center font-semibold text-gray-500",
               !date && "text-black bg-white"
             )}
           >
-            <CiCalendar className="mr-2 size-4" />
+            <CiCalendar className="hidden lg:block mr-2 size-4" />
             {date[0]?.startDate ? (
               date[0]?.endDate ? (
                 <>
