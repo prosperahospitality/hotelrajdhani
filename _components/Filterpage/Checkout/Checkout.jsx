@@ -275,7 +275,7 @@ export default function Checkout() {
 
               <div className="w-full flex justify-center items-center md:justify-end">
                 <button
-                  className="bg-red-900 text-white font-medium py-2 px-4 rounded-lg"
+                  className="bg-[#333333] text-white font-medium py-2 px-4 rounded-lg"
                   onClick={(e) => {
                     router.push(
                       `/filterpage?checkindate=${bookingDetails.checkin_dateF}&checkoutdate=${bookingDetails.checkout_dateF}&adultsSelect=${bookingDetails.roomDet[0].adultCount}&childSelect=${bookingDetails.roomDet[0].childCount}&bookId=${booking_id}`
@@ -408,7 +408,7 @@ export default function Checkout() {
                 </label>
               </div>
               <div className="w-full flex justify-center lg:justify-start">
-                <Button onClick={(e) => handleBookingRequest()} className="bg-red-900 text-white font-medium">Send Booking Request</Button>
+                <Button onClick={(e) => handleBookingRequest()} className="bg-[#333333] text-white font-medium">Send Booking Request</Button>
               </div>
             </div>
           </div>

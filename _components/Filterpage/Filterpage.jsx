@@ -65,6 +65,7 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
+
     const handleCheckout = async () => {
         setIsLoading(true);
 
@@ -135,10 +136,10 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 flex flex-col lg:flex-row gap-5 lg:gap-0 items-center justify-between bg-green-600 p-4 shadow-lg z-[100]">
+        <div className="fixed bottom-0 left-0 right-0 flex flex-col lg:flex-row gap-5 lg:gap-0 items-center justify-between bg-red-100 p-4 shadow-lg z-[100]">
             <div className="flex gap-5 flex-col lg:flex-row flex-2 items-center">
                 {/* Date Range */}
-                <div className="flex space-x-2 text-white ">
+                <div className="flex space-x-2 text-black ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar">
                         <path d="M8 2v4" />
                         <path d="M16 2v4" />
@@ -146,12 +147,12 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                         <path d="M3 10h18" />
                     </svg>
                     <span>
-                        {"19-02-2024"} - {"20-02-2024"}
+                        {searchedCheckInDate} - {searchedCheckOutDate}
                     </span>
                 </div>
                 <div className="flex justify-between gap-5 ">
                     {/* Rooms */}
-                    <div className="flex items-center space-x-2 text-white">
+                    <div className="flex items-center space-x-2 text-black">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -167,12 +168,12 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                             />
                         </svg>
                         <span>
-                            Rooms: {"2"}
+                            Rooms: {bookingSum.filter((item) => item.value !== true).length}
                         </span>
                     </div>
 
                     {/* Guests */}
-                    <div className="flex items-center space-x-2 text-white">
+                    <div className="flex items-center space-x-2 text-black">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -195,7 +196,7 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
             {/* Price and Checkout */}
             <div className="flex items-center lg:items-end justify-center lg:justify-end gap-5 flex-1 ">
                 <div className="flex gap-5 justify-between  lg:justify-end w-full">
-                    <div className="text-white text-xl">
+                    <div className="text-black text-xl">
                         Total: ₹ {displayBookingSum.amount}
                         <span className="text-sm text-pink-100 block cursor-pointer">
                             Price Breakup
@@ -203,7 +204,7 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                     </div>
 
                     <Button
-                        className="bg-white text-pink-600 font-semibold px-6 py-2 rounded-lg hover:bg-pink-200"
+                        className="bg-black text-white font-semibold px-6 py-2 rounded-lg hover:bg-pink-200 hover:text-black"
                         color="default"
                         auto
                         onClick={handleCheckout}
@@ -225,7 +226,7 @@ const SimpleSwitch = ({ isSelected, onValueChange }) => {
         <div className="flex flex-col gap-2 w-[33%]">
             <button
                 onClick={() => onValueChange(!isSelected)} // Toggle the value when clicked
-                className={`w-[100px] h-[47px] flex items-center justify-center rounded-lg ${isSelected ? "bg-green-500 hover:bg-green-600" : "bg-default-100 hover:bg-default-200"
+                className={`w-[100px] h-[47px] flex items-center justify-center rounded-lg ${isSelected ? "bg-[#333333] text-white hover:bg-[#F5F5DC] hover:text-[#333333]" : "bg-default-100 text-black hover:bg-default-200 hover:text-black"
                     }`}
             >
                 {isSelected ? "Add Room" : "Remove"}

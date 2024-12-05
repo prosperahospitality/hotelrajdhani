@@ -63,7 +63,7 @@ const AdminloginPage = () => {
 
         
 
-        router.push(encodeURI(`/admin/hotel/dashboard?hotel_id=${"123456"}&hotel_name=${"Hotel Rajdhani"}`))
+        router.push(encodeURI(`/admin/dashboard?hotel_id=${"123456"}&hotel_name=${"Hotel Rajdhani"}`))
         
       }else if(result.ok === false){
         alert("Username or password is incorrect!")

@@ -8,8 +8,8 @@ export async function middleware(request) {
 
 
   if (request.nextUrl.pathname.startsWith('/admin/')) {
-    const authToken = cookies.get("next-auth.session-token")?.value;
-    // const authToken = cookies.get("__Secure-next-auth.session-token")?.value;
+    // const authToken = cookies.get("next-auth.session-token")?.value;
+    const authToken = cookies.get("__Secure-next-auth.session-token")?.value;
 
     try {
       const decoded = await decode({
@@ -31,8 +31,8 @@ export async function middleware(request) {
 
 
   if (request.nextUrl.pathname.startsWith('/adminlogin')) {
-    // const authToken = cookies.get("__Secure-next-auth.session-token")?.value;
-    const authToken = cookies.get("next-auth.session-token")?.value;
+    const authToken = cookies.get("__Secure-next-auth.session-token")?.value;
+    // const authToken = cookies.get("next-auth.session-token")?.value;
 
     // if (!authToken) {
     //   return NextResponse.redirect(new URL('/adminlogin', request.url));

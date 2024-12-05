@@ -27,7 +27,7 @@ const AboutUs = () => {
             <p className="col-span-2 text-start font-medium">A/C Dining Hall to Savor Delicious Meals</p>
           </div>
           <div className="grid grid-cols-3 gap-3 py-4  text-[#333333]">
-            <h3 className="col-span-1 text-3xl text-start lg:text-center font-bold">10</h3>
+            <h3 className="col-span-1 text-3xl text-start lg:text-center font-bold">12</h3>
             <p className="col-span-2 text-start font-medium ">Professional Staff at Your Service
             </p>
           </div>

@@ -148,7 +148,7 @@ const SearchBar = ({ checkindateParam,
                             isIconOnly
                             size="md"
                             onClick={searchAction}
-                            className="w-full p-4 bg-[#800000]"
+                            className="w-full p-4 bg-[#333333]"
                         >
                             <Search className="text-white" />
                             <p className="text-white ml-2">Check Availability</p>

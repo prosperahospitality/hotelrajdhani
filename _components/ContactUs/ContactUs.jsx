@@ -193,7 +193,7 @@ const ContactUs = () => {
               <span className="text-red-600">{errors.message}</span>
             )}
             <div className="w-full">
-              <button className="border border-themeColor px-10 py-3 rounded-full text-themeColor flex-1 font-semibold hover:bg-themeColor hover:text-white">
+              <button className="border border-[#333333] bg-[#333333] px-10 py-3 rounded-full text-white flex-1 font-semibold hover:bg-[#F5F5DC] hover:text-[#333333]">
                 Submit
               </button>
             </div>

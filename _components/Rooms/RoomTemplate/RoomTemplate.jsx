@@ -303,7 +303,7 @@ const SelectMonth = ({
                                             isIconOnly
                                             size="lg"
                                             onClick={(e) => searchAction()}
-                                            className="w-full p-4 bg-[#800000] hover:bg-red-700 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
+                                            className="w-full p-4 bg-[#333333] border border-black border-b-medium hover:bg-red-300 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
                                         >
                                             <div className='flex flex-row gap-2 justify-center items-center'>
                                                 <Search className="text-white size-5" />
@@ -316,7 +316,7 @@ const SelectMonth = ({
                                             isIconOnly
                                             size="lg"
                                             onClick={(e) => handleCheckout()}
-                                            className="w-full p-4 bg-[#800000] hover:bg-red-700 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
+                                            className="w-full p-4 border border-black border-b-medium bg-[#333333] hover:bg-red-300 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
                                         >
 
                                             <div className='flex flex-row gap-2 justify-center items-center'>
@@ -353,8 +353,8 @@ const Facilities = ({ roomservices }) => {
                     <div className="text-3xl font-semibold">Room Services</div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full mt-4">
                         {roomservices?.map((item, index) => (
-                            <Card className="w-full h-full p-4" key={index.toString()}>
-                                <div className="flex flex-col items-center justify-center gap-2 text-center">
+                            <Card className="w-full h-full p-4 bg-[#F5F5DC]" key={index.toString()}>
+                                <div className="flex flex-col items-center justify-center gap-2 text-center text-[#333333]">
                                     {item.icon}
                                     <div className="text-xl">{item.name}</div>
                                 </div>
@@ -494,14 +494,14 @@ const BookingProcess = () => {
                         <div className="border-y lg:border-y-0 lg:border-x lg:border-l-0 relative px-5 py-10">
                             <div className="flex flex-col gap-8">
                                 <h2 className="text-xl text-center font-semibold text-gray-600">
-                                    SEARCH & SELECT <span className="text-7xl text-themeColor">1</span>
+                                    SEARCH & SELECT <span className="text-7xl text-[#333333]">1</span>
                                 </h2>
                                 <p className="px-5 text-gray-500 text-center lg:text-start">
                                     Use our search bar to explore available rooms. Filter by location, room type, and price, then select your favorite option from our curated listings.
                                 </p>
                             </div>
                             <div
-                                className={`absolute w-8 h-8 transform rotate-45 bg-red-700 
+                                className={`absolute w-8 h-8 transform rotate-45 bg-[#333333] 
                 lg:top-[40%] left-[40%] md:left-[45%] lg:left-auto lg:right-0 translate-x-1/2  lg:translate-x-[55%] 
                 bottom-0  translate-y-1/2 z-10 `}
                             ></div>
@@ -514,7 +514,7 @@ const BookingProcess = () => {
                         <div className="border-y lg:border-y-0 lg:border-x relative px-5 py-10">
                             <div className="flex flex-col gap-8">
                                 <h2 className="text-xl text-center font-semibold text-gray-600">
-                                    ENTER DETAILS <span className="text-7xl text-themeColor">2</span>
+                                    ENTER DETAILS <span className="text-7xl text-[#333333]">2</span>
                                 </h2>
                                 <p className="px-5 text-gray-500 text-center lg:text-start">
                                     Provide the necessary booking details, including guest information, stay duration, and any special requests, in our easy-to-use booking form.
@@ -534,7 +534,7 @@ const BookingProcess = () => {
                         <div className="border-y lg:border-y-0 lg:border-x relative px-5 py-10">
                             <div className="flex flex-col gap-8">
                                 <h2 className="text-xl text-center font-semibold text-gray-600">
-                                    SAFE CHECKOUT <span className="text-7xl text-themeColor">3</span>
+                                    SAFE CHECKOUT <span className="text-7xl text-[#333333]">3</span>
                                 </h2>
                                 <p className="px-5 text-gray-500 text-center lg:text-start">
                                     Review your selection and submit your booking request. Our team will contact you to confirm the details and arrange for payment securely.
@@ -554,7 +554,7 @@ const BookingProcess = () => {
                         <div className="border-y lg:border-y-0 lg:border-x lg:border-r-0 relative px-5 py-10 w-[106%]">
                             <div className="flex flex-col gap-8">
                                 <h2 className="text-xl text-center font-semibold text-gray-600">
-                                    CONFIRMATION <span className="text-7xl text-themeColor">4</span>
+                                    CONFIRMATION <span className="text-7xl text-[#333333]">4</span>
                                 </h2>
                                 <p className="px-5 text-gray-500 text-center lg:text-start">
                                     Receive an instant confirmation email with your booking details. Get ready for a comfortable and hassle-free stay.

@@ -16,7 +16,8 @@ const Landing = (props) => {
         <div className="relative w-full h-[38rem] md:h-[40rem]">
             {/* Top Right Section */}
             <div className="absolute top-4 right-4 text-gray-600 z-20 font-serif">
-                <div className="lg:w-14 lg:h-14 w-12 h-12 bg-[#F5F5DC] text-[#333333] rounded-full flex items-center justify-center">
+                {/* <img alt="since" src='/img/since.png' className='h-36 w-36'/> */}
+                <div className="lg:w-14 lg:h-14 w-12 h-12 bg-[#D8B4A6] text-black rounded-full flex items-center justify-center">
                     <span className="text-[8px] lg:text-[9px] text-[#333333] italic text-center leading-tight">
                         Established in 2004
                     </span>
@@ -50,7 +51,7 @@ const Landing = (props) => {
             </div>
 
             {/* SearchBar Section */}
-            <div className="absolute inset-0 flex justify-center items-end mb-12 md:mb-16 z-20 px-4">
+            <div className="absolute inset-0 flex justify-center items-end mb-12 md:mb-16 z-20 px-4 w-full">
                 <SearchBar />
             </div>
 

@@ -67,7 +67,7 @@ const Facilities = () => {
 
     return (
         <div className="bg-white text-black mt-8">
-            <div className="w-full pt-10 pb-6 ">
+            <div className="w-full pb-6 ">
                 <div className=" w-[95%] mx-auto flex flex-col justify-center items-center ">
                     <div>
                         <div className="flex justify-center items-center">

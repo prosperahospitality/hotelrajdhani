@@ -157,7 +157,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
       {/* for desktop view */}
 
       <div className='hidden lg:block '>
-        <div className='w-full p-3 font-extrabold text-white bg-green-600 rounded-md flex justify-start gap-3'>
+        <div className='w-full p-3 font-semibold text-black bg-red-100 rounded-md flex justify-start gap-3'>
           <ListFilter />
           <p>Sort & Filter</p>
         </div>
@@ -181,7 +181,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
                   onChange={handleprice}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb"
                   style={{
-                    background: `linear-gradient(to right, green ${((selectedprice - minprice) / (maxprice - minprice)) * 100}%, #ddd 0%)`,
+                    background: `linear-gradient(to right, #333333 ${((selectedprice - minprice) / (maxprice - minprice)) * 100}%, #ddd 0%)`,
                   }}
                 />
               </div>
@@ -206,7 +206,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
                     ))}
                 <Button
                   onClick={handlestate}
-                  className="w-full bg-green-600 text-white font-extrabold mt-3 text-base"
+                  className="w-full bg-[#333333] text-white font-extrabold mt-3 text-base"
                   radius="sm"
                 >
                   {showstate ? 'Show Less' : 'Show More'}

@@ -305,7 +305,7 @@ const TestCard = ({ packageReviews, allPackages }) => {
                   classNames={{
                     wrapper: "gap-3",
                     item: "rounded-full bg-white",
-                    cursor: "bg-green-700 text-white font-bold rounded-full",
+                    cursor: "bg-[#333333] text-white font-bold rounded-full",
                   }}
                 />
               </div>
