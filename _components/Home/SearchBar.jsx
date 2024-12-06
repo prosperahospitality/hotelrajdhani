@@ -27,8 +27,8 @@ const SearchBar = () => {
     const [checkindate, setCheckindate] = useState(formatDate(defaultDate));
     const [checkoutdate, setCheckoutdate] = useState(formatDate(nextDay));
 
-    const [adultsSelect, setAdultsSelect] = useState();
-    const [childSelect, setChildSelect] = useState();
+    const [adultsSelect, setAdultsSelect] = useState(1);
+    const [childSelect, setChildSelect] = useState(0);
 
     const differenceInDays = (date1, date2) => (new Date(date2.split('-').reverse().join('-')) - new Date(date1.split('-').reverse().join('-'))) / (1000 * 3600 * 24);
     const [initialDate, setInitialDate] = useState(
@@ -36,6 +36,8 @@ const SearchBar = () => {
     );
 
     const handleDateSelect = (val) => {
+
+        console.log("Val:::::::::>", val)
 
         const formatDate = (date) => {
             const day = String(date.getDate()).padStart(2, "0");

@@ -31,6 +31,7 @@ export default function RIMainCont() {
   const hotel_id = "123456";
   const hotel_name = "Hotel Rajdhani";
   const [result, setResult] = useState([]);
+  const [allResult, setAllResult] = useState([]);
   const [lastID, setLastID] = useState(0);
   const dispatch = useDispatch();
   const [previousDateRange, setPreviousDateRange] = useState([]);
@@ -38,10 +39,6 @@ export default function RIMainCont() {
   let selectedDateRange = useSelector(
     (state) => state.rateandinventory.formattedDateRange
   );
-  let standardDateRange = useSelector(
-    (state) => state.rateandinventory.standardDateRange
-  );
-  console.log("standardDateRange:::::::::>", standardDateRange);
   let selectedRoom = useSelector(
     (state) => state.rateandinventory.selectedRoom
   );
@@ -211,7 +208,7 @@ export default function RIMainCont() {
         );
         const result0 = await response0.json();
         const resultData = result0.data.sort((a, b) => a.id - b.id);
-
+        setAllResult(result0.data);
         let lstID;
         if (resultData && resultData.length > 0) {
 
@@ -243,14 +240,9 @@ export default function RIMainCont() {
             item.room_name === selectedRoom
         );
 
-        console.log("selectedDateRange:::::::::::>", selectedDateRange)
-
 
         await Promise.all(
-          standardDateRange?.map(async (item) => {
-            const date = parse(item, "dd-MM-yyyy", new Date());
-
-           
+          selectedDateRange?.map(async (item) => {
             lstID = lstID + 1;
 
             if (selectedRoom !== " " || selectedRoom !== undefined) {
@@ -261,8 +253,7 @@ export default function RIMainCont() {
                 Hotel_name: hotel_name,
                 user_id: "01",
                 user_name: "test",
-                booking_date: format(date, "EEE dd MMM"),
-                booking_dateF: item,
+                booking_date: item.toString(),
                 room_type: selectedRoom,
                 room_id: roooomid,
                 price_per_guest_flag: false,
@@ -426,6 +417,7 @@ export default function RIMainCont() {
           if (selectedRoomUpdateProperty === selectedRoom) {
             updatePropArray?.map(async (item) => {
               if (item.roomtype === selectedRoom) {
+                // let filteredUpdateProp = selectedDateRange.filter(date => item.updatedDates.includes(date))
 
                 let payload = {
                   Hotel_Id: hotel_id,
@@ -567,9 +559,6 @@ export default function RIMainCont() {
       ]);
     }
 
-    console.log("selectedDateRangeselectedRoom", selectedDateRange,
-      selectedRoom)
-
     if (selectedDateRange || selectedRoom) {
       dataFxn(
         selectedDateRange,
@@ -580,6 +569,9 @@ export default function RIMainCont() {
     }
   }, [selectedDateRange, selectedRoom, editableSelectedRoom]);
 
+  useEffect(() => {
+
+  }, [previousDateRange]);
 
   const generateUniqueID = () => {
     const newID = `MRI${String(lastID + 1).padStart(5, "0")}`;
@@ -746,21 +738,9 @@ export default function RIMainCont() {
 
     dates.push({
       ...item,
-      date: item.booking_dateF,
+      date: format(date, "yyyy-MM-dd"),
       day: format(date, "EEEE"),
     });
-
-    dates.sort((a, b) => {
-
-      const dateA = new Date(a.booking_date.split("-").reverse().join("-"));
-      const dateB = new Date(b.booking_date.split("-").reverse().join("-"));
-    
-      return dateA - dateB;
-    });
-    
-    console.log(dates);
-
-
   });
 
 
@@ -887,8 +867,6 @@ export default function RIMainCont() {
 
     statuschange(item);
   };
-
-  console.log("DAtes:::::::::>", dates)
 
   return (
 

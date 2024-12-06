@@ -68,6 +68,7 @@ export default function Daterangepickerreact({
   const handleSelect = (item) => {
     console.log("New Date: ", item);
     setDate([item.selection]);
+    onDateValue([item.selection]);
   };
 
   useEffect(() => {

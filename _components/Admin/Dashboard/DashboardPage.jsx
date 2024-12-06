@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import StatsCard from "@/_components/Admin/Dashboard/StatsCard";
 import SalesOverview from "@/_components/Admin/Dashboard/SalesOverview";
 import UpcomingSchedule from "@/_components/Admin/Dashboard/UpcomingSchedule";
@@ -40,6 +40,25 @@ export default function DashboardPage() {
       const result = await response.json();
       console.log("Data::::::::>", result)
       setBookingDetails(result.data_All)
+
+      const deleteolddates = async () => {
+        let payload = {
+          action: "deleteOldDates"
+        };
+
+        const response = await fetch(
+          `/api/admin/rates_and_inventory/managerateandinventory`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+        const result = await response.json();
+      }
+      deleteolddates()
 
     } catch (error) {
 
@@ -126,9 +145,9 @@ export default function DashboardPage() {
           <Notification />
         </div>
         <div className="bg-background text-foreground p-4 rounded-lg shadow-sm dark:shadow-gray-600 space-y-4">
-          <UpcomingSchedule bookingDetails={bookingDetails} dateChange={dateChange}/>
+          <UpcomingSchedule bookingDetails={bookingDetails} dateChange={dateChange} />
         </div>
       </div>
-      </div>
+    </div>
   );
 }

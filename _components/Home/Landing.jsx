@@ -1,6 +1,6 @@
 'use client';
 import { MoveDown } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@nextui-org/react';
 import IMAGES from '@/public';
@@ -11,7 +11,36 @@ import 'swiper/css/effect-fade';
 import { Autoplay, EffectFade } from "swiper/modules";
 import SearchBar from '@/_components/Home/SearchBar';
 
+
 const Landing = (props) => {
+
+    useEffect(() => {
+        try {
+            const deleteolddates = async () => {
+                let payload = {
+                    action: "deleteOldDates"
+                };
+
+                const response = await fetch(
+                    `/api/admin/rates_and_inventory/managerateandinventory`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    }
+                );
+                const result = await response.json();
+                console.log("result::::::::::>", result)
+            }
+            deleteolddates()
+        } catch (error) {
+
+        }
+    }, [])
+
+
     return (
         <div className="relative w-full h-[38rem] md:h-[40rem]">
             {/* Top Right Section */}

@@ -7,6 +7,7 @@ const pms_ratesandinventory_managerateandinventoryModel= new mongoose.Schema({
     user_id: String,
     user_name: String,
     booking_date: String,
+    booking_dateF: String,
     room_type: String,
     room_id: String,
     price_per_guest_flag: Boolean,

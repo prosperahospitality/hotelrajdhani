@@ -62,6 +62,8 @@ function getCurrentDateTime() {
 const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckOutDate, bookingSum, selectedDateRange, checkInDataForSum,
     checkOutDataForSum }) => {
 
+        console.log("Selected Date Range checkout::::::>", selectedDateRange)
+
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
@@ -255,11 +257,12 @@ const Filterpage = () => {
     const [filteredRoomDetails, setFilteredRoomDetails] = useState([]);
     const [newFilteredRoomDetails, setNewFilteredRoomDetails] = useState([]);
 
-    const [searchedCheckInDate, setSearchedCheckInDate] = useState('');
-    const [searchedCheckOutDate, setSearchedCheckOutDate] = useState('');
-    const [adultsSelectCompp, setSelectedAdultCount] = useState('');
-    const [childSelectCompp, setSelectedChildCount] = useState('');
+    const [searchedCheckInDate, setSearchedCheckInDate] = useState(checkindateParam);
+    const [searchedCheckOutDate, setSearchedCheckOutDate] = useState(checkoutdateParam);
+    const [adultsSelectCompp, setSelectedAdultCount] = useState(adultsSelectComp);
+    const [childSelectCompp, setSelectedChildCount] = useState(childSelectComp);
     const [selectedPrice, setSelectedPrice] = useState();
+    const [diffindayss, setDiffindayss] = useState(1);
 
 
 
@@ -289,13 +292,24 @@ const Filterpage = () => {
         return `${dayName} ${day} ${monthName}`;
     }
 
+    const parseDatee = (dateString) => {
+        const [day, month, year] = dateString.split("-").map(Number);
+        return new Date(year, month - 1, day);
+    };
+
     let formattedDateCheckin = formatDate(searchedCheckInDate);
     let formattedDateCheckout = formatDate(searchedCheckOutDate);
 
     const [checkInDataForSum, setCheckInDataForSum] = useState(formattedDateCheckin);
     const [checkOutDataForSum, setCheckOutDataForSum] = useState(formattedDateCheckout);
 
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
+    const [selectedDateRange, setSelectedDateRange] = useState([
+        {
+            startDate: parseDatee(searchedCheckInDate),
+            endDate: parseDatee(searchedCheckOutDate),
+            key: "selection",
+        },
+    ]);
 
     function parseDate(dateString) {
         const [day, month, year] = dateString.split("-").map(Number);
@@ -482,17 +496,25 @@ const Filterpage = () => {
 
                     let diffindays = differenceInDays(searchedCheckInDate, searchedCheckOutDate);
 
+                    setDiffindayss(diffindays)
 
+                    console.log("diffindays:::::::::>", diffindays, searchedCheckInDate, searchedCheckOutDate)
 
                     if (datesss.length === diffindays) {
                     } else {
                         const formattedDateCheckoutttt = subtractOneDay(searchedCheckOutDate);
 
+                        console.log("formattedDateCheckoutttt:::::::::>", formattedDateCheckoutttt)
+
                         formattedDateCheckout = formatDate(formattedDateCheckoutttt);
                     }
 
+                    const year = new Date(selectedDateRange[0].startDate).getFullYear();
+
+                    console.log("Years::::::::::::>", year, selectedDateRange)
+
                     const results = await fetch(
-                        `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${"123456"}&searchedDate=${formattedDateCheckin}&checkoutdate=${formattedDateCheckout}`,
+                        `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${"123456"}&searchedDate=${formattedDateCheckin}&checkoutdate=${formattedDateCheckout}&year=${year}`,
                         {
                             method: "GET",
                             headers: {
@@ -966,10 +988,10 @@ const Filterpage = () => {
                                             <div className="col-span-1 lg:col-span-3 flex flex-col justify-between">
                                                 <div>
                                                     <p className="text-xl lg:text-2xl font-semibold mt-4"
-                                                    style={{
-                                                        fontFamily: "Times New Roman, Georgia, serif",
-                                                        fontWeight: "bold",
-                                                    }}
+                                                        style={{
+                                                            fontFamily: "Times New Roman, Georgia, serif",
+                                                            fontWeight: "bold",
+                                                        }}
                                                     >
                                                         {item.room_name}
                                                     </p>
@@ -1145,11 +1167,12 @@ const Filterpage = () => {
                                                                         <div className="w-full">
                                                                             <p className="text-xs font-extralight">Start From</p>
                                                                             <p className="font-semibold text-2xl mt-2"
-                                                                            style={{
-                                                                                fontFamily: "Times New Roman, Georgia, serif",
-                                                                                fontWeight: "bold",
-                                                                            }}>
-                                                                                &#8377; {sum ? sum : "0"}*
+                                                                                style={{
+                                                                                    fontFamily: "Times New Roman, Georgia, serif",
+                                                                                    fontWeight: "bold",
+                                                                                }}>
+                                                                                {/* &#8377; {sum ? sum : "0"}* */}
+                                                                                &#8377; {item.room_rate ? (item.room_rate * diffindayss) : sum}*
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -1166,7 +1189,8 @@ const Filterpage = () => {
                                                                                         id: item.id,
                                                                                         name: item.room_name,
                                                                                         value: value,
-                                                                                        amount: sum,
+                                                                                        // amount: sum,
+                                                                                        amount: (item.room_rate * diffindayss),
                                                                                         adultCount: adultsSelectCompp,
                                                                                         childCount: childSelectCompp,
                                                                                         roomimage: item.roomimages[0]
@@ -1179,7 +1203,8 @@ const Filterpage = () => {
                                                                                             id: item.id,
                                                                                             name: item.room_name,
                                                                                             value: value,
-                                                                                            amount: sum,
+                                                                                            // amount: sum,
+                                                                                            amount: (item.room_rate * diffindayss),
                                                                                             adultCount: adultsSelectCompp,
                                                                                             childCount: childSelectCompp,
                                                                                             roomimage: item.roomimages[0]

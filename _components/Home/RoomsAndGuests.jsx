@@ -49,7 +49,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect, maxchilds 
 
   useEffect(() => {
     if (children) {
-     
+
 
       dispatch(handleAgeSelect(children));
     }
@@ -93,7 +93,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect, maxchilds 
           </Button>
         </div>
       </div>
-{/* 
+      {/* 
       <div className="space-y-4">
         {children?.map((child, index) => (
           <div key={child.id} className="flex items-center space-x-2">
@@ -173,7 +173,7 @@ export default function RoomsAndGuests({
   maxchilds
 }) {
   const ageSelect = useSelector((state) => state.search.ageSelect);
-  
+
   const [adults, setAdults] = useState(parseInt(adultsSelectParam));
   const [children, setChildren] = useState(parseInt(childSelectParam));
   const [infants, setInfants] = useState(0);
@@ -185,17 +185,26 @@ export default function RoomsAndGuests({
     setButtonText(`Adults: ${adults}, Rooms: ${rooms}`);
   };
 
-  useEffect(() => {
-    const checkAndCallFunction = (func, arg) => {
-      if (typeof func === "function") {
-        func(arg);
-      }
-    };
+  // useEffect(() => {
+  //   const checkAndCallFunction = (func, arg) => {
+  //     if (typeof func === "function") {
+  //       func(arg);
+  //     }
+  //   };
 
-    checkAndCallFunction(onAdultsSelect, adults);
-    checkAndCallFunction(onChildSelect, children);
-    checkAndCallFunction(onRoomsSelect, rooms);
-  }, [adults, children, rooms, onAdultsSelect, onChildSelect, onRoomsSelect]);
+  //   checkAndCallFunction(onAdultsSelect, adults);
+  //   checkAndCallFunction(onChildSelect, children);
+  //   checkAndCallFunction(onRoomsSelect, rooms);
+  // }, [adults, children, rooms, onAdultsSelect, onChildSelect, onRoomsSelect]);
+
+  const handleAdults = (val) => {
+    setAdults(val)
+    onAdultsSelect(val)
+  }
+  const handleChilds = (val) => {
+    setChildren(val)
+    onChildSelect(val)
+  }
 
   return (
     <div className="flex w-full justify-center items-center ">
@@ -212,8 +221,8 @@ export default function RoomsAndGuests({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="ml-2 lg:m-0 bg-white w-[80%] lg:w-full">
-          <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={setAdults} value={adults} maxadults={maxadults}/>
-          <IncDecfunc title="Children" description="Ages 0–17" onChange={setChildren} value={children} ageSelect={ageSelect} maxchilds={maxchilds}/>
+          <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={handleAdults} value={adults} maxadults={maxadults} />
+          <IncDecfunc title="Children" description="Ages 0–17" onChange={handleChilds} value={children} ageSelect={ageSelect} maxchilds={maxchilds} />
         </PopoverContent>
       </Popover>
     </div>

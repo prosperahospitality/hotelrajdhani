@@ -1,72 +1,67 @@
-import  db  from "@/config/mongodbConfig";
+import db from "@/config/mongodbConfig";
 import { Pms_Ratesandinventory_Managerateandinventory } from "@/_lib/model/admin/rates_and_inventory/managerateandinventory/managerateandinventory";
 import { NextResponse } from "next/server";
-import { format, parse, eachDayOfInterval } from 'date-fns';
+import { format, parse, eachDayOfInterval, isBefore } from 'date-fns';
 
-export async function GET(request){
+export async function GET(request) {
+  const hotelId = "123456";
+  const selectedRoom = request.nextUrl.searchParams.get('selectedRoom');
+  const rowDataID = request.nextUrl.searchParams.get('rowDataID');
+  const searchedDate = request.nextUrl.searchParams.get('searchedDate');
+  const checkoutdate = request.nextUrl.searchParams.get('checkoutdate');
+  const year = request.nextUrl.searchParams.get('year');
 
-  let hotelId = "123456";
-  let selectedRoom = request.nextUrl.searchParams.get('selectedRoom');
-  let rowDataID = request.nextUrl.searchParams.get('rowDataID');
-  let searchedDate = request.nextUrl.searchParams.get('searchedDate');
-  let checkoutdate = request.nextUrl.searchParams.get('checkoutdate');
-
-  const getDatesBetween = (checkin, checkout) => {
-    const checkinDate = parse(checkin, 'EEE dd MMM', new Date());
-    const checkoutDate = parse(checkout, 'EEE dd MMM', new Date());
-    const interval = eachDayOfInterval({ start: checkinDate, end: checkoutDate });
+  const getDatesBetween = (checkin, checkout, year) => {
+    const checkinWithYear = `${checkin} ${year}`;
+    const checkoutWithYear = `${checkout} ${year}`;
   
-    return interval.map(date => format(date, 'EEE dd MMM'));
+    const checkinDate = parse(checkinWithYear, 'EEE dd MMM yyyy', new Date());
+    const checkoutDate = parse(checkoutWithYear, 'EEE dd MMM yyyy', new Date());
+  
+    return eachDayOfInterval({ start: checkinDate, end: checkoutDate }).map(date =>
+      format(date, 'EEE dd MMM')
+    );
   };
 
-  const dates = searchedDate === null || checkoutdate === null ? [] :  getDatesBetween(searchedDate, checkoutdate);
+  const dates = searchedDate && checkoutdate ? getDatesBetween(searchedDate, checkoutdate, year) : [];
 
-  console.log('Dates::::::>', dates)
-  
-  let data = [];
-  let databydate = [];
-  let databyid = [];
-  let databyHoteliddd = [];
-  let rowbyid = [];
-  let databybookingdates = [];
-  let success=true;
+  console.log("Dates Res:::::::::>", dates, searchedDate,
+    checkoutdate)
+
+  let response = {};
+  let success = true;
+
   try {
-    db.connect()
+    db.connect();
 
-    //await Pms_Ratesandinventory_Managerateandinventory.deleteMany();
-
-    data = await Pms_Ratesandinventory_Managerateandinventory.find();
-    databydate = await Pms_Ratesandinventory_Managerateandinventory.find({"booking_date": searchedDate});
-    databyid = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": hotelId , "room_type": selectedRoom});
-    databyHoteliddd = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": hotelId, "booking_date": searchedDate });
-    rowbyid = await Pms_Ratesandinventory_Managerateandinventory.findOne({"id": rowDataID});
-    databybookingdates = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": hotelId, "booking_date": { $in: dates } });
-    
+    response.data = await Pms_Ratesandinventory_Managerateandinventory.find();
+    response.databydate = await Pms_Ratesandinventory_Managerateandinventory.find({ booking_date: searchedDate });
+    response.databyid = await Pms_Ratesandinventory_Managerateandinventory.find({ Hotel_Id: hotelId, room_type: selectedRoom });
+    response.databyHoteliddd = await Pms_Ratesandinventory_Managerateandinventory.find({ Hotel_Id: hotelId, booking_date: searchedDate });
+    response.rowbyid = await Pms_Ratesandinventory_Managerateandinventory.findOne({ id: rowDataID });
+    response.databybookingdates = await Pms_Ratesandinventory_Managerateandinventory.find({
+      Hotel_Id: hotelId,
+      booking_date: { $in: dates }
+    });
   } catch (error) {
-    data={result:"error"}
-    success=false;
+    response.data = { result: "error" };
+    success = false;
   }
-  return NextResponse.json({data, databyid, databydate, rowbyid, databyHoteliddd, databybookingdates, success})
+
+  return NextResponse.json({ ...response, success });
 }
 
-export async function POST(req){
-
+export async function POST(req) {
   const payload = await req.json();
-
-  let data = [];
-  let databyid = [];
-
-  let dataExisted = [];
-  let dataAll = [];
+  console.log("payload::::::::>", payload)
+  let response = {};
   let success = true;
+
   await db.connect();
 
-  //await Pms_Ratesandinventory_Managerateandinventory.deleteMany()
-
-  if(payload.operation === "edit") {
-
-
-    const pms_propertymaster_roomdetails = await Pms_Ratesandinventory_Managerateandinventory.updateOne({ id: payload.rowDataID }, 
+  if (payload.operation === "edit") {
+    await Pms_Ratesandinventory_Managerateandinventory.updateOne(
+      { id: payload.rowDataID },
       {
         rate_3hr: payload.hr3Rate,
         rate_6hr: payload.hr6Rate,
@@ -80,146 +75,100 @@ export async function POST(req){
         first_checkin_last_checkout_status_6hr: payload.first_checkin_last_checkout_status_6hr,
         first_checkin_last_checkout_status_12hr: payload.first_checkin_last_checkout_status_12hr,
         status: payload.status,
-      });
-
-      dataAll = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": payload.Hotel_Id , "room_type": payload.room_type});
-
-  }else if(payload.operation === "bulkEdit") {
-    
-    payload.formattedDates.map(async(item) => {
-      let search = await Pms_Ratesandinventory_Managerateandinventory.find({
-        Hotel_Id: payload.Hotel_Id,
-        booking_date: { $regex: new RegExp(item, 'i') },
-        status: { $regex: new RegExp(payload.status, 'i') },
-        room_type: { $regex: new RegExp(payload.selectedRoom, 'i') },
-      });
-      if(search.length === 0) {
-        await Pms_Ratesandinventory_Managerateandinventory.updateMany({ Hotel_Id: payload.Hotel_Id, booking_date: item }, 
-          {
-            status: payload.status,
-          })
-          databyid = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": payload.Hotel_Id , "room_type": payload.selectedRoom});
-      }else{
-
-        success = false;
       }
-
-    })
-}else if(payload.operation === "bulkUpdateProp") {
- 
-  payload.formattedDates.map(async(item) => {
-    let search = await Pms_Ratesandinventory_Managerateandinventory.find({
+    );
+    response.dataAll = await Pms_Ratesandinventory_Managerateandinventory.find({
       Hotel_Id: payload.Hotel_Id,
-      booking_date: { $regex: new RegExp(item, 'i') },
-      status: { $regex: new RegExp(payload.status, 'i') },
-      room_type: { $regex: new RegExp(payload.selectedRoom, 'i') },
+      room_type: payload.room_type,
     });
-    if(search.length === 0) {
-      await Pms_Ratesandinventory_Managerateandinventory.updateMany({ Hotel_Id: payload.Hotel_Id, booking_date: item, room_type: payload.selectedRoom }, 
-        {
-          status: payload.status,
-        })
-    }else{
-     
-      success = false;
-    }
+  } else if (["bulkEdit", "bulkUpdateProp", "bulkUpdateRoom", "bulkUpdateRate"].includes(payload.operation)) {
+    await Promise.all(
+      payload.formattedDates.map(async (item) => {
+        const query = {
+          Hotel_Id: payload.Hotel_Id,
+          booking_date: { $regex: new RegExp(item, 'i') },
+          room_type: { $regex: new RegExp(payload.selectedRoom, 'i') },
+        };
 
-  })
-}else if(payload.operation === "bulkUpdateRoom") {
-  
-  payload.formattedDates.map(async(item) => {
-    let search = await Pms_Ratesandinventory_Managerateandinventory.find({
-      Hotel_Id: payload.Hotel_Id,
-      booking_date: { $regex: new RegExp(item, 'i') },
-      total_rooms_count: payload.totalRooms,
-      room_type: { $regex: new RegExp(payload.selectedRoom, 'i') },
-    });
-    console.log("Search res: ",search)
-    if(search.length === 0) {
-      await Pms_Ratesandinventory_Managerateandinventory.updateMany({ Hotel_Id: payload.Hotel_Id, booking_date: item, room_type: payload.selectedRoom }, 
-        {
-          total_rooms_count: payload.totalRooms,
-        })
-    }else{
-      console.log("False")
-      success = false;
-    }
+        if (payload.operation === "bulkUpdateRoom") {
+          query.total_rooms_count = payload.totalRooms;
+        }
 
-  })
-}else if(payload.operation === "bulkUpdateRate") {
+        const updateFields = {
+          ...(payload.operation === "bulkEdit" && { status: payload.status }),
+          ...(payload.operation === "bulkUpdateProp" && { status: payload.status }),
+          ...(payload.operation === "bulkUpdateRoom" && { total_rooms_count: payload.totalRooms }),
+          ...(payload.operation === "bulkUpdateRate" && {
+            rate_3hr: payload.rate_3hr,
+            rate_6hr: payload.rate_6hr,
+            rate_12hr: payload.rate_12hr,
+            rate_24hr: payload.rate_24hr,
+            rate_child: payload.rate_child,
+            rate_extraperson: payload.rate_extraperson,
+          }),
+        };
 
-  payload.formattedDates.map(async(item) => {
-    // let search = await Pms_Ratesandinventory_Managerateandinventory.find({
-    //   Hotel_Id: payload.Hotel_Id,
-    //   booking_date: { $regex: new RegExp(item, 'i') },
-    //   status: { $regex: new RegExp(payload.status, 'i') },
-    //   room_type: { $regex: new RegExp(payload.selectedRoom, 'i') },
-    // });
-    // console.log("Search res: ",search)
-    // if(search.length === 0) {
-      await Pms_Ratesandinventory_Managerateandinventory.updateMany({ Hotel_Id: payload.Hotel_Id, booking_date: item, room_type: payload.selectedRoom }, 
-        {
-          rate_3hr: payload.rate_3hr,
-          rate_6hr: payload.rate_6hr,
-          rate_12hr: payload.rate_12hr,
-          rate_24hr: payload.rate_24hr,
-          rate_child: payload.rate_child,
-          rate_extraperson: payload.rate_extraperson,
-        })
-    // }else{
-    //   console.log("False")
-    //   success = false;
-    // }
+        await Pms_Ratesandinventory_Managerateandinventory.updateMany(query, updateFields);
+      })
+    );
+  } else if (payload.operation === "singleEdit") {
 
-  })
-}else if(payload.operation === "singleEdit") {
-  await Pms_Ratesandinventory_Managerateandinventory.updateOne({ Hotel_Id: payload.Hotel_Id, booking_date: payload.formattedDates, room_type: payload.selectedRoom }, 
-    {
-      rate_24hr: payload.rate24hr,
-    })
-}else if(payload.action === "statusChange") {
-  console.log("Status Change Status: ", payload)
-  await Pms_Ratesandinventory_Managerateandinventory.updateOne({ id: payload.id}, {status: payload.status === "bookable" ? "soldout" : "bookable"})
-}else{
-
-    //await Pms_Ratesandinventory_Managerateandinventory.deleteMany();
-    if(payload.user_id) {
-      // let search1 = await Pms_Ratesandinventory_Managerateandinventory.find({
-      //   booking_date: { $regex: new RegExp(payload.booking_date, 'i') },
-      //   room_type: { $regex: new RegExp(payload.room_type, 'i') },
-      // });
-  
-      // console.log("Search 1:",search1)
-  
-      let search = await Pms_Ratesandinventory_Managerateandinventory.find({
+    await Pms_Ratesandinventory_Managerateandinventory.updateOne(
+      {
         Hotel_Id: payload.Hotel_Id,
-        booking_date: { $regex: new RegExp(payload.booking_date, 'i') },
-        user_id: { $regex: new RegExp(payload.user_id, 'i') },
-        room_type: { $regex: new RegExp(payload.room_type, 'i') },
+        booking_date: payload.formattedDates,
+        room_type: payload.selectedRoom,
+      },
+      { rate_24hr: payload.rate24hr }
+    );
+
+  } else if (payload.action === "statusChange") {
+
+    await Pms_Ratesandinventory_Managerateandinventory.updateOne(
+      { id: payload.id },
+      { status: payload.status === "bookable" ? "soldout" : "bookable" }
+    );
+
+  } else if (payload.action === "deleteOldDates") {
+    try {
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const records = await Pms_Ratesandinventory_Managerateandinventory.find();
+
+      const oldRecords = records.filter(record => {
+        const bookingDate = parse(record.booking_date, 'EEE dd MMM', new Date());
+        return isBefore(bookingDate, currentDate);
       });
   
-      // if(search1.length === 1) {
-      //   dataExisted = { result: "Data already existed" };
-      //   success = false;
-      // }else{
-        if(search.length === 0) {
-          await Pms_Ratesandinventory_Managerateandinventory.create(payload);
-          data = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": payload.Hotel_Id});
-          dataAll = await Pms_Ratesandinventory_Managerateandinventory.find();
-        }else {
-          dataExisted = { result: "Data already existed" };
-          success = false;
-        }
-      //}
-    }else{
-      console.log("No user id")
+      const oldRecordIds = oldRecords.map(record => record._id);
+      if (oldRecordIds.length > 0) {
+        await Pms_Ratesandinventory_Managerateandinventory.deleteMany({ _id: { $in: oldRecordIds } });
+      } else {
+        console.log("No old records found to delete.");
+      }
+    } catch (error) {
+      console.error("Error::::::::>", error);
+      success = false;
     }
-    }
-    
 
-  
-  return NextResponse.json({ data, dataAll, databyid, success });
+  }else {
+
+    const search = await Pms_Ratesandinventory_Managerateandinventory.find({
+      booking_dateF: payload.booking_dateF,
+      room_type: { $regex: new RegExp(payload.room_type, 'i') },
+    });
+
+    if (search.length === 0) {
+      await Pms_Ratesandinventory_Managerateandinventory.create(payload);
+      response.data = await Pms_Ratesandinventory_Managerateandinventory.find({ Hotel_Id: payload.Hotel_Id });
+      response.dataAll = await Pms_Ratesandinventory_Managerateandinventory.find();
+    } else {
+      response.dataExisted = { result: "Data already existed" };
+      success = false;
+    }
+
+  }
+
+  return NextResponse.json({ ...response, success });
 }
-
-
-

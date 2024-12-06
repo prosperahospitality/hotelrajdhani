@@ -1,6 +1,7 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
+    standardDateRange: [],
     formattedDateRange: [],
     selectedRoom: '',
     quickSold: [],
@@ -40,6 +41,11 @@ const rateandinventorySlice = createSlice({
         handleFormattedDateRange: (state, action) => {
             
             state.formattedDateRange = action.payload
+        },
+
+        handleStandardDateRange: (state, action) => {
+            
+            state.standardDateRange = action.payload
         },
 
         handleSelectedRoom :  (state, action) => {
@@ -183,7 +189,7 @@ const rateandinventorySlice = createSlice({
     },
 });
 
-export const {handleFormattedDateRange, handleSelectedRoom, handleQuickSold, handleQuickSoldFormattedDate ,handleQuickSoldSelectedRadio, removeQuickSoldFormattedDate, handleQuickSoldFormattedDateCopy, handleUpdateBulkProperty, handleFormattedDateUpdateProp, handleFormattedDateUpdatePropCopy, handleSelectedRoomUpdateProperty, handleSelectedRadioUpdateProp, handleQuickSoldFlag, handleUpdatePropArray, handleUpdateRoomArray, handleFormattedDateUpdateRoom,
+export const {handleStandardDateRange, handleFormattedDateRange, handleSelectedRoom, handleQuickSold, handleQuickSoldFormattedDate ,handleQuickSoldSelectedRadio, removeQuickSoldFormattedDate, handleQuickSoldFormattedDateCopy, handleUpdateBulkProperty, handleFormattedDateUpdateProp, handleFormattedDateUpdatePropCopy, handleSelectedRoomUpdateProperty, handleSelectedRadioUpdateProp, handleQuickSoldFlag, handleUpdatePropArray, handleUpdateRoomArray, handleFormattedDateUpdateRoom,
     handleSelectedRoomUpdateRoom,
     handleValueUpdateRoom,
     

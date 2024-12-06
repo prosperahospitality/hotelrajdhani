@@ -11,13 +11,13 @@ const SearchBar = ({ checkindateParam,
     checkoutdateParam,
     adultsSelectParam,
     childSelectParam,
-    allRoomsDet, 
+    allRoomsDet,
     onFilteredResults,
     onCheckindate,
     onCheckoutdate,
     onAdultsSelect,
     onChildSelect,
-    onSelectedDateRange}) => {
+    onSelectedDateRange }) => {
 
     let defaultDate = today(getLocalTimeZone());
     const nextDay = defaultDate.add({ days: 1 });
@@ -31,10 +31,23 @@ const SearchBar = ({ checkindateParam,
         return `${day}-${month}-${year}`;
     };
 
+    const parseDate = (dateString) => {
+        const [day, month, year] = dateString.split("-").map(Number);
+        return new Date(year, month - 1, day);
+    };
+
     const [checkindate, setCheckindate] = useState(checkindateParam);
     const [checkoutdate, setCheckoutdate] = useState(checkoutdateParam);
 
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
+    const [selectedDateRange, setSelectedDateRange] = useState([
+        {
+            startDate: parseDate(checkindateParam),
+            endDate: parseDate(checkoutdateParam),
+            key: "selection",
+        },
+    ]);
+
+    console.log("Selected Date Range::::::>", selectedDateRange)
 
     const [adultsSelect, setAdultsSelect] = useState();
     const [childSelect, setChildSelect] = useState();
@@ -59,8 +72,8 @@ const SearchBar = ({ checkindateParam,
         setCheckoutdate(formattedEndDate);
         setSelectedDateRange(val);
 
-        onCheckindate(formattedStartDate);
-        onCheckoutdate(formattedEndDate);
+        // onCheckindate(formattedStartDate);
+        // onCheckoutdate(formattedEndDate);
         onSelectedDateRange(val);
     };
 
@@ -76,15 +89,17 @@ const SearchBar = ({ checkindateParam,
     const searchAction = () => {
         try {
 
-            const filteredRooms = allRoomsDet.filter((item) => {
+            // const filteredRooms = allRoomsDet.filter((item) => {
 
-                const isAdultValid = item.base_adult <= adultsSelect && item.max_adult >= adultsSelect;
+            //     const isAdultValid = item.base_adult <= adultsSelect && item.max_adult >= adultsSelect;
 
-                const isChildValid = (item.base_child <= childSelect && item.max_child >= childSelect) || (childSelect === 0 && item.base_child >= 1);
+            //     const isChildValid = (item.base_child <= childSelect && item.max_child >= childSelect) || (childSelect === 0 && item.base_child >= 1);
 
-                return isAdultValid && isChildValid;
+            //     return isAdultValid && isChildValid;
 
-            });
+            // });
+
+            const filteredRooms = allRoomsDet;
 
             onFilteredResults(filteredRooms)
 

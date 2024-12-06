@@ -34,9 +34,14 @@ const SelectMonth = ({
     roomprice,
     checkInDataForSum,
     checkOutDataForSum,
-    roomdetPayload
+    roomdetPayload,
+    roombaseprice
 }
 ) => {
+
+
+    console.log("Checkout::::::::>", )
+    
     let defaultDate = today(getLocalTimeZone());
     const nextDay = defaultDate.add({ days: 1 });
 
@@ -77,10 +82,23 @@ const SelectMonth = ({
         return `${dayName} ${day} ${monthName}`;
     }
 
+    const parseDatee = (dateString) => {
+        const [day, month, year] = dateString.split("-").map(Number);
+        return new Date(year, month - 1, day);
+    };
+
     const [checkindate, setCheckindate] = useState(formatDate(defaultDate));
     const [checkoutdate, setCheckoutdate] = useState(formatDate(nextDay));
 
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
+    const [selectedDateRange, setSelectedDateRange] = useState([
+        {
+            startDate: parseDatee(formatDate(defaultDate)),
+            endDate: parseDatee(formatDate(nextDay)),
+            key: "selection",
+        },
+    ]);
+
+    console.log("selectedDateRange:::::>", selectedDateRange)
 
     // const searchedDate = "25-11-2024";
     // const checkoutdate = "26-11-2024";
@@ -89,6 +107,7 @@ const SelectMonth = ({
     const [initialDate, setInitialDate] = useState(
         differenceInDays(checkindate, checkoutdate)
     );
+
 
     const handleDateSelect = (val) => {
 
@@ -199,6 +218,8 @@ const SelectMonth = ({
             const formattedStartDate = formatDate(selectedDateRange[0].startDate);
             const formattedEndDate = formatDate(selectedDateRange[0].endDate);
 
+            const abc = differenceInDays(formattedStartDate, formattedEndDate)
+
             let payload = {
                 user_id: "",
                 booking_id: await generateUniqueID(),
@@ -210,7 +231,7 @@ const SelectMonth = ({
                 Hotel_name: "Hotel Rajdhani",
                 booking_date: getCurrentDateTime(),
                 roomDet: [roomdetPayload],
-                price: roomprice.toString(),
+                price: (roombaseprice * abc),
                 status: "inprocess",
                 city: '',
                 zip: '',
@@ -591,6 +612,13 @@ const RoomsTemplate = (props) => {
         return `${day}-${month}-${year}`;
     };
 
+    const formatYear = (date) => {
+        const day = String(date.day).padStart(2, "0");
+        const month = String(date.month).padStart(2, "0");
+        const year = String(date.year);
+        return `${year}`;
+    };
+
     const checkindateParam = formatDatee(defaultDate);
 
     const checkoutdateParam = formatDatee(nextDay);
@@ -601,6 +629,11 @@ const RoomsTemplate = (props) => {
 
     const [searchedCheckOutDate, setSearchedCheckOutDate] = useState(checkoutdateParam);
 
+    const [initialYear, setInitialYear] = useState(formatYear(defaultDate));
+
+    console.log("Date4s::::::::::>", searchedCheckInDate,
+        searchedCheckOutDate)
+
     const adultsSelectComp = '1';
 
     const childSelectComp = '0';
@@ -610,6 +643,8 @@ const RoomsTemplate = (props) => {
     const [childSelectCompp, setSelectedChildCount] = useState('');
 
     const [selectedDateRange, setSelectedDateRange] = useState(null);
+
+    const [diffindayss, setDiffindayss] = useState(1);
 
 
     function formatDate(dateString) {
@@ -694,6 +729,7 @@ const RoomsTemplate = (props) => {
                 roomname: roomInform?.room_name,
                 price: roomInform?.room_rate,
                 images: roomInform?.roomimages,
+                roomimage: roomInform?.roomimages[0],
                 bed_type: roomInform?.bed_type[0].value,
                 max_adults: roomInform?.max_adult,
                 max_childs: roomInform?.max_child,
@@ -755,6 +791,7 @@ const RoomsTemplate = (props) => {
                                 : getDatesBetween(formattedDateCheckin, formattedDateCheckout);
 
                         let diffindays = differenceInDays(searchedCheckInDate, searchedCheckOutDate);
+                        
 
 
 
@@ -765,8 +802,13 @@ const RoomsTemplate = (props) => {
                             formattedDateCheckout = formatDate(formattedDateCheckoutttt);
                         }
 
+                        console.log("formattedDateCheckin::::>", formattedDateCheckin,
+                            formattedDateCheckout)
+
+                            console.log("Year:::::::>", initialYear)
+
                         const results = await fetch(
-                            `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${"123456"}&searchedDate=${formattedDateCheckin}&checkoutdate=${formattedDateCheckout}`,
+                            `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${"123456"}&searchedDate=${formattedDateCheckin}&checkoutdate=${formattedDateCheckout}&year=${initialYear}`,
                             {
                                 method: "GET",
                                 headers: {
@@ -919,7 +961,7 @@ const RoomsTemplate = (props) => {
                             : getDatesBetween(formattedDateCheckin, formattedDateCheckout);
 
                     let diffindays = differenceInDays(searchedCheckInDate, searchedCheckOutDate);
-
+                    setDiffindayss(diffindays)
 
 
                     if (datesss.length === diffindays) {
@@ -929,8 +971,15 @@ const RoomsTemplate = (props) => {
                         formattedDateCheckout = formatDate(formattedDateCheckoutttt);
                     }
 
+                    console.log("formattedDateCheckin1::::>", formattedDateCheckin,
+                        formattedDateCheckout, selectedDateRange)
+
+                        const year = new Date(selectedDateRange[0].startDate).getFullYear();
+
+                        console.log("Year1:::::::>", year)
+
                     const results = await fetch(
-                        `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${"123456"}&searchedDate=${formattedDateCheckin}&checkoutdate=${formattedDateCheckout}`,
+                        `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${"123456"}&searchedDate=${formattedDateCheckin}&checkoutdate=${formattedDateCheckout}&year=${year.toString()}`,
                         {
                             method: "GET",
                             headers: {
@@ -1019,7 +1068,6 @@ const RoomsTemplate = (props) => {
         }
         fetchRoomRate()
     }, [searchedCheckInDate, searchedCheckOutDate, filteredRoomDetails])
-
 
 
     const finalPrice = () => {
@@ -1175,13 +1223,17 @@ const RoomsTemplate = (props) => {
         return finalPricee
     };
 
+
+
+
     const roomdetPayload = {
         id: roomDetails.id,
         name: roomDetails.roomname,
         value: false,
-        amount: finalPrice(),
+        amount: roomDetails.price ? (roomDetails.price * diffindayss)  : finalPrice(),
         adultCount: adultsSelectCompp,
         childCount: childSelectCompp,
+        roomimage: roomDetails?.roomimage
     }
 
 
@@ -1216,7 +1268,7 @@ const RoomsTemplate = (props) => {
                                 }}
                             >
                                 <IndianRupee className="flex justify-center text-center self-center" />
-                                {finalPrice()}
+                                {roomDetails.price ? (roomDetails.price * diffindayss)  : finalPrice()}
                             </div>
                         </div>
                         <div className="flex lg:justify-end lg:items-center text-sm md:text-base text-gray-500 mt-2">per night</div>
@@ -1382,10 +1434,11 @@ const RoomsTemplate = (props) => {
                             onSelectedDateRange={setSelectedDateRange}
                             maxadults={roomDetails.max_adults}
                             maxchilds={roomDetails.max_childs}
-                            roomprice={finalPrice()}
+                            roomprice={roomDetails.price ? (roomDetails.price * diffindayss)  : finalPrice()}
                             checkInDataForSum={checkInDataForSum}
                             checkOutDataForSum={checkOutDataForSum}
                             roomdetPayload={roomdetPayload}
+                            roombaseprice={roomDetails.price}
                         />
                     </div>
                 </div>
@@ -1396,3 +1449,5 @@ const RoomsTemplate = (props) => {
 }
 
 export default RoomsTemplate
+
+

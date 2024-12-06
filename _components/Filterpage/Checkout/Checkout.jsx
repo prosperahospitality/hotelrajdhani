@@ -62,12 +62,12 @@ export default function Checkout() {
         result?.databyid?.checkin_date +
         "," +
         " " +
-        extractYear(result?.databyid?.booking_date);
+        extractYear(result?.databyid?.checkin_dateF);
       const checkoutData =
         result?.databyid?.checkout_date +
         "," +
         " " +
-        extractYear(result?.databyid?.booking_date);
+        extractYear(result?.databyid?.checkin_dateF);
 
       const checkinDate = new Date(checkinData);
       const checkoutDate = new Date(checkoutData);
@@ -78,7 +78,7 @@ export default function Checkout() {
 
       setNights(numberOfNights);
 
-      setCurrentYear(extractYear(result?.databyid?.booking_date));
+      setCurrentYear(extractYear(result?.databyid?.checkin_dateF));
 
 
       if (result?.databyid?.pflag0 === 1) {

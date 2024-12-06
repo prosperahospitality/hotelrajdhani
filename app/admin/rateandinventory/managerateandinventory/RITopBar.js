@@ -25,6 +25,7 @@ import { Save, Zap, CalendarRange } from "lucide-react";
 import { format, addDays, isBefore } from "date-fns";
 import { useDispatch } from "react-redux";
 import { handleFormattedDateRange } from "@/app/redux/slices/rateandinventorySlice";
+import { handleStandardDateRange } from "@/app/redux/slices/rateandinventorySlice";
 import { handleSelectedRoom } from "@/app/redux/slices/rateandinventorySlice";
 import { handleUpdateBulkProperty } from "@/app/redux/slices/rateandinventorySlice";
 import { handleFormattedDateUpdateProp } from "@/app/redux/slices/rateandinventorySlice";
@@ -78,6 +79,7 @@ const RITopBar = () => {
 
   const [selectedDate, setSelectedDate] = useState();
   const [formattedDateRange, setFormattedDateRange] = useState([]);
+  const [standardDateRange, setStandardDateRange] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverOpenUpdateRoom, setPopoverOpenUpdateRoom] = useState(false);
@@ -269,6 +271,8 @@ const RITopBar = () => {
   }, []);
 
   useEffect(() => {
+
+    console.log("selectedDate::::::::>", selectedDate)
     if (selectedDate && selectedDate[0].startDate && selectedDate[0].endDate) {
       const dates = [];
       let currentDate = selectedDate[0].startDate;
@@ -281,8 +285,10 @@ const RITopBar = () => {
 
       // Format each date in the array
       const formattedDates = dates.map((date) => format(date, "EEE dd MMM"));
+      const standardDateRange = dates.map((date) => format(date, "dd-MM-yyyy"));
 
       setFormattedDateRange(formattedDates);
+      setStandardDateRange(standardDateRange);
     } else {
    
     }
@@ -313,6 +319,10 @@ const RITopBar = () => {
   useEffect(() => {
     dispatch(handleFormattedDateRange(formattedDateRange));
   }, [formattedDateRange]);
+
+  useEffect(() => {
+    dispatch(handleStandardDateRange(standardDateRange));
+  }, [standardDateRange]);
 
   useEffect(() => {
     dispatch(handleSelectedRoom(selectedRoom));
