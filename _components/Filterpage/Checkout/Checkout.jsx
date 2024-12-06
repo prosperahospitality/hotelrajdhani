@@ -256,7 +256,7 @@ export default function Checkout() {
                     className="mb-4 flex gap-4 w-full flex-col md:flex-row"
                   >
                     <Image
-                      src={IMAGES.passage}
+                      src={item.roomimage}
                       alt="Superior Room"
                       className="w-full md:w-1/4 h-32 object-cover rounded-lg"
                       width={500}

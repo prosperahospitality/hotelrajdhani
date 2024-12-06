@@ -4,6 +4,8 @@ const IMAGES = {
     landing1: '/img/landing1.jpeg',
     landing2: '/img/landing2.jpeg',
     landing3: '/img/landing3.jpg',
+    landing5: '/img/landing5.jpg',
+    landing6: '/img/landing6.jpg',
     sitelogo: '/img/sitelogo.png',
     reception: '/img/reception.jpeg',
     reception2: '/img/reception2.jpeg',
