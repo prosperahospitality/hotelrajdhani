@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import DataTable from "@/_components/Admin/Propertymaster/Roomdetails/DataTable";
 import { useSelector } from "react-redux";
 import { Trash2 } from 'lucide-react';
+import { Spinner } from "@nextui-org/react";
 
 const columns = [
     { name: "ID", uid: "id", sortable: true },
@@ -108,9 +109,9 @@ const RoomDetailsPage = () => {
     checksRef.current = useSelector((state) => state.checks.selectedChecks);
 
     useEffect(() => {
-      console.log("result::::::>", result)
+        console.log("result::::::>", result)
     }, [result])
-    
+
 
     const initialFxn = async () => {
         try {
@@ -1215,7 +1216,7 @@ const RoomDetailsPage = () => {
                                                                 </Autocomplete>
 
                                                                 <Input
-                                                                    
+
                                                                     key="Room No"
                                                                     type="text"
                                                                     label="Enter Room No"
@@ -1272,7 +1273,7 @@ const RoomDetailsPage = () => {
                                                                 </Autocomplete>
 
                                                                 <Autocomplete
-                                                                    
+
                                                                     key="Room Rate Plan"
                                                                     labelPlacement="outside"
                                                                     placeholder="Select...."
@@ -1312,7 +1313,7 @@ const RoomDetailsPage = () => {
                                                     {actionType === "editmany" ? '' :
                                                         <>
                                                             <Input
-                                                                
+
                                                                 key="CGST"
                                                                 type="text"
                                                                 label="CGST"
@@ -1325,7 +1326,7 @@ const RoomDetailsPage = () => {
                                                                 onChange={(e) => setCGST(e.target.value)}
                                                             />
                                                             <Input
-                                                                
+
                                                                 key="SGST"
                                                                 type="text"
                                                                 label="SGST"
@@ -1338,7 +1339,7 @@ const RoomDetailsPage = () => {
                                                                 onChange={(e) => setSGST(e.target.value)}
                                                             />
                                                             <Input
-                                                                
+
                                                                 key="IGST"
                                                                 type="text"
                                                                 label="IGST"
@@ -1356,7 +1357,7 @@ const RoomDetailsPage = () => {
                                                     {actionType === "editmany" ? '' :
                                                         <>
                                                             <Input
-                                                                
+
                                                                 key="Extra Adult Price"
                                                                 type="text"
                                                                 label="Extra Adult Price"
@@ -1369,7 +1370,7 @@ const RoomDetailsPage = () => {
                                                                 onChange={(e) => setExtraAdultPrice(e.target.value)}
                                                             />
                                                             <Input
-                                                                
+
                                                                 key="Extra Child Price"
                                                                 type="text"
                                                                 label="Extra Child Price"
@@ -1383,7 +1384,7 @@ const RoomDetailsPage = () => {
                                                             />
                                                             <div className='flex gap-2'>
                                                                 <Input
-                                                                    
+
                                                                     key="Room Size"
                                                                     type="text"
                                                                     label="Room Size"
@@ -1396,7 +1397,7 @@ const RoomDetailsPage = () => {
                                                                     onChange={(e) => setRoomSize(e.target.value)}
                                                                 />
                                                                 <Autocomplete
-                                                                    
+
                                                                     key="Select Size"
                                                                     labelPlacement="outside"
                                                                     placeholder="Select...."
@@ -1466,7 +1467,7 @@ const RoomDetailsPage = () => {
 
                                                                                 variant="bordered"
                                                                                 size="md"
-                                                                                
+
                                                                                 style={{ width: "100%" }}
                                                                                 defaultSelectedKey={actionType === "edit" && selectedBedtype[0] ? selectedBedtype[0].value : ''}
                                                                                 value={selectedBedtype && selectedBedtype[0] ? selectedBedtype[0].value : ''}
@@ -1550,7 +1551,7 @@ const RoomDetailsPage = () => {
                                                                                 key={actionType === "edit" && selectedBedSize[0] ? selectedBedSize[0].value : 'bed size'}
                                                                                 labelPlacement="outside"
                                                                                 placeholder="Select...."
-                                                                                
+
                                                                                 variant="bordered"
                                                                                 className=""
                                                                                 style={{}}
@@ -1728,7 +1729,11 @@ const RoomDetailsPage = () => {
                     </div>
                 </>
 
-                : "Prerendered"}
+                :
+                <div className="fixed inset-0 flex items-center justify-center bg-background-800">
+                    <Spinner />
+                </div>
+            }
         </div>
     )
 }

@@ -1,13 +1,30 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import Landing from '@/_components/Home/Landing'
 import Introduction from '@/_components/Home/Introduction'
 import Facilities from '@/_components/Home/Facilities'
 import Placestovisit from '@/_components/Home/Placestovisit'
 import Testimonials from '@/_components/Home/Testimonials'
 import CorporateGuestsSection from '@/_components/Home/Companies'
+import { useSelector, useDispatch } from 'react-redux'
+import { handleLocateUsFxn, handleTouristSpotsFxn } from "@/app/redux/slices/navSlice";
+
 
 
 const Home = () => {
+
+  const dispatch = useDispatch();
+
+  const scrollLocation = useSelector((state) => state.nav.scrollLocation);
+
+  const scrollTourist = useSelector((state) => state.nav.scrollTourist);
+
+  const scrollToDiv = (id) => {
+    const targetDiv = document.getElementById(id);
+    if (targetDiv) {
+      targetDiv.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const revenuedata = [
     {
@@ -17,16 +34,31 @@ const Home = () => {
     }
   ]
 
+  useEffect(() => {
+    if (scrollLocation) {
+      scrollToDiv("target-div")
+      dispatch(handleLocateUsFxn(false))
+    }
+  }, [scrollLocation])
+
+  useEffect(() => {
+    if (scrollTourist) {
+      scrollToDiv("target-place")
+      dispatch(handleTouristSpotsFxn(false))
+    }
+  }, [scrollTourist])
+
+
 
   return (
     <div className='flex flex-col gap-10 lg:gap-16'>
       {/* <Landing content={revenuedata}/> */}
       <Landing />
       <Introduction />
-      <div className='w-full flex justify-center items-center mt-16'>
+      <div className='w-full flex justify-center items-center mt-16' id="target-div">
         <div className="flex flex-col justify-center items-center w-[98%] h-full">
           <div className="border-b border-gray-500  inline-block pb-1">
-            <p className="text-center text-gray-500 text-xl lg:text-2xl">Locate Us</p>
+            <p className="text-center text-gray-500 text-2xl lg:text-2xl font-semibold mt-8 lg:mt-0">Locate Us</p>
           </div>
           <div className="flex justify-center item-center w-full h-full p-4 mt-4">
             <iframe
@@ -43,7 +75,9 @@ const Home = () => {
 
       <Facilities />
       <CorporateGuestsSection />
-      <Placestovisit />
+      <div id="target-place">
+        <Placestovisit />
+      </div>
       <Testimonials />
     </div>
   )

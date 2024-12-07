@@ -59,6 +59,7 @@ import { DateRange } from "react-date-range";
 import { cn } from "@/_lib/utils";
 import { CiCalendar } from "react-icons/ci";
 import { useMediaQuery } from '@react-hook/media-query';
+import { Spinner } from "@nextui-org/react";
 
 
 const Rooms = [
@@ -628,7 +629,7 @@ const RITopBar = () => {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div><Spinner /></div>;
   }
 
   const handleDateSelect = (val) => {

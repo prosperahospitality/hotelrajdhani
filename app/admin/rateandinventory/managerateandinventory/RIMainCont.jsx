@@ -19,6 +19,7 @@ import {
   parse,
 } from "date-fns";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { Spinner } from "@nextui-org/react";
 
 export default function RIMainCont() {
   const [isLoading, setIsLoading] = useState(true);
@@ -717,23 +718,11 @@ export default function RIMainCont() {
 
   useEffect(() => { }, [updateRoomArray]);
 
-  //---------------------------------------------------------------------------------------------------------
-
-  // Dummy data for demonstration
-  const dummyData = [
-    { name: "Luke Skywalker", height: "172", mass: "77", birth_year: "19BBY" },
-    { name: "C-3PO", height: "167", mass: "75", birth_year: "112BBY" },
-    { name: "R2-D2", height: "96", mass: "32", birth_year: "33BBY" },
-    { name: "Darth Vader", height: "202", mass: "136", birth_year: "41.9BBY" },
-    { name: "Luke Skywalker", height: "172", mass: "77", birth_year: "19BBY" },
-    { name: "C-3PO", height: "167", mass: "75", birth_year: "112BBY" },
-  ];
 
   useEffect(() => {
-    // Simulate loading delay
     setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Adjust as needed
+    }, 2000); 
   }, []);
 
   const start = startOfMonth(new Date());
@@ -757,6 +746,8 @@ export default function RIMainCont() {
     
       return dateA - dateB;
     });
+
+
     
     console.log(dates);
 
@@ -891,7 +882,6 @@ export default function RIMainCont() {
   console.log("DAtes:::::::::>", dates)
 
   return (
-
     <div className="overflow-x-scroll w-full lg:w-[80rem] 2xl:w-[99rem] overflow-auto custom-scrollbar">
       <table className="w-[50%]">
         <thead className="sticky top-50 bg-background">
@@ -902,11 +892,9 @@ export default function RIMainCont() {
             {dates.map((item) => (
               <th
                 key={item.date}
-                className={`border bg-background ${isSaturday(new Date(item.date)) ||
-                    isSunday(new Date(item.date))
-                    ? "font-bold"
-                    : ""
-                  } max-w-[80px] lg:w-[200px] `}
+                className={`border bg-background ${
+                  isSaturday(new Date(item.date)) || isSunday(new Date(item.date)) ? 'font-bold' : ''
+                } max-w-[80px] lg:w-[200px] `}
               >
                 <div className="flex justify-center items-center flex-col py-2">
                   <div className="font-semibold">{item.day}</div>
@@ -921,7 +909,7 @@ export default function RIMainCont() {
             <tr>
               <td colSpan={dates.length + 1} className="text-center py-5">
                 <div className="spinner-border text-light" role="status">
-                  <span className="visually-hidden">Loading...</span>
+                  <Spinner />
                 </div>
               </td>
             </tr>
@@ -932,11 +920,8 @@ export default function RIMainCont() {
                   Room status
                 </td>
                 {dates.map((item) => (
-                  <td
-                    key={item.date}
-                    className="border bg-background text-center"
-                  >
-                    {item.status === "bookable" ? (
+                  <td key={item.date} className="border bg-background text-center">
+                    {item.status === 'bookable' ? (
                       <Button
                         variant="flat"
                         color="success"
@@ -960,40 +945,28 @@ export default function RIMainCont() {
                   </td>
                 ))}
               </tr>
-
+  
               <tr>
                 <td className="sticky left-0 z-10 bg-background border p-2">
                   Net Booked
                 </td>
                 {dates.map((item) => (
-                  <td
-                    className="rounded border h-full w-full"
-                    key={item.date}
-                  >
-                    {/* <Button
-                      variant="flat"
-                      color="danger"
-                      radius="none"
-                      className="w-full"
-                    >
-                      Inactive
-                    </Button> */}
+                  <td className="rounded border h-full w-full" key={item.date}>
+                    {/* Empty for future customization */}
                   </td>
                 ))}
               </tr>
-
+  
               <tr>
                 <td className="sticky left-0 z-10 bg-background border p-2">
                   <div className="flex flex-col">
                     <button
                       onClick={(e) =>
-                        checkPricePerGuest === true
-                          ? null
-                          : toggleAdditionalRows(selectedRoom)
+                        checkPricePerGuest === true ? null : toggleAdditionalRows(selectedRoom)
                       }
                       className="flex gap-3"
                     >
-                      Guest Count :{" "}
+                      Guest Count :{' '}
                       {pricePerGuest && pricePerGuest.length > 0
                         ? pricePerGuest[0].baseOccupancy
                         : currentSelectedRoomDetails.base_adult}
@@ -1005,20 +978,14 @@ export default function RIMainCont() {
                     </button>
                   </div>
                 </td>
-
+  
                 {dates.map((item) => (
                   <td key={item.date} className="border bg-background">
-                    <div className="text-center pr-4 text-[14px] pt-1">
-                      INR
-                    </div>
+                    <div className="text-center pr-4 text-[14px] pt-1">INR</div>
                     <input
                       key={item.id}
                       type="number"
-                      value={
-                        price.key === item.id && price.value
-                          ? price.value
-                          : item.rate_24hr
-                      }
+                      value={price.key === item.id && price.value ? price.value : item.rate_24hr}
                       onChange={(e) => {
                         setPrice({ key: item.id, value: e.target.value });
                         handleKeyDown(
@@ -1028,12 +995,12 @@ export default function RIMainCont() {
                           item.Hotel_Id,
                           e.target.value,
                           selectedRoom,
-                          "editRate"
+                          'editRate'
                         );
                       }}
                       className="py-2 bg-background text-foreground text-center cursor-text"
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+                        if (e.key === 'Enter') {
                           e.target.blur(); // Remove focus from input field
                         }
                       }}
@@ -1041,11 +1008,11 @@ export default function RIMainCont() {
                   </td>
                 ))}
               </tr>
-
+  
               {showAdditionalRows && (
                 <>
                   {pricePerGuest
-                    .filter((item) => item.reduction !== "Normal price")
+                    .filter((item) => item.reduction !== 'Normal price')
                     .map((item1, index) => (
                       <React.Fragment key={item1.id || `${item1.occupancy}-${index}`}>
                         <tr>
@@ -1068,7 +1035,7 @@ export default function RIMainCont() {
                               </svg>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                style={{ margin: "4px 0 0 0" }}
+                                style={{ margin: '4px 0 0 0' }}
                                 width="13"
                                 height="13"
                                 viewBox="0 0 24 24"
@@ -1082,77 +1049,73 @@ export default function RIMainCont() {
                                 <path d="M18 6 6 18" />
                                 <path d="m6 6 12 12" />
                               </svg>
-                              <span className="" style={{ margin: "-2px 0 0 3px" }}>
+                              <span className="" style={{ margin: '-2px 0 0 3px' }}>
                                 {item1.occupancy}
                               </span>
                             </div>
                           </td>
-
+  
                           {dates.map((item) => {
                             let priceToDisplay;
-
+  
                             if (price.key === item.id) {
-                              if (item1.reduction === "Normal price increased by") {
-                                if (item1.type === "INR") {
-                                  priceToDisplay =
-                                    parseInt(price.value) + parseInt(item1.amount);
+                              if (item1.reduction === 'Normal price increased by') {
+                                if (item1.type === 'INR') {
+                                  priceToDisplay = parseInt(price.value) + parseInt(item1.amount);
                                 }
-
-                                if (item1.type === "%") {
+  
+                                if (item1.type === '%') {
                                   const increase =
                                     parseInt(price.value) * (parseInt(item1.amount) / 100);
                                   const newPrice = parseInt(price.value) + increase;
                                   priceToDisplay = newPrice.toFixed(2);
                                 }
-                              } else if (item1.reduction === "Normal price reduced by") {
-                                if (item1.type === "INR") {
-                                  priceToDisplay =
-                                    parseInt(price.value) - parseInt(item1.amount);
+                              } else if (item1.reduction === 'Normal price reduced by') {
+                                if (item1.type === 'INR') {
+                                  priceToDisplay = parseInt(price.value) - parseInt(item1.amount);
                                 }
-
-                                if (item1.type === "%") {
+  
+                                if (item1.type === '%') {
                                   const discount =
                                     parseInt(price.value) * (parseInt(item1.amount) / 100);
                                   const newPrice = parseInt(price.value) - discount;
                                   priceToDisplay = newPrice.toFixed(2);
                                 }
                               }
-
+  
                               if (item1.isActive === false) {
                                 priceToDisplay = price.value;
                               }
                             } else {
-                              if (item1.reduction === "Normal price increased by") {
-                                if (item1.type === "INR") {
-                                  priceToDisplay =
-                                    parseInt(item.rate_24hr) + parseInt(item1.amount);
+                              if (item1.reduction === 'Normal price increased by') {
+                                if (item1.type === 'INR') {
+                                  priceToDisplay = parseInt(item.rate_24hr) + parseInt(item1.amount);
                                 }
-
-                                if (item1.type === "%") {
+  
+                                if (item1.type === '%') {
                                   const increase =
                                     parseInt(item.rate_24hr) * (parseInt(item1.amount) / 100);
                                   const newPrice = parseInt(item.rate_24hr) + increase;
                                   priceToDisplay = newPrice.toFixed(2);
                                 }
-                              } else if (item1.reduction === "Normal price reduced by") {
-                                if (item1.type === "INR") {
-                                  priceToDisplay =
-                                    parseInt(item.rate_24hr) - parseInt(item1.amount);
+                              } else if (item1.reduction === 'Normal price reduced by') {
+                                if (item1.type === 'INR') {
+                                  priceToDisplay = parseInt(item.rate_24hr) - parseInt(item1.amount);
                                 }
-
-                                if (item1.type === "%") {
+  
+                                if (item1.type === '%') {
                                   const discount =
                                     parseInt(item.rate_24hr) * (parseInt(item1.amount) / 100);
                                   const newPrice = parseInt(item.rate_24hr) - discount;
                                   priceToDisplay = newPrice.toFixed(2);
                                 }
                               }
-
+  
                               if (item1.isActive === false) {
                                 priceToDisplay = item.rate_24hr;
                               }
                             }
-
+  
                             return (
                               <td
                                 key={`${item.date}-${item1.id || index}`}
@@ -1167,12 +1130,11 @@ export default function RIMainCont() {
                     ))}
                 </>
               )}
-
             </>
           )}
         </tbody>
       </table>
     </div>
-
   );
+  
 }

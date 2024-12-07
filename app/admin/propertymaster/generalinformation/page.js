@@ -135,7 +135,7 @@ const GeneralInformation = () => {
               className="text-foreground-300 font-semibold"
               onClick={(e) => {
                 window.open(
-                  `https://www.oceanspearlresort.com`,
+                  `https://www.hotelrajdhani.in`,
                   "_blank"
                 );
               }}

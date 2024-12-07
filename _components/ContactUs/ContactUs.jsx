@@ -81,7 +81,7 @@ const ContactUs = () => {
 
   return (
     <>
-      <div className="relative w-full h-[38rem]">
+      <div className="relative w-full h-[40rem]">
         <div className="relative w-full h-full flex justify-center items-center bg-black opacity-95">
           <Image src={IMAGES.contactus} alt="landing-bg" fill className="object-cover" />
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black/15">

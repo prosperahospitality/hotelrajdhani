@@ -70,27 +70,27 @@ export const siteConfig = {
    
     {
       label: "Rooms",
-      href:`/booknow?hotelName=${hotelName}&hotelId=${'123456'}&checkindate=${currentDate}&checkoutdate=${checkoutDate}&adultsSelect=2&childSelect=0&roomsSelect=1`
+      href:`/rooms/single-bed-non-ac-room`
     },
 
     {
       label: "Testimonials",
-      href: "/",
+      href: "/testimonials",
     },
 
     {
       label: "Blogs",
-      href: "/",
+      href: "/blog",
     },
     
     {
       label: "Contact Us",
-      href: "/contact",
+      href: "/contactus",
     },
-    {
-      label: "My Bookings",
-      href: "/booking-history",
-    },
+    // {
+    //   label: "My Bookings",
+    //   href: "/booking-history",
+    // },
   ],
 
 

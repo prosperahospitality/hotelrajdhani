@@ -72,7 +72,7 @@ const Facilities = () => {
                     <div>
                         <div className="flex justify-center items-center">
                             <div className="border-b border-gray-500  inline-block pb-1">
-                                <p className="text-center text-gray-500 text-xl lg:text-2xl">The Facilities</p>
+                                <p className="text-center text-gray-500 text-2xl lg:text-2xl font-semibold">The Facilities</p>
                             </div>
                         </div>
                         <h3 className="text-center text-2xl lg:text-4xl leading-snug mt-6 font-semibold ">

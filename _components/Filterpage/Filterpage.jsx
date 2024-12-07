@@ -20,6 +20,7 @@ import { FreeMode, Navigation } from 'swiper/modules';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import '@/app/styles/rooms.css';
+import { Spinner } from "@nextui-org/react";
 
 const generateUniqueID = async () => {
     const response = await fetch("/api/userApi/booking_details", {
@@ -62,7 +63,7 @@ function getCurrentDateTime() {
 const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckOutDate, bookingSum, selectedDateRange, checkInDataForSum,
     checkOutDataForSum }) => {
 
-        console.log("Selected Date Range checkout::::::>", selectedDateRange)
+    console.log("Selected Date Range checkout::::::>", selectedDateRange)
 
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
@@ -228,7 +229,7 @@ const SimpleSwitch = ({ isSelected, onValueChange }) => {
         <div className="flex flex-col gap-2 w-[33%]">
             <button
                 onClick={() => onValueChange(!isSelected)} // Toggle the value when clicked
-                className={`w-[100px] h-[47px] flex items-center justify-center rounded-lg ${isSelected ? "bg-[#333333] text-white hover:bg-[#F5F5DC] hover:text-[#333333]" : "bg-default-100 text-black hover:bg-default-200 hover:text-black"
+                className={`w-[100px] h-[47px] flex items-center justify-center rounded-lg ${isSelected ? "bg-[#333333] text-white hover:bg-gray-600 hover:text-white" : "bg-default-100 text-black hover:bg-default-200 hover:text-black font-semibold"
                     }`}
             >
                 {isSelected ? "Add Room" : "Remove"}
@@ -240,7 +241,7 @@ const SimpleSwitch = ({ isSelected, onValueChange }) => {
 
 
 const Filterpage = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [isSelected, setIsSelected] = useState([]);
     const [displayBookingSum, setDisplayBookingSum] = useState({});
     const [allRoomsDet, setAllRoomsDet] = useState([]);
@@ -447,6 +448,8 @@ const Filterpage = () => {
 
         } catch (error) {
             console.log("Error::::::>", error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -753,7 +756,9 @@ const Filterpage = () => {
         setSelectedPrice(price);
     };
 
-
+    useEffect(() => {
+        setIsSelected([])
+    }, [selectedDateRange])
 
     return (
         <div>
@@ -778,473 +783,481 @@ const Filterpage = () => {
                         <Sitefilter onselectedprice={handleSelectedPrice} />
                     </div>
 
-                    <div className="col-span-1 lg:col-span-3">
-                        <div>
-                            <div className="w-full flex justify-between items-center">
-                                <div className="w-full lg:w-[55%]">
-                                    <p className="font-semibold mt-2 text-xl text-gray-600">
-                                        ({newFilteredRoomDetails.length} Rooms Available)
-                                    </p>
-                                </div>
-                            </div>
-                            {console.log("newFilteredRoomDetails:::::::>", newFilteredRoomDetails)}
-
-                            {loading ? (
+                    {
+                        loading
+                            ? <div className="col-span-1 lg:col-span-3">
                                 <SkeletonCard />
-                            ) : (
-                                newFilteredRoomDetails && newFilteredRoomDetails?.map((item, index) => {
+                            </div>
+                            : <div className="col-span-1 lg:col-span-3">
+                                <div>
+                                    <div className="w-full flex justify-between items-center">
+                                        <div className="w-full lg:w-[55%]">
+                                            <p className="font-semibold mt-2 text-xl text-gray-600">
+                                                ({newFilteredRoomDetails.length} Rooms Available)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {console.log("newFilteredRoomDetails:::::::>", newFilteredRoomDetails)}
+
+                                    {loading ? (
+                                        <SkeletonCard />
+                                    ) : (
+                                        newFilteredRoomDetails && newFilteredRoomDetails?.map((item, index) => {
 
 
-                                    let sum = 0;
-                                    let abvvvvv = [];
-                                    let ccc = [];
+                                            let sum = 0;
+                                            let abvvvvv = [];
+                                            let ccc = [];
 
-                                    // console.log("Rates:::::::::>", pricePerGuest, manageInventory)
+                                            // console.log("Rates:::::::::>", pricePerGuest, manageInventory)
 
 
-                                    if (pricePerGuest !== undefined && manageInventory !== undefined) {
-                                        let abc = pricePerGuest[item.id];
+                                            if (pricePerGuest !== undefined && manageInventory !== undefined) {
+                                                let abc = pricePerGuest[item.id];
 
-                                        if (abc === undefined) {
+                                                if (abc === undefined) {
 
-                                            ccc = manageInventory[item.id]?.map((item) => {
-                                                if (item.status === "soldout") {
-                                                    return item.room_id
+                                                    ccc = manageInventory[item.id]?.map((item) => {
+                                                        if (item.status === "soldout") {
+                                                            return item.room_id
+                                                        }
+                                                    }).filter(item => item !== undefined)
+
+                                                    let fff = manageInventory[item.id]?.map((item) => { return item.rate_24hr })
+
+                                                    console.log("Datas:::::::::::::::::>", ccc, fff)
+
+                                                    fff?.map((it, index) => {
+                                                        abvvvvv.push(Math.round(it))
+                                                    })
+
+
+                                                } else {
+
+                                                    let abcd;
+
+                                                    console.log("Occupancy::::::>", adultsSelectComp, adultsSelectCompp, abc)
+
+                                                    if (adultsSelectComp === undefined || adultsSelectCompp !== undefined) {
+                                                        abcd = abc?.map((item2) => {
+                                                            if (item2.occupancy === (adultsSelectCompp).toString()) {
+                                                                return item2
+                                                            }
+                                                        }).filter((item) => item !== undefined)
+                                                    } else {
+
+
+                                                        abcd = abc?.map((item2) => {
+                                                            if (item2.occupancy === (adultsSelectComp).toString()) {
+                                                                return item2
+                                                            }
+                                                        }).filter((item) => item !== undefined)
+
+
+                                                    }
+
+
+                                                    ccc = manageInventory[item.id]?.map((item) => {
+                                                        if (item.status === "soldout") {
+                                                            return item.room_id
+                                                        }
+                                                    }).filter(item => item !== undefined)
+
+
+
+                                                    let fff = manageInventory[item.id]?.map((item) => { return item.rate_24hr })
+
+                                                    console.log("Data Rates::::::::>", fff, abcd)
+
+
+
+                                                    fff?.map((item4) => {
+                                                        abcd?.map((item5) => {
+                                                            if (item.id === item5.roomid) {
+
+                                                                let priceToDisplay;
+
+                                                                if (item5.reduction === "Normal price reduced by" && item5.isActive === true) {
+
+                                                                    if (item5.type === "INR") {
+                                                                        priceToDisplay = parseInt(item4) - parseInt(item5.amount);
+                                                                    }
+
+                                                                    if (item5.type === "%") {
+                                                                        const discount = parseInt(item4) * (parseInt(item5.amount) / 100);
+                                                                        const newPrice = parseInt(item4) - discount;
+                                                                        priceToDisplay = newPrice.toFixed(2);
+                                                                    }
+
+                                                                    abvvvvv.push(Math.round(priceToDisplay))
+
+
+
+                                                                } else if (item5.reduction === "Normal price increased by" && item5.isActive === true) {
+
+                                                                    if (item5.type === "INR") {
+                                                                        priceToDisplay = parseInt(item4) + parseInt(item5.amount);
+                                                                        abvvvvv.push(Math.round(priceToDisplay))
+                                                                    }
+
+                                                                    if (item5.type === "%") {
+                                                                        const increase = parseInt(item4) * (parseInt(item5.amount) / 100);
+                                                                        const newPrice = parseInt(item4) + increase;
+                                                                        priceToDisplay = newPrice.toFixed(2);
+                                                                        abvvvvv.push(Math.round(priceToDisplay))
+                                                                    }
+
+
+                                                                } else if (item5.reduction === "Normal price" && item5.isActive === true) {
+                                                                    priceToDisplay = parseInt(item4);
+                                                                    abvvvvv.push(Math.round(priceToDisplay))
+                                                                } else {
+                                                                    priceToDisplay = parseInt(item4);
+                                                                    abvvvvv.push(Math.round(priceToDisplay))
+                                                                }
+                                                            }
+                                                        })
+                                                    })
                                                 }
-                                            }).filter(item => item !== undefined)
 
-                                            let fff = manageInventory[item.id]?.map((item) => { return item.rate_24hr })
-
-                                            console.log("Datas:::::::::::::::::>", ccc, fff)
-
-                                            fff?.map((it, index) => {
-                                                abvvvvv.push(Math.round(it))
-                                            })
-
-
-                                        } else {
-
-                                            let abcd;
-
-                                            console.log("Occupancy::::::>", adultsSelectComp, adultsSelectCompp, abc)
-
-                                            if (adultsSelectComp === undefined || adultsSelectCompp !== undefined) {
-                                                abcd = abc?.map((item2) => {
-                                                    if (item2.occupancy === (adultsSelectCompp).toString()) {
-                                                        return item2
-                                                    }
-                                                }).filter((item) => item !== undefined)
-                                            } else {
-
-
-                                                abcd = abc?.map((item2) => {
-                                                    if (item2.occupancy === (adultsSelectComp).toString()) {
-                                                        return item2
-                                                    }
-                                                }).filter((item) => item !== undefined)
 
 
                                             }
 
-
-                                            ccc = manageInventory[item.id]?.map((item) => {
-                                                if (item.status === "soldout") {
-                                                    return item.room_id
-                                                }
-                                            }).filter(item => item !== undefined)
-
-
-
-                                            let fff = manageInventory[item.id]?.map((item) => { return item.rate_24hr })
-
-                                            console.log("Data Rates::::::::>", fff, abcd)
-
-
-
-                                            fff?.map((item4) => {
-                                                abcd?.map((item5) => {
-                                                    if (item.id === item5.roomid) {
-
-                                                        let priceToDisplay;
-
-                                                        if (item5.reduction === "Normal price reduced by" && item5.isActive === true) {
-
-                                                            if (item5.type === "INR") {
-                                                                priceToDisplay = parseInt(item4) - parseInt(item5.amount);
-                                                            }
-
-                                                            if (item5.type === "%") {
-                                                                const discount = parseInt(item4) * (parseInt(item5.amount) / 100);
-                                                                const newPrice = parseInt(item4) - discount;
-                                                                priceToDisplay = newPrice.toFixed(2);
-                                                            }
-
-                                                            abvvvvv.push(Math.round(priceToDisplay))
-
-
-
-                                                        } else if (item5.reduction === "Normal price increased by" && item5.isActive === true) {
-
-                                                            if (item5.type === "INR") {
-                                                                priceToDisplay = parseInt(item4) + parseInt(item5.amount);
-                                                                abvvvvv.push(Math.round(priceToDisplay))
-                                                            }
-
-                                                            if (item5.type === "%") {
-                                                                const increase = parseInt(item4) * (parseInt(item5.amount) / 100);
-                                                                const newPrice = parseInt(item4) + increase;
-                                                                priceToDisplay = newPrice.toFixed(2);
-                                                                abvvvvv.push(Math.round(priceToDisplay))
-                                                            }
-
-
-                                                        } else if (item5.reduction === "Normal price" && item5.isActive === true) {
-                                                            priceToDisplay = parseInt(item4);
-                                                            abvvvvv.push(Math.round(priceToDisplay))
-                                                        } else {
-                                                            priceToDisplay = parseInt(item4);
-                                                            abvvvvv.push(Math.round(priceToDisplay))
-                                                        }
-                                                    }
-                                                })
-                                            })
-                                        }
-
-
-
-                                    }
-
-                                    sum = abvvvvv.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                                            sum = abvvvvv.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
 
 
 
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] mb-16"
-                                        >
-                                            <div className="col-span-1">
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] mb-16"
+                                                >
+                                                    <div className="col-span-1">
 
-                                                <div className="hidden lg:block">
-                                                    <div className="w-full h-44 relative">
-                                                        <Image
-                                                            alt={"abc"}
-                                                            src={item.roomimages[0]}
-                                                            fill
-                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                            className="rounded-lg object-fill"
-                                                        // style={{ objectFit: "cover" }}
-                                                        />
-                                                    </div>
-                                                    <div className="w-full h-44 relative mt-2">
-                                                        <Image
-                                                            alt={"abc"}
-                                                            src={item.roomimages[1]}
-                                                            fill
-                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                            className="rounded-lg object-fill"
-                                                        // style={{ objectFit: "cover" }}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="block lg:hidden">
-                                                    <Swiper
-                                                        spaceBetween={50}
-                                                        slidesPerView={1}
-                                                        modules={[FreeMode, Navigation]}
-                                                        loop={true}
-                                                        navigation={true}
-                                                        className="mySwiper4"
-                                                    >
-                                                        <SwiperSlide key={`${index}-${item.roomimages[0]}`}>
-                                                            <div className="w-full h-64 relative">
+                                                        <div className="hidden lg:block">
+                                                            <div className="w-full h-44 relative">
                                                                 <Image
                                                                     alt={"abc"}
                                                                     src={item.roomimages[0]}
                                                                     fill
                                                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                                     className="rounded-lg object-fill"
+                                                                // style={{ objectFit: "cover" }}
                                                                 />
                                                             </div>
-                                                        </SwiperSlide>
-                                                        <SwiperSlide key={`${index}-${item.roomimages[1]}`}>
-                                                            <div className="w-full h-64 relative">
+                                                            <div className="w-full h-44 relative mt-2">
                                                                 <Image
                                                                     alt={"abc"}
                                                                     src={item.roomimages[1]}
                                                                     fill
                                                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                                     className="rounded-lg object-fill"
+                                                                // style={{ objectFit: "cover" }}
                                                                 />
                                                             </div>
-                                                        </SwiperSlide>
-                                                    </Swiper>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="col-span-1 lg:col-span-3 flex flex-col justify-between">
-                                                <div>
-                                                    <p className="text-xl lg:text-2xl font-semibold mt-4"
-                                                        style={{
-                                                            fontFamily: "Times New Roman, Georgia, serif",
-                                                            fontWeight: "bold",
-                                                        }}
-                                                    >
-                                                        {item.room_name}
-                                                    </p>
-
-                                                    <p className="line-clamp-3 mt-4">{item.roomdesc}</p>
-
-                                                    <div>
-                                                        <div className="flex justify-start items-center mt-2 w-full pt-2">
-                                                            <div className="w-full text-gray-800 text-lg grid grid-cols-2 md:grid-cols-4 gap-8">
-                                                                {/* Max Guests */}
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <UsersRound className="w-6 h-6" />
-                                                                    </div>
-                                                                    <div className="flex flex-col">
-                                                                        <div className="text-sm">Max. Guests</div>
-                                                                        <div className="font-semibold text-sm">{item.max_adult} Adults / {item.max_child} Children</div>
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Booking Nights */}
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <Moon className="w-6 h-6" />
-                                                                    </div>
-                                                                    <div className="flex flex-col">
-                                                                        <div className="text-sm">Booking Nights</div>
-                                                                        <div className="font-semibold text-sm">{numberOfNights ? numberOfNights : 1} Night</div>
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Bed Type */}
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <BedDouble className="w-6 h-6" />
-                                                                    </div>
-                                                                    <div className="flex flex-col">
-                                                                        <div className="text-sm">Bed Type</div>
-                                                                        <div className="font-semibold text-sm">{item?.bed_type[0].value}</div>
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Area */}
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24">
-                                                                            <path fill="currentColor" d="M3 5v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2m16.002 14H5V5h14z"></path>
-                                                                            <path fill="currentColor" d="M15 12h2V7h-5v2h3zm-3 3H9v-3H7v5h5z"></path>
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div className="flex flex-col">
-                                                                        <div className="text-sm">Area</div>
-                                                                        <div className="font-semibold text-sm">168 sq. ft.</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-
-                                                </div>
-
-                                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full pb-4">
-                                                    <div className="col-span-10 w-full">
-                                                        <div className="hidden lg:block w-full h-full">
-                                                            <div className="mt-4 w-full h-full flex items-center gap-5 flex-wrap justify-center lg:justify-start lg:content-end pb-4">
-                                                                <div className="flex justify-start items-center flex-col">
-                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                        <Wifi className="w-[25px] h-[25px] text-red-700" />
-                                                                    </div>
-                                                                    <p className="text-sm font-semibold mt-1">Wifi</p>
-                                                                </div>
-
-                                                                <div className="flex justify-center items-center flex-col ">
-                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                        <Cctv className="w-[25px] h-[25px] text-red-700" />
-                                                                    </div>
-                                                                    <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
-                                                                </div>
-
-                                                                <div className="flex justify-center items-center flex-col ">
-                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                        <Droplets className="w-[25px] h-[25px] text-red-700" />
-                                                                    </div>
-                                                                    <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
-                                                                </div>
-
-                                                                <div className="flex justify-center items-center flex-col ">
-                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                        <CircleParking className="w-[25px] h-[25px] text-red-700" />
-                                                                    </div>
-                                                                    <p className="text-sm font-semibold mt-1">Parking</p>
-                                                                </div>
-
-                                                                <div className="flex justify-center items-center flex-col ">
-                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                        <GlassWater className="w-[25px] h-[25px] text-red-700" />
-                                                                    </div>
-                                                                    <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
-                                                                </div>
-
-                                                                <div className="flex justify-center items-center flex-col ">
-                                                                    <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
-                                                                            <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
-                                                                        </svg>
-                                                                    </div>
-                                                                    <p className="text-sm font-semibold mt-1 text-center">Extra Mattress</p>
-                                                                </div>
-                                                            </div>
                                                         </div>
 
-                                                        <div className="lg:hidden block w-full h-full">
-                                                            <div className="w-full h-full">
-                                                                <div className="mt-8 w-full h-full grid grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-4 justify-center lg:justify-start">
-                                                                    <div className="flex justify-center items-center flex-col">
-                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                            <Wifi className="w-[25px] h-[25px] text-red-700" />
-                                                                        </div>
-                                                                        <p className="text-sm font-semibold mt-1 text-center">Wifi</p>
+                                                        <div className="block lg:hidden">
+                                                            <Swiper
+                                                                spaceBetween={50}
+                                                                slidesPerView={1}
+                                                                modules={[FreeMode, Navigation]}
+                                                                loop={true}
+                                                                navigation={true}
+                                                                className="mySwiper4"
+                                                            >
+                                                                <SwiperSlide key={`${index}-${item.roomimages[0]}`}>
+                                                                    <div className="w-full h-64 relative">
+                                                                        <Image
+                                                                            alt={"abc"}
+                                                                            src={item.roomimages[0]}
+                                                                            fill
+                                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                                            className="rounded-lg object-fill"
+                                                                        />
                                                                     </div>
-
-                                                                    <div className="flex justify-center items-center flex-col">
-                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                            <Cctv className="w-[25px] h-[25px] text-red-700" />
-                                                                        </div>
-                                                                        <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
+                                                                </SwiperSlide>
+                                                                <SwiperSlide key={`${index}-${item.roomimages[1]}`}>
+                                                                    <div className="w-full h-64 relative">
+                                                                        <Image
+                                                                            alt={"abc"}
+                                                                            src={item.roomimages[1]}
+                                                                            fill
+                                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                                            className="rounded-lg object-fill"
+                                                                        />
                                                                     </div>
-
-                                                                    <div className="flex justify-center items-center flex-col">
-                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                            <Droplets className="w-[25px] h-[25px] text-red-700" />
-                                                                        </div>
-                                                                        <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
-                                                                    </div>
-
-                                                                    <div className="flex justify-center items-center flex-col">
-                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                            <CircleParking className="w-[25px] h-[25px] text-red-700" />
-                                                                        </div>
-                                                                        <p className="text-sm font-semibold mt-1 text-center">Parking</p>
-                                                                    </div>
-
-                                                                    <div className="flex justify-center items-center flex-col">
-                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                            <GlassWater className="w-[25px] h-[25px] text-red-700" />
-                                                                        </div>
-                                                                        <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
-                                                                    </div>
-
-                                                                    <div className="flex justify-center items-center flex-col">
-                                                                        <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
-                                                                                <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
-                                                                            </svg>
-                                                                        </div>
-                                                                        <p className="text-sm font-semibold mt-1 text-center">Extra Mattress</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                                </SwiperSlide>
+                                                            </Swiper>
                                                         </div>
 
                                                     </div>
 
-                                                    <div className="col-span-2 w-full">
-                                                        <div className="flex flex-col justify-end">
-                                                            {ccc?.includes(item.id) ? (
-                                                                <p className="text-end p-4">Soldout</p>
-                                                            ) : (
-                                                                <div>
-                                                                    <div className="flex mt-2 mb-2">
-                                                                        <div className="w-full">
-                                                                            <p className="text-xs font-extralight">Start From</p>
-                                                                            <p className="font-semibold text-2xl mt-2"
-                                                                                style={{
-                                                                                    fontFamily: "Times New Roman, Georgia, serif",
-                                                                                    fontWeight: "bold",
-                                                                                }}>
-                                                                                {/* &#8377; {sum ? sum : "0"}* */}
-                                                                                &#8377; {item.room_rate ? (item.room_rate * diffindayss) : sum}*
-                                                                            </p>
+                                                    <div className="col-span-1 lg:col-span-3 flex flex-col justify-between">
+                                                        <div>
+                                                            <p className="text-xl lg:text-2xl font-semibold mt-4"
+                                                                style={{
+                                                                    fontFamily: "Times New Roman, Georgia, serif",
+                                                                    fontWeight: "bold",
+                                                                }}
+                                                            >
+                                                                {item.room_name}
+                                                            </p>
+
+                                                            <p className="line-clamp-3 mt-4">{item.roomdesc}</p>
+
+                                                            <div>
+                                                                <div className="flex justify-start items-center mt-2 w-full pt-2">
+                                                                    <div className="w-full text-gray-800 text-lg grid grid-cols-2 md:grid-cols-4 gap-8">
+                                                                        {/* Max Guests */}
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <UsersRound className="w-6 h-6" />
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <div className="text-sm">Max. Guests</div>
+                                                                                <div className="font-semibold text-sm">{item.max_adult} Adults / {item.max_child} Children</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {/* Booking Nights */}
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <Moon className="w-6 h-6" />
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <div className="text-sm">Booking Nights</div>
+                                                                                <div className="font-semibold text-sm">{numberOfNights ? numberOfNights : 1} Night</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {/* Bed Type */}
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <BedDouble className="w-6 h-6" />
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <div className="text-sm">Bed Type</div>
+                                                                                <div className="font-semibold text-sm">{item?.bed_type[0].value}</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {/* Area */}
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24">
+                                                                                    <path fill="currentColor" d="M3 5v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2m16.002 14H5V5h14z"></path>
+                                                                                    <path fill="currentColor" d="M15 12h2V7h-5v2h3zm-3 3H9v-3H7v5h5z"></path>
+                                                                                </svg>
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <div className="text-sm">Area</div>
+                                                                                <div className="font-semibold text-sm">168 sq. ft.</div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                    <SimpleSwitch
-                                                                        isSelected={isSelected?.find(sel => sel.id === item.id)?.value ?? true}
-                                                                        onValueChange={(value) => {
-                                                                            console.log("Value:::::::::>", value);
-                                                                            setIsSelected(prevval => {
-                                                                                const existingIndex = prevval?.findIndex(sel => sel.id === item.id);
+                                                                </div>
+                                                            </div>
 
-                                                                                if (existingIndex !== -1) {
-                                                                                    const updatedArray = [...prevval];
-                                                                                    updatedArray[existingIndex] = {
-                                                                                        id: item.id,
-                                                                                        name: item.room_name,
-                                                                                        value: value,
-                                                                                        // amount: sum,
-                                                                                        amount: (item.room_rate * diffindayss),
-                                                                                        adultCount: adultsSelectCompp,
-                                                                                        childCount: childSelectCompp,
-                                                                                        roomimage: item.roomimages[0]
-                                                                                    };
-                                                                                    return updatedArray;
-                                                                                } else {
-                                                                                    return [
-                                                                                        ...prevval,
-                                                                                        {
-                                                                                            id: item.id,
-                                                                                            name: item.room_name,
-                                                                                            value: value,
-                                                                                            // amount: sum,
-                                                                                            amount: (item.room_rate * diffindayss),
-                                                                                            adultCount: adultsSelectCompp,
-                                                                                            childCount: childSelectCompp,
-                                                                                            roomimage: item.roomimages[0]
+
+
+                                                        </div>
+
+                                                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full pb-4">
+                                                            <div className="col-span-10 w-full">
+                                                                <div className="hidden lg:block w-full h-full">
+                                                                    <div className="mt-4 w-full h-full flex items-center gap-5 flex-wrap justify-center lg:justify-start lg:content-end pb-4">
+                                                                        <div className="flex justify-start items-center flex-col">
+                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <Wifi className="w-[25px] h-[25px] text-red-700" />
+                                                                            </div>
+                                                                            <p className="text-sm font-semibold mt-1">Wifi</p>
+                                                                        </div>
+
+                                                                        <div className="flex justify-center items-center flex-col ">
+                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <Cctv className="w-[25px] h-[25px] text-red-700" />
+                                                                            </div>
+                                                                            <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
+                                                                        </div>
+
+                                                                        <div className="flex justify-center items-center flex-col ">
+                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <Droplets className="w-[25px] h-[25px] text-red-700" />
+                                                                            </div>
+                                                                            <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
+                                                                        </div>
+
+                                                                        <div className="flex justify-center items-center flex-col ">
+                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <CircleParking className="w-[25px] h-[25px] text-red-700" />
+                                                                            </div>
+                                                                            <p className="text-sm font-semibold mt-1">Parking</p>
+                                                                        </div>
+
+                                                                        <div className="flex justify-center items-center flex-col ">
+                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <GlassWater className="w-[25px] h-[25px] text-red-700" />
+                                                                            </div>
+                                                                            <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
+                                                                        </div>
+
+                                                                        <div className="flex justify-center items-center flex-col ">
+                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
+                                                                                    <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
+                                                                                </svg>
+                                                                            </div>
+                                                                            <p className="text-sm font-semibold mt-1 text-center">Extra Mattress</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="lg:hidden block w-full h-full">
+                                                                    <div className="w-full h-full">
+                                                                        <div className="mt-8 w-full h-full grid grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-4 justify-center lg:justify-start">
+                                                                            <div className="flex justify-center items-center flex-col">
+                                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                    <Wifi className="w-[25px] h-[25px] text-red-700" />
+                                                                                </div>
+                                                                                <p className="text-sm font-semibold mt-1 text-center">Wifi</p>
+                                                                            </div>
+
+                                                                            <div className="flex justify-center items-center flex-col">
+                                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                    <Cctv className="w-[25px] h-[25px] text-red-700" />
+                                                                                </div>
+                                                                                <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
+                                                                            </div>
+
+                                                                            <div className="flex justify-center items-center flex-col">
+                                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                    <Droplets className="w-[25px] h-[25px] text-red-700" />
+                                                                                </div>
+                                                                                <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
+                                                                            </div>
+
+                                                                            <div className="flex justify-center items-center flex-col">
+                                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                    <CircleParking className="w-[25px] h-[25px] text-red-700" />
+                                                                                </div>
+                                                                                <p className="text-sm font-semibold mt-1 text-center">Parking</p>
+                                                                            </div>
+
+                                                                            <div className="flex justify-center items-center flex-col">
+                                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                    <GlassWater className="w-[25px] h-[25px] text-red-700" />
+                                                                                </div>
+                                                                                <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
+                                                                            </div>
+
+                                                                            <div className="flex justify-center items-center flex-col">
+                                                                                <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
+                                                                                        <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
+                                                                                    </svg>
+                                                                                </div>
+                                                                                <p className="text-sm font-semibold mt-1 text-center">Extra Mattress</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div className="col-span-2 w-full">
+                                                                <div className="flex flex-col justify-end">
+                                                                    {ccc?.includes(item.id) ? (
+                                                                        <p className="text-end p-4">Soldout</p>
+                                                                    ) : (
+                                                                        <div>
+                                                                            <div className="flex mt-2 mb-2">
+                                                                                <div className="w-full">
+                                                                                    <p className="text-xs font-extralight">Start From</p>
+                                                                                    <p className="font-semibold text-2xl mt-2"
+                                                                                        style={{
+                                                                                            fontFamily: "Times New Roman, Georgia, serif",
+                                                                                            fontWeight: "bold",
+                                                                                        }}>
+                                                                                        {/* &#8377; {sum ? sum : "0"}* */}
+                                                                                        &#8377; {item.room_rate ? (item.room_rate * diffindayss) : sum}*
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <SimpleSwitch
+                                                                                isSelected={isSelected?.find(sel => sel.id === item.id)?.value ?? true}
+                                                                                onValueChange={(value) => {
+                                                                                    console.log("Value:::::::::>", value);
+                                                                                    setIsSelected(prevval => {
+                                                                                        const existingIndex = prevval?.findIndex(sel => sel.id === item.id);
+
+                                                                                        if (existingIndex !== -1) {
+                                                                                            const updatedArray = [...prevval];
+                                                                                            updatedArray[existingIndex] = {
+                                                                                                id: item.id,
+                                                                                                name: item.room_name,
+                                                                                                value: value,
+                                                                                                // amount: sum,
+                                                                                                amount: (item.room_rate * diffindayss),
+                                                                                                adultCount: adultsSelectCompp,
+                                                                                                childCount: childSelectCompp,
+                                                                                                roomimage: item.roomimages[0]
+                                                                                            };
+                                                                                            return updatedArray;
+                                                                                        } else {
+                                                                                            return [
+                                                                                                ...prevval,
+                                                                                                {
+                                                                                                    id: item.id,
+                                                                                                    name: item.room_name,
+                                                                                                    value: value,
+                                                                                                    // amount: sum,
+                                                                                                    amount: (item.room_rate * diffindayss),
+                                                                                                    adultCount: adultsSelectCompp,
+                                                                                                    childCount: childSelectCompp,
+                                                                                                    roomimage: item.roomimages[0]
+                                                                                                }
+                                                                                            ];
                                                                                         }
-                                                                                    ];
-                                                                                }
-                                                                            });
-                                                                        }}
-                                                                    />
+                                                                                    });
+                                                                                }}
+                                                                            />
 
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                            )}
+                                                            </div>
                                                         </div>
+
+
+
+
                                                     </div>
                                                 </div>
+                                            )
+                                        })
+                                    )}
+
+                                    {isSelected?.filter((item) => item.value !== true).length > 0 ? (
+                                        <BookingSummary
+                                            displayBookingSum={displayBookingSum}
+                                            searchedCheckInDate={searchedCheckInDate}
+                                            searchedCheckOutDate={searchedCheckOutDate}
+                                            bookingSum={isSelected}
+                                            selectedDateRange={selectedDateRange}
+                                            checkInDataForSum={checkInDataForSum}
+                                            checkOutDataForSum={checkOutDataForSum}
+                                        />
+                                    ) : (
+                                        ""
+                                    )}
+                                </div>
+                            </div>
+                    }
 
 
-
-
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            )}
-
-                            {isSelected?.filter((item) => item.value !== true).length > 0 ? (
-                                <BookingSummary
-                                    displayBookingSum={displayBookingSum}
-                                    searchedCheckInDate={searchedCheckInDate}
-                                    searchedCheckOutDate={searchedCheckOutDate}
-                                    bookingSum={isSelected}
-                                    selectedDateRange={selectedDateRange}
-                                    checkInDataForSum={checkInDataForSum}
-                                    checkOutDataForSum={checkOutDataForSum}
-                                />
-                            ) : (
-                                ""
-                            )}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1255,8 +1268,68 @@ export default Filterpage;
 
 const SkeletonCard = () => {
     return (
-        <div className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] animate-pulse">
-            {/* Skeleton card design */}
+        <div className="rounded-lg w-full grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] animate-pulse">
+            <div className="col-span-1">
+                <div className="w-full h-44 bg-gray-200 rounded-lg"></div>
+                <div className="flex w-full mt-2 h-40 bg-gray-200 rounded-lg"></div>
+            </div>
+
+            <div className="col-span-1 lg:col-span-2">
+                <div className="flex justify-start items-center">
+                    <div className="h-4 w-24 bg-gray-200 rounded-md"></div>
+                </div>
+
+                <div className="h-6 w-1/2 bg-gray-200 rounded-md mt-1"></div>
+
+                <div className="mt-4 w-full flex justify-start items-center gap-5">
+                    {Array(4)
+                        .fill()
+                        .map((_, index) => (
+                            <div
+                                key={index}
+                                className="flex justify-center items-center flex-col"
+                            >
+                                <div className="border bg-gray-200 w-[25px] h-[25px] rounded-large"></div>
+                                <div className="h-4 w-16 bg-gray-200 rounded-md mt-1"></div>
+                            </div>
+                        ))}
+                </div>
+
+                <hr className="border border-black border-dotted mt-5 mb-4" />
+                <div className="mt-2">
+                    <div className="flex flex-col lg:flex-row justify-start gap-1">
+                        <div className="font-semibold w-full lg:w-[22%]">
+                            <div className="h-4 w-24 bg-gray-200 rounded-md"></div>
+                        </div>
+                        <div className="flex w-full lg:w-[75%] flex-wrap gap-1">
+                            <div className="h-4 w-1/2 bg-gray-200 rounded-md"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-2">
+                    <div className="flex flex-col lg:flex-row justify-start gap-1">
+                        <div className="font-semibold w-full lg:w-[22%]">
+                            <div className="h-4 w-24 bg-gray-200 rounded-md"></div>
+                        </div>
+                        <div className="flex w-full lg:w-[75%] justify-start flex-wrap gap-1">
+                            <div className="h-4 w-1/2 bg-gray-200 rounded-md"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="col-span-1">
+                <div className="h-4 w-full bg-gray-200 rounded-md"></div>
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                    <div className="w-full">
+                        <div className="h-4 w-1/2 bg-gray-200 rounded-md"></div>
+                    </div>
+                    <div className="w-full">
+                        <div className="h-4 w-1/2 bg-gray-200 rounded-md"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

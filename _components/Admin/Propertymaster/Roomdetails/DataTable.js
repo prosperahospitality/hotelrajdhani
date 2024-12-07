@@ -36,6 +36,7 @@ import {useDispatch} from "react-redux";
 import { useSelector } from "react-redux";
 import {Spinner} from "@nextui-org/react";
 
+
 export default function DataTable ({ data, columns, statusOptions, columnSort, statusColorMap, columnName, actionsContent, operation, handleOpen, handleClick, handleDelete, handleSubmit}) {
   let INITIAL_VISIBLE_COLUMNS;
 
@@ -438,7 +439,7 @@ React.useEffect(() => {
               </TableHeader>
               <TableBody className='w-[10px]' emptyContent={isLoading &&  sortedItems.length === 0
               ? <Spinner />
-            : "No data found"} items={sortedItems}>
+            : <Spinner />} items={sortedItems}>
   {(item) => (
     <TableRow key={operation === "propManagement" ? item.Hotel_Id : item.id} className= {operation === "pms_roomtype" ? "text-foreground" : ""}>
       {(columnKey) => {

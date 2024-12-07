@@ -22,6 +22,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import { Search } from "lucide-react";
+import { Spinner } from "@nextui-org/react";
 
 const sampleGalleryImages = [
   IMAGES.specialtours,
@@ -30,6 +31,7 @@ const sampleGalleryImages = [
 ];
 
 const TestCard = ({ packageReviews, allPackages }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedReview, setSelectedReview] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -82,6 +84,7 @@ const TestCard = ({ packageReviews, allPackages }) => {
   useEffect(() => {
     if (packageReviews?.length > 0) {
       setFilteredReviews(packageReviews);
+      setIsLoading(false)
     }
   }, [packageReviews]);
 
@@ -229,89 +232,95 @@ const TestCard = ({ packageReviews, allPackages }) => {
             </select>
           </div>
         </div>
-        {activeSection === "reviews" && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-[95%] mx-auto my-8">
-              {currentReviews?.map((review, index) => (
-                <div
-                  key={index}
-                  className="relative w-full border overflow-hidden rounded-xl shadow-lg flex flex-col bg-white"
-                >
-                  <div className="relative w-full min-h-72 border overflow-hidden rounded-xl shadow-lg">
-                    <Image
-                      src={IMAGES.testimonialsbg}
-                      alt="Background"
-                      fill
-                      className="w-full h-full object-contain opacity-20"
-                    />
-                    <div className="absolute inset-0 flex flex-col justify-between p-4 gap-2">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-2">
-                          <FaStar className="text-yellow-400" />
-                          <span className="text-base font-semibold">
-                            {review?.rating}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-4">
-                        <div className="flex-1 h-32">
-                          <h1 className="font-semibold line-clamp-2 text-gray-700">
-                            {review?.tagline}
-                          </h1>
-                          <p className="text-sm line-clamp-4 text-gray-500 mt-2">
-                            {review?.description}
-                          </p>
-                          <button
-                            onClick={() => handleReadMore(review)}
-                            className="underline text-themeColor"
-                          >
-                            read more
-                          </button>
-                        </div>
-
-                        {review?.image[0] && (
-                          <div className="w-32 h-32 relative group overflow-hidden rounded-xl shadow-lg">
-                            <Image
-                              src={review?.image[0]}
-                              alt={review?.package_name}
-                              width={400}
-                              height={400}
-                              className="w-full h-full object-fill transition-all group-hover:scale-105"
-                              loading="lazy"
-                            />
+        {isLoading
+          ? <div className="flex justify-center items-center min-h-screen">
+          <Spinner size="lg" color="danger"/>
+        </div>
+          : activeSection === "reviews" && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-[95%] mx-auto my-8">
+                {currentReviews?.map((review, index) => (
+                  <div
+                    key={index}
+                    className="relative w-full border overflow-hidden rounded-xl shadow-lg flex flex-col bg-white"
+                  >
+                    <div className="relative w-full min-h-72 border overflow-hidden rounded-xl shadow-lg">
+                      <Image
+                        src={IMAGES.testimonialsbg}
+                        alt="Background"
+                        fill
+                        className="w-full h-full object-contain opacity-20"
+                      />
+                      <div className="absolute inset-0 flex flex-col justify-between p-4 gap-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2">
+                            <FaStar className="text-yellow-400" />
+                            <span className="text-base font-semibold">
+                              {review?.rating}
+                            </span>
                           </div>
-                        )}
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="font-semibold">{review?.name}</h3>
-                          <p className="text-xs">{review?.traveled_date}</p>
                         </div>
 
+                        <div className="flex gap-4">
+                          <div className="flex-1 h-32">
+                            <h1 className="font-semibold line-clamp-2 text-gray-700">
+                              {review?.tagline}
+                            </h1>
+                            <p className="text-sm line-clamp-4 text-gray-500 mt-2">
+                              {review?.description}
+                            </p>
+                            <button
+                              onClick={() => handleReadMore(review)}
+                              className="underline text-themeColor"
+                            >
+                              read more
+                            </button>
+                          </div>
+
+                          {review?.image[0] && (
+                            <div className="w-32 h-32 relative group overflow-hidden rounded-xl shadow-lg">
+                              <Image
+                                src={review?.image[0]}
+                                alt={review?.package_name}
+                                width={400}
+                                height={400}
+                                className="w-full h-full object-fill transition-all group-hover:scale-105"
+                                loading="lazy"
+                              />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h3 className="font-semibold">{review?.name}</h3>
+                            <p className="text-xs">{review?.traveled_date}</p>
+                          </div>
+
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {totalPages > 1 && (
-              <div className="flex justify-center mt-8">
-                <Pagination
-                  total={totalPages}
-                  page={currentPage}
-                  onChange={handlePageChange}
-                  classNames={{
-                    wrapper: "gap-3",
-                    item: "rounded-full bg-white",
-                    cursor: "bg-[#333333] text-white font-bold rounded-full",
-                  }}
-                />
+                ))}
               </div>
-            )}
-          </>
-        )}
+
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-8">
+                  <Pagination
+                    total={totalPages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    classNames={{
+                      wrapper: "gap-3",
+                      item: "rounded-full bg-white",
+                      cursor: "bg-[#333333] text-white font-bold rounded-full",
+                    }}
+                  />
+                </div>
+              )}
+            </>
+          )
+        }
+
 
         {selectedReview && (
           <Modal

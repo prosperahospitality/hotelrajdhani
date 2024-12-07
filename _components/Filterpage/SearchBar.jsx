@@ -1,9 +1,9 @@
 'use client'
 import React, { useState } from 'react'
 import { CalendarRange, Search } from "lucide-react"
-import Daterangepickerreact from "@/_components/Home/Daterangepickerreact"
+import Daterangepickerreact from '@/_components/Filterpage/Daterangepickerreact';
 import { PiUsersLight } from "react-icons/pi";
-import RoomsAndGuests from '@/_components/Home/RoomsAndGuests'
+import RoomsAndGuests from '@/_components/Filterpage/RoomsAndGuests'
 import { Button } from '@nextui-org/react'
 import { today, getLocalTimeZone } from "@internationalized/date";
 
@@ -49,8 +49,8 @@ const SearchBar = ({ checkindateParam,
 
     console.log("Selected Date Range::::::>", selectedDateRange)
 
-    const [adultsSelect, setAdultsSelect] = useState();
-    const [childSelect, setChildSelect] = useState();
+    const [adultsSelect, setAdultsSelect] = useState(adultsSelectParam);
+    const [childSelect, setChildSelect] = useState(childSelectParam);
 
     const differenceInDays = (date1, date2) => (new Date(date2.split('-').reverse().join('-')) - new Date(date1.split('-').reverse().join('-'))) / (1000 * 3600 * 24);
     const [initialDate, setInitialDate] = useState(

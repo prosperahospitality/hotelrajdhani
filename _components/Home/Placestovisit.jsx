@@ -108,7 +108,7 @@ const Placestovisit = () => {
           <div>
             <div className="flex justify-center items-center">
               <div className="border-b border-gray-500  inline-block pb-1">
-                <p className="text-center text-xl text-gray-500 lg:text-2xl">
+                <p className="text-center text-2xl font-semibold text-gray-500 lg:text-2xl">
                   Places To Visit
                 </p>
               </div>

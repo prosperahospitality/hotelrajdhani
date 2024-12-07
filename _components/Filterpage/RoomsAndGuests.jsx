@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { handleAgeSelect } from "@/app/redux/slices/searchSlice";
 import { useSelector } from "react-redux";
 
-const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
+const IncDecfunc = ({ title, description, onChange, value, ageSelect, maxchilds }) => {
 
   const [children, setChildren] = useState(
     ageSelect.length === 0 ? [{ id: value, age: "" }] : ageSelect
@@ -49,7 +49,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
 
   useEffect(() => {
     if (children) {
-     
+
 
       dispatch(handleAgeSelect(children));
     }
@@ -86,13 +86,14 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
             variant="shadow"
             color="primary"
             size="sm"
+            isDisabled={value === Number(maxchilds)}
             onClick={increment}
           >
             <GoPlus />
           </Button>
         </div>
       </div>
-{/* 
+      {/* 
       <div className="space-y-4">
         {children?.map((child, index) => (
           <div key={child.id} className="flex items-center space-x-2">
@@ -115,7 +116,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect }) => {
   );
 };
 
-const AdultsRoomfunc = ({ title, description, onChange, value }) => {
+const AdultsRoomfunc = ({ title, description, onChange, value, maxadults }) => {
   function increment() {
     onChange(value + 1);
   }
@@ -137,7 +138,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value }) => {
           variant="shadow"
           color="primary"
           size="sm"
-          isDisabled={value === 0}
+          isDisabled={value === 1}
           onClick={decrement}
         >
           <FiMinus />
@@ -148,6 +149,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value }) => {
           variant="shadow"
           color="primary"
           size="sm"
+          isDisabled={value === Number(maxadults)}
           onClick={increment}
         >
           <GoPlus />
@@ -156,6 +158,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value }) => {
     </div>
   );
 };
+
 
 export default function RoomsAndGuests({
   onAdultsSelect,
@@ -166,9 +169,11 @@ export default function RoomsAndGuests({
   roomsSelectParam,
   onChildAgeSelect,
   ageArray,
+  maxadults,
+  maxchilds
 }) {
   const ageSelect = useSelector((state) => state.search.ageSelect);
-  
+
   const [adults, setAdults] = useState(parseInt(adultsSelectParam));
   const [children, setChildren] = useState(parseInt(childSelectParam));
   const [infants, setInfants] = useState(0);
@@ -180,35 +185,44 @@ export default function RoomsAndGuests({
     setButtonText(`Adults: ${adults}, Rooms: ${rooms}`);
   };
 
-  useEffect(() => {
-    const checkAndCallFunction = (func, arg) => {
-      if (typeof func === "function") {
-        func(arg);
-      }
-    };
+  // useEffect(() => {
+  //   const checkAndCallFunction = (func, arg) => {
+  //     if (typeof func === "function") {
+  //       func(arg);
+  //     }
+  //   };
 
-    checkAndCallFunction(onAdultsSelect, adults);
-    checkAndCallFunction(onChildSelect, children);
-    checkAndCallFunction(onRoomsSelect, rooms);
-  }, [adults, children, rooms, onAdultsSelect, onChildSelect, onRoomsSelect]);
+  //   checkAndCallFunction(onAdultsSelect, adults);
+  //   checkAndCallFunction(onChildSelect, children);
+  //   checkAndCallFunction(onRoomsSelect, rooms);
+  // }, [adults, children, rooms, onAdultsSelect, onChildSelect, onRoomsSelect]);
+
+  const handleAdults = (val) => {
+    setAdults(val)
+    onAdultsSelect(val)
+  }
+  const handleChilds = (val) => {
+    setChildren(val)
+    onChildSelect(val)
+  }
 
   return (
     <div className="flex w-full justify-center items-center ">
       <Popover placement="bottom">
-        <PopoverTrigger asChild className="text-black bg-white rounded-lg">
+        <PopoverTrigger asChild className="text-black bg-white rounded-xl">
           <Button
             variant="destructive"
-            className={cn("w-full justify-center text-center font-normal")}
+            className={cn("w-full justify-center text-center font-normal bg-white")}
           >
-            <PiUsersLight className="size-6 text-gray-500" />
-            <span className="font-semibold text-gray-500">
+            <PiUsersLight className="hidden lg:block size-6 text-gray-500 lg:text-[#333333] " />
+            <span className="font-semibold text-gray-500 lg:text-[#333333]">
               {`Adults: ${adults}, Childrens: ${children}`}
             </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="ml-2 lg:m-0 bg-white w-[80%] lg:w-full">
-          <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={setAdults} value={adults} />
-          <IncDecfunc title="Children" description="Ages 0–17" onChange={setChildren} value={children} ageSelect={ageSelect} />
+          <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={handleAdults} value={adults} maxadults={maxadults} />
+          <IncDecfunc title="Children" description="Ages 0–17" onChange={handleChilds} value={children} ageSelect={ageSelect} maxchilds={maxchilds} />
         </PopoverContent>
       </Popover>
     </div>

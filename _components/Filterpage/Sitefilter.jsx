@@ -12,9 +12,9 @@ const Filtermodal = ({ onselectedprice }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = React.useState('md');
 
-  const [minprice, setminprice] = useState(25990);
+  const [minprice, setminprice] = useState(0);
 
-  const [maxprice, setmaxprice] = useState(150000);
+  const [maxprice, setmaxprice] = useState(5000);
 
   const [selectedprice, setselectedprice] = useState(maxprice);
 

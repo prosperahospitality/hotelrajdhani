@@ -50,7 +50,7 @@ export default function Testimonials({ }) {
 
 
     return (
-        <div className="w-[90%] lg:w-[90%] h-full relative mx-auto py-16">
+        <div className="w-[90%] lg:w-[90%] h-full relative mx-auto pb-16 lg:py-16">
             <Image src={IMAGES.testimonialsBG} alt='prospera-hospitality' fill className='flex w-full h-full object-cover' />
             <Swiper
                 className="mySwiper flex justify-center items-center"

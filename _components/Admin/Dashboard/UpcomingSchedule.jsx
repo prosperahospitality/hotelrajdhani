@@ -56,9 +56,11 @@ const UpcomingSchedule = ({ bookingDetails, dateChange }) => {
 
   const router = useRouter();
 
-  const selectedDateBooking = bookingDetails.filter(
-    (item) => item.booking_date.split(" ")[0] === dateChange.format("DD-MM-YYYY")
-  );
+  const selectedDateBooking = bookingDetails.filter((item) => {
+    if (!dateChange || typeof dateChange.format !== "function") return false; 
+    return item.booking_date.split(" ")[0] === dateChange.format("DD-MM-YYYY");
+  });
+  
 
   return (
     <div className="p-6 bg-background text-gray-900 rounded-lg shadow-md dark:text-white">
@@ -75,7 +77,7 @@ const UpcomingSchedule = ({ bookingDetails, dateChange }) => {
       </div>
       <div className="text-end pt-4">
         <button
-          onClick={(e) => router.push(`/admin/hotel/bookings/bookinghistory?hotel_id=123456&hotel_name=Ocean%27s%20Pearl%20Resort`)}
+          onClick={(e) => router.push(`/admin/bookings/bookinghistory?hotel_id=123456&hotel_name=Hotel%27s%20Rajdhani`)}
           className="border border-blue-600 text-blue-600 py-2 px-4 rounded-md hover:bg-blue-600 hover:text-white transition shadow-lg"
         >
           Show More

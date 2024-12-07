@@ -8,10 +8,17 @@ import { Menu, X, ChevronUp, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { Phone, Mail } from "lucide-react";
 import { today, getLocalTimeZone } from "@internationalized/date";
+import { Spinner } from "@nextui-org/react";
+import { useDispatch } from "react-redux";
+import { handleLocateUsFxn, handleTouristSpotsFxn } from "@/app/redux/slices/navSlice";
+
 
 const NavBar = () => {
+  const dispatch = useDispatch();
   let defaultDate = today(getLocalTimeZone());
   const nextDay = defaultDate.add({ days: 1 });
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const formatDate = (date) => {
     const day = String(date.day).padStart(2, "0");
@@ -40,7 +47,7 @@ const NavBar = () => {
   const links = [
     { name: "Home", url: "/" },
     { name: "About", url: "/aboutus" },
-    { name: "Rooms", sublinks: sublinks },
+    { name: "Rooms", url: sublinks ? sublinks[0]?.url : "/rooms/single-bed-non-ac-room", sublinks: sublinks },
     { name: "Testimonials", url: "/testimonials" },
     { name: "Blogs", url: "/blog" },
     { name: "Contact Us", url: "/contactus" },
@@ -81,12 +88,22 @@ const NavBar = () => {
       setRoomsData(allRoomInform);
     } catch (error) {
       console.log("Abc::::::::::>", error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
   useEffect(() => {
     initialFxn();
   }, []);
+
+  const handleLocateus = () => {
+    dispatch(handleLocateUsFxn(true))
+  }
+
+  const handleTouristSpot = () => {
+    dispatch(handleTouristSpotsFxn(true))
+  }
 
   return (
     <div className="h-auto sticky top-0 bg-white z-50 border-b">
@@ -112,121 +129,76 @@ const NavBar = () => {
 
 
       {/* Main Navbar */}
-      <div className="w-[95%] mx-auto py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <img
-            src={IMAGES.logowithoutbg}
-            alt="hotelrajdhanilogo"
-            className="w-40 lg:w-60 h-auto object-contain"
-          />
-        </Link>
+      <div className="hidden lg:block">
+        <div className="w-[95%] mx-auto py-4 flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center">
+            <img
+              src={IMAGES.logowithoutbg}
+              alt="hotelrajdhanilogo"
+              className="w-40 lg:w-60 h-auto object-contain"
+            />
+          </Link>
 
-        {/* Hamburger icon for small devices */}
-        <div className="lg:hidden">
-          <button onClick={toggleMenu} className="text-gray-500 text-2xl">
-            {isMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
+          {/* Hamburger icon for small devices */}
+          <div className="lg:hidden">
+            <button onClick={toggleMenu} className="text-gray-500 text-2xl">
+              {isMenuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
 
-        {/* Links for large devices */}
-        <div className="hidden lg:flex space-x-6">
-          {links.map((link, index) => (
-            <div
-              key={index}
-              className="relative"
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <Link
-                href={link.url || "#"}
-                className={`p-2 ${isLinkActive(link)
-                    ? "text-black font-bold"
-                    : "text-gray-500 hover:text-black"
-                  }`}
+          {/* Links for large devices */}
+          <div className="hidden lg:flex space-x-6">
+            {links.map((link, index) => (
+              <div
+                key={index}
+                className="relative"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
               >
-                {link.name}
-              </Link>
-              {link.sublinks && activeDropdown === index && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="absolute w-[270px] left-0 mt-2 bg-white shadow-md p-3 rounded-md"
-                >
-                  {link.sublinks.map((sublink, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      href={sublink.url}
-                      className="block p-2 text-gray-500 hover:text-black"
-                    >
-                      {sublink.name}
-                    </Link>
-                  ))}
-                </motion.div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Book Now Button */}
-        <Link
-          href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
-          className="hidden lg:flex"
-        >
-          <Button
-            radius="full"
-            className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
-          >
-            Book Now
-          </Button>
-        </Link>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden flex flex-col bg-white w-full space-y-4 absolute z-50 top-[8rem] left-0 px-6">
-          {links.map((link, index) => (
-            <div key={index} className="relative">
-              {link.sublinks ? (
-                <button
-                  onClick={() => toggleMobileDropdown(index)}
-                  className="flex justify-between w-full p-2 text-gray-500 hover:text-black"
+                <div
+                  onClick={() => (window.location.href = link.url || "#")}
+                  className={`p-2 ${isLinkActive(link)
+                    ? "text-black font-bold"
+                    : "text-gray-500 hover:text-black cursor-pointer"
+                    }`}
                 >
                   {link.name}
-                  {activeMobileDropdown === index ? (
-                    <ChevronUp />
-                  ) : (
-                    <ChevronDown />
-                  )}
-                </button>
-              ) : (
-                <Link
-                  href={link.url}
-                  onClick={handleLinkClick}
-                  className="block p-2 text-gray-500 hover:text-black"
-                >
-                  {link.name}
-                </Link>
-              )}
-              {link.sublinks && activeMobileDropdown === index && (
-                <div className="flex flex-col mt-2 bg-gray-100">
-                  {link.sublinks.map((sublink, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      href={sublink.url}
-                      onClick={handleLinkClick}
-                      className="block p-2 pl-4 text-gray-500 hover:text-black"
-                    >
-                      {sublink.name}
-                    </Link>
-                  ))}
                 </div>
-              )}
-            </div>
-          ))}
+
+                {link.sublinks && activeDropdown === index && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute w-[270px] left-0 bg-white shadow-md px-3 rounded-md"
+                  >
+                    {isLoading ? (
+                      <div className="flex justify-center items-center h-32">
+                        <Spinner size="lg" color="danger" />
+                      </div>
+                    ) : (
+                      link.sublinks.map((sublink, subIndex) => (
+                        <div
+                          key={subIndex}
+                          onClick={() => (window.location.href = sublink.url)}
+                          className="block p-2 text-gray-500 hover:text-black cursor-pointer"
+                        >
+                          {sublink.name}
+                        </div>
+                      ))
+                    )}
+                  </motion.div>
+                )}
+              </div>
+            ))}
+          </div>
+
+
+
+          {/* Book Now Button */}
           <Link
             href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
-            className="flex mt-4 pb-4"
+            className="hidden lg:flex"
           >
             <Button
               radius="full"
@@ -235,6 +207,177 @@ const NavBar = () => {
               Book Now
             </Button>
           </Link>
+        </div>
+      </div>
+
+      <div className="block lg:hidden">
+        <div className="w-[95%] mx-auto py-4 grid grid-cols-4 justify-center items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center col-span-3 place-content-end">
+            <img
+              src={IMAGES.logowithoutbg}
+              alt="hotelrajdhanilogo"
+              className="w-48 lg:w-60 h-auto object-contain"
+            />
+          </Link>
+
+          {/* Hamburger icon for small devices */}
+          <div className="lg:hidden self-baseline text-end">
+            <button onClick={toggleMenu} className="text-gray-500 text-2xl">
+              {isMenuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
+
+          {/* Links for large devices */}
+          <div className="hidden lg:flex space-x-6">
+            {links.map((link, index) => (
+              <div
+                key={index}
+                className="relative"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  onClick={() => (window.location.href = link.url || "#")}
+                  className={`p-2 ${isLinkActive(link)
+                    ? "text-black font-bold"
+                    : "text-gray-500 hover:text-black cursor-pointer"
+                    }`}
+                >
+                  {link.name}
+                </div>
+
+                {link.sublinks && activeDropdown === index && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute w-[270px] left-0 bg-white shadow-md px-3 rounded-md"
+                  >
+                    {isLoading ? (
+                      <div className="flex justify-center items-center h-32">
+                        <Spinner size="lg" color="danger" />
+                      </div>
+                    ) : (
+                      link.sublinks.map((sublink, subIndex) => (
+                        <div
+                          key={subIndex}
+                          onClick={() => (window.location.href = sublink.url)}
+                          className="block p-2 text-gray-500 hover:text-black cursor-pointer"
+                        >
+                          {sublink.name}
+                        </div>
+                      ))
+                    )}
+                  </motion.div>
+                )}
+              </div>
+            ))}
+          </div>
+
+
+
+          {/* Book Now Button */}
+          <Link
+            href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
+            className="hidden lg:flex"
+          >
+            <Button
+              radius="full"
+              className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
+            >
+              Book Now
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="lg:hidden flex flex-col bg-red-100 w-[100%] h-[28rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
+{links.map((link, index) => (
+  <div key={index} className="relative">
+    {link.sublinks ? (
+      <button
+        onClick={() => toggleMobileDropdown(index)}
+        className="flex justify-between w-full p-2 text-gray-500 hover:text-black"
+      >
+        {link.name}
+        {activeMobileDropdown === index ? <ChevronUp /> : <ChevronDown />}
+      </button>
+    ) : (
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault(); // Prevent default anchor behavior
+          window.location.href = link.url; // Navigate to the desired URL
+        }}
+        className="block p-2 text-gray-500 hover:text-black"
+      >
+        {link.name}
+      </a>
+    )}
+    {link.sublinks && activeMobileDropdown === index && (
+      <div className="flex flex-col mt-2 bg-gray-100 rounded-xl py-2">
+        {link.sublinks.map((sublink, subIndex) => (
+          <a
+            key={subIndex}
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = sublink.url;
+            }}
+            className="block p-2 pl-4 text-gray-500 hover:text-black"
+          >
+            {sublink.name}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+))}
+
+          <div>
+            <div className="inline-flex gap-4">
+              <Link
+                href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
+                className="flex mt-4 pb-4"
+              >
+                <Button
+                  radius="full"
+                  className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
+                >
+                  Book Now
+                </Button>
+              </Link>
+              <Button
+                radius="full"
+                className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
+                onClick={(e) => {
+                  handleLinkClick();
+                  handleLocateus();
+                }}
+              >
+                Locate Us
+              </Button>
+              {/* <Link
+                href={`/`}
+                className="flex mt-4 pb-4"
+              > */}
+              <Button
+                radius="full"
+                className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
+                onClick={(e) => {
+                  handleLinkClick();
+                  handleTouristSpot();
+                }}
+              >
+                Tourist spots
+              </Button>
+              {/* </Link> */}
+            </div>
+          </div>
+
         </div>
       )}
     </div>

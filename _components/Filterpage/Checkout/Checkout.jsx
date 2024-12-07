@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import IMAGES from "@/public";
+import Swal from 'sweetalert2'
 
 export default function Checkout() {
 
@@ -157,9 +158,15 @@ export default function Checkout() {
           });
           const emailresult = await emailresponse.json();
 
-          if(emailresult.status === 200) {
-            alert("Request sent successfully!")
-            router.push(`/`)
+          if (emailresult.status === 200) {
+            Swal.fire({
+              title: "Success!",
+              text: "Request sent successfully!",
+              icon: "success"
+            }).then((result) => {
+              window.location.href = "/";
+            });
+
           }
         }
 

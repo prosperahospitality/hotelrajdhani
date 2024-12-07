@@ -118,7 +118,7 @@ const SearchBar = () => {
 
             <div className='block lg:hidden w-full'>
                 <div className="grid grid-rows-1 gap-4 w-full p-4 text-black">
-                    <div className="flex flex-col items-center lg:bg-black/20 p-4 rounded-xl gap-4 backdrop-blur-sm">
+                    <div className="flex flex-col items-center  p-4 rounded-xl gap-4 bg-transparent">
                         <div className="grid grid-cols-12 w-full gap-2">
                             <p className="col-span-4 flex gap-2 justify-center items-center text-slate-100 font-extrabold text-md text-center">
                                 {/* <CalendarRange className="size-8" /> */}

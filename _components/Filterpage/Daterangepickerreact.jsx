@@ -71,11 +71,11 @@ export default function Daterangepickerreact({
     onDateValue([item.selection]);
   };
 
-  // useEffect(() => {
-  //   if (date) {
-  //     onDateValue(date);
-  //   }
-  // }, [date, onDateValue]);
+  useEffect(() => {
+    if (date) {
+      onDateValue(date);
+    }
+  }, [date, onDateValue]);
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -85,7 +85,7 @@ export default function Daterangepickerreact({
             id="date"
             variant={"destructive"}
             className={cn(
-              "flex justify-center text-center font-semibold text-gray-500 bg-red-100 text-[13px] lg:text-medium lg:text-[#333333]",
+              "flex justify-center text-center font-semibold text-gray-500 bg-white text-[13px] lg:text-medium lg:text-[#333333]",
               !date && "text-black bg-white"
             )}
           >

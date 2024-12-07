@@ -70,10 +70,10 @@ export default function Footer() {
         <div className="mx-auto lg:flex w-full items-center justify-between py-2">
           <div className="md:flex items-center md:justify-between gap-4">
             <p className="text-3xl lg:text-4xl text-[#333333] font-semibold antialiased"
-            style={{
-              fontFamily: "Times New Roman, Georgia, serif",
-              fontWeight: "bold",
-          }}
+              style={{
+                fontFamily: "Times New Roman, Georgia, serif",
+                fontWeight: "bold",
+              }}
             >
               {siteConfig.hotelname}
             </p>
@@ -112,7 +112,7 @@ export default function Footer() {
                 <h4 className="text-gray-500">Hotel</h4>
                 <span className="text-gray-500">-</span>
                 <p className="text-gray-500">
-                Godhra Road, Near V.M College, Halol, Gujarat, 389350
+                  Godhra Road, Near V.M College, Halol, Gujarat, 389350
                 </p>
               </div>
 
@@ -156,19 +156,24 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className=" flex flex-col gap-5 p-5">
+          <div className="flex flex-col gap-5 p-5">
             <h2 className="text-xl font-medium text-[#333333]">Quick Links:</h2>
             {siteConfig.navItems.map((item) => (
-              <div className="" key={item.label}>
-                <Link
-                  href={item.href}
+              <div key={item.label}>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = item.href;
+                  }}
                   className="text-gray-500 hover:underline"
                 >
                   {item.label}
-                </Link>
+                </a>
               </div>
             ))}
           </div>
+
 
           <div className=" flex flex-col gap-5 p-5">
             <h2 className="text-xl font-medium text-[#333333]">
