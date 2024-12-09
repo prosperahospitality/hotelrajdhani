@@ -212,9 +212,9 @@ export default function RoomsAndGuests({
         <PopoverTrigger asChild className="text-black bg-white rounded-xl">
           <Button
             variant="destructive"
-            className={cn("w-full justify-center text-center font-normal bg-red-100")}
+            className={cn("w-full justify-center text-center font-normal bg-slate-100")}
           >
-            <PiUsersLight className="hidden lg:block size-6 text-gray-500 lg:text-[#333333] " />
+            <PiUsersLight className="block size-6 text-gray-500 lg:text-[#333333]" />
             <span className="font-semibold text-gray-500 lg:text-[#333333]">
               {`Adults: ${adults}, Childrens: ${children}`}
             </span>

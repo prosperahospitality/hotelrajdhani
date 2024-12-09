@@ -42,7 +42,7 @@ const Landing = (props) => {
 
 
     return (
-        <div className="relative w-full h-[38rem] md:h-[40rem]">
+        <div className="relative w-full h-[36rem] md:h-[40rem]">
             {/* Top Right Section */}
             <div className="absolute top-4 right-4 text-gray-600 z-20 font-serif">
                 

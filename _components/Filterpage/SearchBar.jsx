@@ -124,7 +124,7 @@ const SearchBar = ({ checkindateParam,
             <div className="flex-col lg:flex-row w-full gap-4 flex items-center m-auto transition-all duration-200 delay-200 ease-in-out text-black">
 
                 {/* Search Bar Container */}
-                <div className="flex w-full bg-black/10 flex-col lg:flex-row p-4 rounded-xl gap-5 backdrop-blur-sm">
+                <div className="flex w-full bg-slate-100 lg:bg-slate-200 flex-col lg:flex-row p-4 rounded-xl gap-5">
 
                     {/* Check-in / Check-out Date Range */}
                     <div className="w-full lg:w-[50%] gap-2">

@@ -286,7 +286,7 @@ const SelectMonth = ({
                     <div className="flex flex-col gap-5 w-full">
                         <div className="my-4 w-full max-w-[35rem]">
                             <div className="flex flex-col w-full h-full gap-4 items-start m-auto text-black transition-all duration-200 ease-in-out">
-                                <div className="flex flex-col w-full p-6 bg-rose-50 rounded-xl gap-6 backdrop-blur-sm">
+                                <div className="flex flex-col w-full p-6 rounded-xl gap-6 backdrop-blur-sm">
                                     {/* Check-In Check-Out Section */}
                                     <div className="flex flex-col w-full gap-4">
                                         <p className="flex items-center justify-center gap-2 text-lg font-semibold">
@@ -1258,7 +1258,7 @@ const RoomsTemplate = (props) => {
                 <Spinner size="lg" color='danger' />
             </div>
             : <div className="w-full">
-                <div className="w-full flex flex-col md:flex-row justify-center items-center h-auto md:h-[10rem] bg-rose-50 lg:mb-16 mb-8 lg:pb-0 lg:pt-0 pb-4 pt-8">
+                <div className="w-full flex flex-col md:flex-row justify-center items-center h-auto md:h-[10rem] bg-slate-50 lg:bg-slate-100 lg:mb-16 mb-8 lg:pb-0 lg:pt-0 pb-4 pt-8">
                     <div className="w-full md:w-[80%] flex flex-col justify-center items-center">
                         <div
                             className="px-4 md:px-8 font-semibold text-2xl md:text-4xl w-full text-left"

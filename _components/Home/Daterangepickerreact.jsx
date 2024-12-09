@@ -6,7 +6,7 @@ import { DateRange } from 'react-date-range';
 import { cn } from "@/_lib/utils";
 import { addDays, format } from "date-fns";
 import { Button } from "@nextui-org/react";
-import { CiCalendar } from "react-icons/ci";
+import { CalendarRange } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -85,11 +85,11 @@ export default function Daterangepickerreact({
             id="date"
             variant={"destructive"}
             className={cn(
-              "flex justify-center text-center font-semibold text-gray-500 bg-red-100 text-[13px] lg:text-medium lg:text-[#333333]",
+              "flex justify-center text-center font-semibold text-gray-500 bg-slate-100 text-[13px] lg:text-medium lg:text-[#333333]",
               !date && "text-black bg-white"
             )}
           >
-            <CiCalendar className="hidden lg:block mr-2 size-4" />
+            <CalendarRange className="block size-5" />
             {date[0]?.startDate ? (
               date[0]?.endDate ? (
                 <>

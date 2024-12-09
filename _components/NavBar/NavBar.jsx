@@ -135,13 +135,17 @@ const NavBar = () => {
       <div className="hidden lg:block">
         <div className="w-[95%] mx-auto py-4 flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <div
+            onClick={() => (window.location.href = '/')}
+            className="flex items-center cursor-pointer"
+          >
             <img
               src={IMAGES.logowithoutbg}
               alt="hotelrajdhanilogo"
               className="w-40 lg:w-60 h-auto object-contain"
             />
-          </Link>
+          </div>
+
 
           {/* Hamburger icon for small devices */}
           <div className="lg:hidden">
@@ -214,15 +218,19 @@ const NavBar = () => {
       </div>
 
       <div className="block lg:hidden">
-        <div className="w-[95%] mx-auto py-4 grid grid-cols-4 justify-center items-center">
+        <div className="w-[95%] mx-auto py-4 grid grid-cols-12 justify-center items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center col-span-3 place-content-end">
+          <div
+            onClick={() => (window.location.href = '/')}
+            className="flex items-center col-span-11 place-content-end mr-[35px] cursor-pointer"
+          >
             <img
               src={IMAGES.logowithoutbg}
               alt="hotelrajdhanilogo"
-              className="w-48 lg:w-60 h-auto object-contain"
+              className="w-56 lg:w-60 h-auto object-contain"
             />
-          </Link>
+          </div>
+
 
           {/* Hamburger icon for small devices */}
           <div className="lg:hidden self-baseline text-end">
@@ -297,7 +305,7 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden flex flex-col bg-red-100 w-[100%] h-[28rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
+        <div className="lg:hidden flex flex-col bg-slate-200 w-[100%] h-[28rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
           {links.map((link, index) => (
             <div key={index} className="relative">
               {link.sublinks ? (

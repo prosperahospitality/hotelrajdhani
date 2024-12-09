@@ -4,7 +4,8 @@ import {
     BedDouble, Bus, Camera, Plane, Utensils, UsersRound, Moon, Wifi, Cctv,
     Droplets,
     CircleParking,
-    GlassWater
+    GlassWater,
+    ArrowUpRight
 } from "lucide-react";
 import { Button, Switch, VisuallyHidden, useSwitch } from "@nextui-org/react";
 import Image from "next/image";
@@ -139,7 +140,7 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 flex flex-col lg:flex-row gap-5 lg:gap-0 items-center justify-between bg-red-100 p-4 shadow-lg z-[100]">
+        <div className="fixed bottom-0 left-0 right-0 flex flex-col lg:flex-row gap-5 lg:gap-0 items-center justify-between bg-slate-100 lg:bg-slate-200 p-4 shadow-lg z-[100]">
             <div className="flex gap-5 flex-col lg:flex-row flex-2 items-center">
                 {/* Date Range */}
                 <div className="flex space-x-2 text-black ">
@@ -198,23 +199,32 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
 
             {/* Price and Checkout */}
             <div className="flex items-center lg:items-end justify-center lg:justify-end gap-5 flex-1 ">
-                <div className="flex gap-5 justify-between  lg:justify-end w-full">
-                    <div className="text-black text-xl">
+                <div className="flex gap-5 justify-between place-self-center  lg:justify-end w-full">
+                    <div className="text-black text-xl flex place-self-center">
                         Total: ₹ {displayBookingSum.amount}
-                        <span className="text-sm text-pink-100 block cursor-pointer">
+                        {/* <span className="text-sm text-pink-100 block cursor-pointer">
                             Price Breakup
-                        </span>
+                        </span> */}
                     </div>
 
                     <Button
-                        className="bg-black text-white font-semibold px-6 py-2 rounded-lg hover:bg-pink-200 hover:text-black"
+                        className="bg-[#333333] text-white font-semibold px-6 py-2 rounded-lg hover:bg-pink-200 hover:text-black"
                         color="default"
                         auto
                         onClick={handleCheckout}
                         isLoading={isLoading}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Checkout" : "Checkout"}
+                        {isLoading ? (
+                            <>
+                                Next <ArrowUpRight className="text-white" size={20} />
+                            </>
+                        ) : (
+                            <>
+                                Next <ArrowUpRight className="text-white" size={20} />
+                            </>
+                        )}
+
                     </Button>
 
                 </div>
@@ -262,8 +272,9 @@ const Filterpage = () => {
     const [searchedCheckOutDate, setSearchedCheckOutDate] = useState(checkoutdateParam);
     const [adultsSelectCompp, setSelectedAdultCount] = useState(adultsSelectComp);
     const [childSelectCompp, setSelectedChildCount] = useState(childSelectComp);
-    const [selectedPrice, setSelectedPrice] = useState();
+    const [selectedPrice, setSelectedPrice] = useState(5000);
     const [diffindayss, setDiffindayss] = useState(1);
+    const [highestRoomRate, setHighestRoomRate] = useState(5000);
 
 
 
@@ -722,11 +733,11 @@ const Filterpage = () => {
 
         console.log("Filter Rooms:::::::::::::::::::::>", filteredRooms)
 
-        setNewFilteredRoomDetails(filteredRooms)
+        // setNewFilteredRoomDetails(filteredRooms)
 
-        if (filteredRooms.length === 0 && selectedPrice !== 0) {
-            setNewFilteredRoomDetails(filteredRoomDetails)
-        }
+        // if (filteredRooms.length === 0 && selectedPrice !== 0) {
+        //     setNewFilteredRoomDetails(filteredRoomDetails)
+        // }
 
 
 
@@ -760,6 +771,33 @@ const Filterpage = () => {
         setIsSelected([])
     }, [selectedDateRange])
 
+    useEffect(() => {
+        console.log("selectedPrice", selectedPrice)
+    }, [selectedPrice])
+
+    useEffect(() => {
+        const highestRateRoom = newFilteredRoomDetails.reduce((max, room) => {
+            const maxRate = parseFloat(max.room_rate);
+            const currentRate = parseFloat(room.room_rate);
+            return currentRate > maxRate ? room : max;
+          }, newFilteredRoomDetails[0]);
+          
+          console.log("highestRateRoom", (parseInt(highestRateRoom?.room_rate) * diffindayss));
+          setHighestRoomRate(
+            highestRateRoom?.room_rate && diffindayss
+              ? parseInt(highestRateRoom.room_rate, 10) * diffindayss
+              : 0
+          );
+          setSelectedPrice(
+            highestRateRoom?.room_rate && diffindayss
+              ? parseInt(highestRateRoom.room_rate, 10) * diffindayss
+              : 0
+          )
+          
+    }, [diffindayss, newFilteredRoomDetails])
+    
+
+
     return (
         <div>
             <div className="w-[95%] m-auto">
@@ -780,7 +818,7 @@ const Filterpage = () => {
                 </div>
                 <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-5 pt-4">
                     <div className="col-span-1 lg:h-full">
-                        <Sitefilter onselectedprice={handleSelectedPrice} />
+                        <Sitefilter onselectedprice={handleSelectedPrice} highestRoomRate={highestRoomRate}/>
                     </div>
 
                     {
@@ -793,7 +831,7 @@ const Filterpage = () => {
                                     <div className="w-full flex justify-between items-center">
                                         <div className="w-full lg:w-[55%]">
                                             <p className="font-semibold mt-2 text-xl text-gray-600">
-                                                ({newFilteredRoomDetails.length} Rooms Available)
+                                                ({newFilteredRoomDetails?.filter((items) => Number(items.room_rate * diffindayss) <= selectedPrice).length} Rooms Available)
                                             </p>
                                         </div>
                                     </div>
@@ -802,7 +840,7 @@ const Filterpage = () => {
                                     {loading ? (
                                         <SkeletonCard />
                                     ) : (
-                                        newFilteredRoomDetails && newFilteredRoomDetails?.map((item, index) => {
+                                        newFilteredRoomDetails && newFilteredRoomDetails?.filter((items) => Number(items.room_rate * diffindayss) <= selectedPrice).map((item, index) => {
 
 
                                             let sum = 0;
@@ -1070,42 +1108,42 @@ const Filterpage = () => {
                                                                 <div className="hidden lg:block w-full h-full">
                                                                     <div className="mt-4 w-full h-full flex items-center gap-5 flex-wrap justify-center lg:justify-start lg:content-end pb-4">
                                                                         <div className="flex justify-start items-center flex-col">
-                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                                <Wifi className="w-[25px] h-[25px] text-red-700" />
+                                                                            <div className="border bg-slate-200 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <Wifi className="w-[25px] h-[25px] text-[#333333]" />
                                                                             </div>
                                                                             <p className="text-sm font-semibold mt-1">Wifi</p>
                                                                         </div>
 
                                                                         <div className="flex justify-center items-center flex-col ">
-                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                                <Cctv className="w-[25px] h-[25px] text-red-700" />
+                                                                            <div className="border bg-slate-200 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <Cctv className="w-[25px] h-[25px] text-[#333333]" />
                                                                             </div>
                                                                             <p className="text-sm font-semibold mt-1 text-center">CCTV Cameras</p>
                                                                         </div>
 
                                                                         <div className="flex justify-center items-center flex-col ">
-                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                                <Droplets className="w-[25px] h-[25px] text-red-700" />
+                                                                            <div className="border bg-slate-200 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <Droplets className="w-[25px] h-[25px] text-[#333333]" />
                                                                             </div>
                                                                             <p className="text-sm font-semibold mt-1 text-center">Hot & Cold Water</p>
                                                                         </div>
 
                                                                         <div className="flex justify-center items-center flex-col ">
-                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                                <CircleParking className="w-[25px] h-[25px] text-red-700" />
+                                                                            <div className="border bg-slate-200 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <CircleParking className="w-[25px] h-[25px] text-[#333333]" />
                                                                             </div>
                                                                             <p className="text-sm font-semibold mt-1">Parking</p>
                                                                         </div>
 
                                                                         <div className="flex justify-center items-center flex-col ">
-                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
-                                                                                <GlassWater className="w-[25px] h-[25px] text-red-700" />
+                                                                            <div className="border bg-slate-200 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                                <GlassWater className="w-[25px] h-[25px] text-[#333333]" />
                                                                             </div>
                                                                             <p className="text-sm font-semibold mt-1 text-center">Mineral Water</p>
                                                                         </div>
 
                                                                         <div className="flex justify-center items-center flex-col ">
-                                                                            <div className="border bg-gray-100 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
+                                                                            <div className="border bg-slate-200 w-[35px] h-[35px] rounded-lg flex justify-center items-center">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 640 512">
                                                                                     <path fill="currentColor" d="M256 64H64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h192zm32 384h288c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H288zM64 160c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v192c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32z"></path>
                                                                                 </svg>

@@ -8,15 +8,15 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const Filtermodal = ({ onselectedprice }) => {
+const Filtermodal = ({ onselectedprice, highestRoomRate }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = React.useState('md');
 
   const [minprice, setminprice] = useState(0);
 
-  const [maxprice, setmaxprice] = useState(5000);
+  const [maxprice, setmaxprice] = useState(highestRoomRate && !isNaN(highestRoomRate) ? highestRoomRate : 5000);
 
-  const [selectedprice, setselectedprice] = useState(maxprice);
+  const [selectedprice, setselectedprice] = useState(maxprice && !isNaN(maxprice) ? maxprice : 5000);
 
   const handleprice = (e) => {
     setselectedprice(Number(e.target.value));
@@ -25,6 +25,11 @@ const Filtermodal = ({ onselectedprice }) => {
 
 
   const sizes = ["full"];
+
+  useEffect(() => {
+    setselectedprice(highestRoomRate)
+    setmaxprice(highestRoomRate)
+  }, [highestRoomRate])
 
 
   const handleOpen = (size) => {
@@ -61,7 +66,7 @@ const Filtermodal = ({ onselectedprice }) => {
                       <div className='pb-3'>
                         <div className="flex justify-between text-sm mb-2">
                           <p className='font-semibold'>min. <span>&#8377; {minprice} </span></p>
-                          <p className='font-semibold'>max. <span>&#8377; {selectedprice}</span></p>
+                          <p className='font-semibold'>max. <span>&#8377; {selectedprice && !isNaN(selectedprice) ? selectedprice : 5000}</span></p>
                         </div>
 
                         <input
@@ -97,7 +102,7 @@ const Filtermodal = ({ onselectedprice }) => {
   );
 }
 
-const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => {
+const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate, highestRoomRate }) => {
 
   const [selectedKeys, setSelectedKeys] = React.useState(new Set(["1", "2", "3", "4"]));
 
@@ -105,13 +110,13 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
 
   const [minprice, setminprice] = useState(0);
 
-  const [maxprice, setmaxprice] = useState(5000);
+  const [maxprice, setmaxprice] = useState(highestRoomRate && !isNaN(highestRoomRate) ? highestRoomRate : 5000);
 
-  const [selectedprice, setselectedprice] = useState(maxprice);
+  const [selectedprice, setselectedprice] = useState(maxprice && !isNaN(maxprice) ? maxprice : 5000);
 
   const [noninternational, setnoninternational] = useState(["Gym", "Swimming Pool", "Wifi", "CCTV Cameras", "Hot & Cold Water", "Parking", "Mineral Water", "Extra Mattress"]);
 
-  const [selectedState, setSelectedState] = useState(null);
+  const [selectedState, setSelectedState] = useState([]);
 
   const router = useRouter();
 
@@ -119,6 +124,12 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
     setshowstate(!showstate)
     // onSetshowstate(!showstate)
   }
+
+  useEffect(() => {
+    setselectedprice(highestRoomRate)
+    setmaxprice(highestRoomRate)
+  }, [highestRoomRate])
+
 
 
 
@@ -131,10 +142,13 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
 
 
 
-  const handleCheckboxChange = (state) => {
-    setSelectedState(state);
-    localStorage.setItem("selectedState", state);
-    router.push(`/filterpage/${state}`);
+  const handleCheckboxChange = (value) => {
+    setSelectedState((prev) =>
+      prev.includes(value)
+        ? prev.filter((state) => state !== value)
+        : [...prev, value]
+    );
+    // router.push(`/filterpage/${state}`);
   };
 
 
@@ -157,7 +171,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
       {/* for desktop view */}
 
       <div className='hidden lg:block '>
-        <div className='w-full p-3 font-semibold text-black bg-red-100 rounded-md flex justify-start gap-3'>
+        <div className='w-full p-3 font-semibold text-black bg-slate-100 lg:bg-slate-200 rounded-md flex justify-start gap-3'>
           <ListFilter />
           <p>Sort & Filter</p>
         </div>
@@ -170,7 +184,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
               <div className='pb-3'>
                 <div className="flex justify-between text-sm mb-2">
                   <p className='font-semibold'>Min. <span>&#8377; {minprice} </span></p>
-                  <p className='font-semibold'>Max. <span>&#8377; {selectedprice}</span></p>
+                  <p className='font-semibold'>Max. <span>&#8377; {selectedprice && !isNaN(selectedprice) ? selectedprice : 5000}</span></p>
                 </div>
 
                 <input
@@ -198,7 +212,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
                         <input
                           type="checkbox"
                           className="size-5 rounded-sm"
-                          checked={selectedState === e}
+                          checked={selectedState.includes(e)}
                           onChange={() => handleCheckboxChange(e)}
                         />
                         <p>{capitalizeWords(e)} </p>
@@ -225,7 +239,7 @@ const Sitefilter = ({ onSelectedDuration, onselectedprice, onSetshowstate }) => 
         <div className=' w-full flex justify-between items-center gap-3 text-center'>
 
           <div className='w-[25%]'>
-            <Filtermodal onselectedprice={onselectedprice} />
+            <Filtermodal onselectedprice={onselectedprice} highestRoomRate={highestRoomRate} />
           </div>
         </div>
       </div>
