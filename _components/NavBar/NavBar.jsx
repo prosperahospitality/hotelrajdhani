@@ -18,6 +18,10 @@ const NavBar = () => {
   let defaultDate = today(getLocalTimeZone());
   const nextDay = defaultDate.add({ days: 1 });
 
+  const pathname = usePathname();
+
+  const lastPart = pathname.split('/').filter(Boolean).pop();
+
   const [isLoading, setIsLoading] = useState(true);
 
   const formatDate = (date) => {
@@ -33,7 +37,6 @@ const NavBar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
-  const pathname = usePathname();
 
   const formatRoomNameToUrl = (roomName) => {
     return roomName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
@@ -295,47 +298,47 @@ const NavBar = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden flex flex-col bg-red-100 w-[100%] h-[28rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
-{links.map((link, index) => (
-  <div key={index} className="relative">
-    {link.sublinks ? (
-      <button
-        onClick={() => toggleMobileDropdown(index)}
-        className="flex justify-between w-full p-2 text-gray-500 hover:text-black"
-      >
-        {link.name}
-        {activeMobileDropdown === index ? <ChevronUp /> : <ChevronDown />}
-      </button>
-    ) : (
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault(); // Prevent default anchor behavior
-          window.location.href = link.url; // Navigate to the desired URL
-        }}
-        className="block p-2 text-gray-500 hover:text-black"
-      >
-        {link.name}
-      </a>
-    )}
-    {link.sublinks && activeMobileDropdown === index && (
-      <div className="flex flex-col mt-2 bg-gray-100 rounded-xl py-2">
-        {link.sublinks.map((sublink, subIndex) => (
-          <a
-            key={subIndex}
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = sublink.url;
-            }}
-            className="block p-2 pl-4 text-gray-500 hover:text-black"
-          >
-            {sublink.name}
-          </a>
-        ))}
-      </div>
-    )}
-  </div>
-))}
+          {links.map((link, index) => (
+            <div key={index} className="relative">
+              {link.sublinks ? (
+                <button
+                  onClick={() => toggleMobileDropdown(index)}
+                  className="flex justify-between w-full p-2 text-gray-500 hover:text-black"
+                >
+                  {link.name}
+                  {activeMobileDropdown === index ? <ChevronUp /> : <ChevronDown />}
+                </button>
+              ) : (
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default anchor behavior
+                    window.location.href = link.url; // Navigate to the desired URL
+                  }}
+                  className="block p-2 text-gray-500 hover:text-black"
+                >
+                  {link.name}
+                </a>
+              )}
+              {link.sublinks && activeMobileDropdown === index && (
+                <div className="flex flex-col mt-2 bg-gray-100 rounded-xl py-2">
+                  {link.sublinks.map((sublink, subIndex) => (
+                    <a
+                      key={subIndex}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = sublink.url;
+                      }}
+                      className="block p-2 pl-4 text-gray-500 hover:text-black"
+                    >
+                      {sublink.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
 
           <div>
             <div className="inline-flex gap-4">
@@ -350,31 +353,31 @@ const NavBar = () => {
                   Book Now
                 </Button>
               </Link>
-              <Button
-                radius="full"
-                className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
-                onClick={(e) => {
-                  handleLinkClick();
-                  handleLocateus();
-                }}
-              >
-                Locate Us
-              </Button>
-              {/* <Link
-                href={`/`}
-                className="flex mt-4 pb-4"
-              > */}
-              <Button
-                radius="full"
-                className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
-                onClick={(e) => {
-                  handleLinkClick();
-                  handleTouristSpot();
-                }}
-              >
-                Tourist spots
-              </Button>
-              {/* </Link> */}
+              {
+                lastPart === undefined
+                  ? <>
+                    <Button
+                      radius="full"
+                      className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
+                      onClick={(e) => {
+                        handleLinkClick();
+                        handleLocateus();
+                      }}
+                    >
+                      Locate Us
+                    </Button><Button
+                      radius="full"
+                      className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
+                      onClick={(e) => {
+                        handleLinkClick();
+                        handleTouristSpot();
+                      }}
+                    >
+                      Tourist spots
+                    </Button>
+                  </>
+                  : ""
+              }
             </div>
           </div>
 

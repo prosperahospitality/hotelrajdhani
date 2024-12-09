@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 const Landing = (props) => {
   return (
-    <div className="relative w-full h-[38rem] md:h-[38rem] lg:h-[45rem]">
+    <div className="relative w-full h-[38rem] md:h-[38rem] lg:h-[40rem]">
 
       {/* Title and Subtitle Section */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 drop-shadow-2xl z-20 font-serif px-4 text-center">
