@@ -50,62 +50,50 @@ const NavBar = () => {
   const sublinkss = [
     {
       name: "Rajputana Stainless Limited",
-      url: `/`,
       logo: "/img/logos/rajputana_stainless_limited.png",
     },
     {
       name: "Setco Auto System Pvt Ltd",
-      url: `/`,
       logo: "/img/logos/setco_auto_system.webp",
     },
     {
       name: "MG Motors",
-      url: `/`,
       logo: "/img/logos/mg_motors.png",
     },
     {
       name: "R.K. Feed Equipments",
-      url: `/`,
       logo: "/img/logos/rk_feed_equipments.jpg",
     },
     {
       name: "Sandhar Engineering Pvt Ltd",
-      url: `/`,
       logo: "/img/logos/sandhar_engineering.png",
     },
     {
       name: "Supreme Treon",
-      url: `/`,
       logo: "/img/logos/supreme_treon.png",
     },
     {
       name: "R.K. Bio Feed Machine",
-      url: `/`,
       logo: "/img/logos/rk_bio_feed_machine.png",
     },
     {
       name: "Purity Flex Pack Ltd",
-      url: `/`,
       logo: "/img/logos/purity_flex_pack.webp"
     },
     {
       name: "R.P. Products Pharma Pvt Ltd",
-      url: `/`,
       logo: "/img/logos/rp_products_pharma.png",
     },
     {
       name: "Krishna Defence and Allied Industries Ltd",
-      url: `/`,
       logo: "/img/logos/krishna_defence.png",
     },
     {
       name: "New Vishwakarma Engineering",
-      url: `/`,
       logo: "/img/logos/new_vishwakarma_engineering.png",
     },
     {
       name: "Rubamin Ltd",
-      url: `/`,
       logo: "/img/logos/rubamin.png",
     },
   ];
@@ -173,7 +161,6 @@ const NavBar = () => {
   }
 
   const handlePartnersClick = () => {
-    console.log("ABC:::::::::>")
     dispatch(handlePartnersClickFxn(true))
   }
 

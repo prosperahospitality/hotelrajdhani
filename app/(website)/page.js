@@ -59,9 +59,13 @@ const Home = () => {
 
   return (
     <div className='flex flex-col gap-10 lg:gap-16'>
+
       {/* <Landing content={revenuedata}/> */}
+
       <Landing />
+
       <Introduction />
+
       <div className='w-full flex justify-center items-center mt-16' id="target-div">
         <div className="flex flex-col justify-center items-center w-[98%] h-full">
           <div className="border-b border-gray-500  inline-block pb-1">
@@ -81,11 +85,17 @@ const Home = () => {
       </div>
 
       <Facilities />
-      <CorporateGuestsSection id="target-companies"/>
+
+      <div id="target-companies">
+        <CorporateGuestsSection />
+      </div>
+
       <div id="target-place">
         <Placestovisit />
       </div>
+
       <Testimonials />
+
     </div>
   )
 }
