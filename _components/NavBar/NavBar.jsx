@@ -50,50 +50,62 @@ const NavBar = () => {
   const sublinkss = [
     {
       name: "Rajputana Stainless Limited",
+      url: `/`,
       logo: "/img/logos/rajputana_stainless_limited.png",
     },
     {
       name: "Setco Auto System Pvt Ltd",
+      url: `/`,
       logo: "/img/logos/setco_auto_system.webp",
     },
     {
       name: "MG Motors",
+      url: `/`,
       logo: "/img/logos/mg_motors.png",
     },
     {
       name: "R.K. Feed Equipments",
+      url: `/`,
       logo: "/img/logos/rk_feed_equipments.jpg",
     },
     {
       name: "Sandhar Engineering Pvt Ltd",
+      url: `/`,
       logo: "/img/logos/sandhar_engineering.png",
     },
     {
       name: "Supreme Treon",
+      url: `/`,
       logo: "/img/logos/supreme_treon.png",
     },
     {
       name: "R.K. Bio Feed Machine",
+      url: `/`,
       logo: "/img/logos/rk_bio_feed_machine.png",
     },
     {
       name: "Purity Flex Pack Ltd",
+      url: `/`,
       logo: "/img/logos/purity_flex_pack.webp"
     },
     {
       name: "R.P. Products Pharma Pvt Ltd",
+      url: `/`,
       logo: "/img/logos/rp_products_pharma.png",
     },
     {
       name: "Krishna Defence and Allied Industries Ltd",
+      url: `/`,
       logo: "/img/logos/krishna_defence.png",
     },
     {
       name: "New Vishwakarma Engineering",
+      url: `/`,
       logo: "/img/logos/new_vishwakarma_engineering.png",
     },
     {
       name: "Rubamin Ltd",
+      url: `/`,
       logo: "/img/logos/rubamin.png",
     },
   ];
@@ -161,6 +173,7 @@ const NavBar = () => {
   }
 
   const handlePartnersClick = () => {
+    console.log("ABC:::::::::>")
     dispatch(handlePartnersClickFxn(true))
   }
 
@@ -218,50 +231,45 @@ const NavBar = () => {
 
                 return (
                   <div
-                    key={index}
-                    className="relative"
-                    onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={handleMouseLeave}
+                  key={index}
+                  className="relative"
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div
+                    onClick={() => (window.location.href = link.url || "#")}
+                    className={`p-2 ${isLinkActive(link)
+                      ? "text-black font-bold"
+                      : "text-gray-500 hover:text-black cursor-pointer"
+                      }`}
                   >
-                    <div
-                      onClick={() => (window.location.href = link.url || "#")}
-                      className={`p-2 ${isLinkActive(link)
-                        ? "text-black font-bold"
-                        : "text-gray-500 hover:text-black cursor-pointer"
-                        }`}
-                    >
-                      {link.name}
-                    </div>
-
-                    {link.sublinks && activeDropdown === index && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="absolute w-[300px] h-[275px] overflow-y-auto left-0 bg-white shadow-md px-3 rounded-md"
-                      >
-                        {isLoading ? (
-                          <div className="flex justify-center items-center h-32">
-                            <Spinner size="lg" color="danger" />
-                          </div>
-                        ) : (
-                          link.sublinks.map((sublink, subIndex) => (
-                            <div
-                              key={subIndex}
-                              onClick={() =>  handlePartnersClick()}
-                              className="flex items-center p-2 text-gray-500 hover:text-black cursor-pointer gap-2"
-                            >
-                              <img
-                                src={sublink.logo}
-                                alt={sublink.name}
-                                className="w-12 h-12 rounded-full object-fill border border-gray-300"
-                              />
-                              <p className="text-gray-600 hover:text-black font-medium">{sublink.name}</p>
-                            </div>
-                          ))
-                        )}
-                      </motion.div>
-                    )}
+                    {link.name}
                   </div>
+
+                  {link.sublinks && activeDropdown === index && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="absolute w-[270px] left-0 bg-white shadow-md px-3 rounded-md"
+                    >
+                      {isLoading ? (
+                        <div className="flex justify-center items-center h-32">
+                          <Spinner size="lg" color="danger" />
+                        </div>
+                      ) : (
+                        link.sublinks.map((sublink, subIndex) => (
+                          <div
+                            key={subIndex}
+                            onClick={() => (window.location.href = sublink.url)}
+                            className="block p-2 text-gray-500 hover:text-black cursor-pointer"
+                          >
+                            {sublink.name}
+                          </div>
+                        ))
+                      )}
+                    </motion.div>
+                  )}
+                </div>
                 )
 
               } else {
