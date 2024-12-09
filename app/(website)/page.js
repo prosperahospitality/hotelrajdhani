@@ -7,9 +7,7 @@ import Placestovisit from '@/_components/Home/Placestovisit'
 import Testimonials from '@/_components/Home/Testimonials'
 import CorporateGuestsSection from '@/_components/Home/Companies'
 import { useSelector, useDispatch } from 'react-redux'
-import { handleLocateUsFxn, handleTouristSpotsFxn } from "@/app/redux/slices/navSlice";
-
-
+import { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn } from "@/app/redux/slices/navSlice";
 
 const Home = () => {
 
@@ -18,6 +16,8 @@ const Home = () => {
   const scrollLocation = useSelector((state) => state.nav.scrollLocation);
 
   const scrollTourist = useSelector((state) => state.nav.scrollTourist);
+
+  const partnersClick = useSelector((state) => state.nav.partnersClick);
 
   const scrollToDiv = (id) => {
     const targetDiv = document.getElementById(id);
@@ -48,6 +48,13 @@ const Home = () => {
     }
   }, [scrollTourist])
 
+  useEffect(() => {
+    if (partnersClick) {
+      scrollToDiv("target-companies")
+      dispatch(handlePartnersClickFxn(false))
+    }
+  }, [partnersClick])
+
 
 
   return (
@@ -74,7 +81,7 @@ const Home = () => {
       </div>
 
       <Facilities />
-      <CorporateGuestsSection />
+      <CorporateGuestsSection id="target-companies"/>
       <div id="target-place">
         <Placestovisit />
       </div>

@@ -44,7 +44,7 @@ const Landing = (props) => {
     return (
         <div className="relative w-full h-[36rem] md:h-[40rem]">
             {/* Top Right Section */}
-            <div className="absolute top-4 right-4 text-gray-600 z-20 font-serif">
+            <div className="absolute top-1 right-3 text-gray-600 z-20 font-serif">
                 
                 {/* <div className="lg:w-14 lg:h-14 w-12 h-12 bg-[#D8B4A6] text-black rounded-full flex items-center justify-center">
                     <span className="text-[8px] lg:text-[9px] text-[#333333] italic text-center leading-tight">
@@ -52,7 +52,7 @@ const Landing = (props) => {
                     </span>
                 </div> */}
 
-                <div className="lg:w-16 lg:h-16 w-12 h-12 flex items-center justify-center">
+                <div className="w-16 h-16 flex items-center justify-center">
                         <img alt="since" src='/img/since.png' className='object-fill'/>
                 </div>
             </div>
@@ -62,7 +62,7 @@ const Landing = (props) => {
 
 
             {/* Central Text Section */}
-            <div className="absolute inset-0 flex flex-col items-center justify-start text-start lg:items-center lg:justify-center lg:text-center top-36 lg:top-0 text-gray-600 drop-shadow-2xl z-20 font-serif px-4">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center lg:items-center lg:justify-center lg:text-center top-0 lg:top-0 text-gray-600 drop-shadow-2xl z-20 font-serif px-4">
                 <span
                     className="text-lg md:text-4xl bg-black text-gray-100 p-2 rounded-lg px-4 bg-opacity-30"
                     style={{
@@ -84,7 +84,7 @@ const Landing = (props) => {
             </div>
 
             {/* SearchBar Section */}
-            <div className="absolute inset-0 flex justify-center items-end mb-12 md:mb-16 z-20 px-4 w-full">
+            <div className="absolute inset-0 flex justify-center items-end mb-4 md:mb-16 z-20 px-4 w-full">
                 <SearchBar />
             </div>
 

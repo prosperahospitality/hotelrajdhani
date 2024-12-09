@@ -3,6 +3,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 const initialState = {
     scrollLocation: false,
     scrollTourist: false,
+    partnersClick: false,
 };
 
 const navSlice = createSlice({
@@ -18,9 +19,13 @@ const navSlice = createSlice({
             state.scrollTourist = action.payload
         },
 
+        handlePartnersClickFxn: (state, action) => {
+            state.partnersClick = action.payload
+        },
+
 
     },
 });
 
-export const { handleLocateUsFxn, handleTouristSpotsFxn } = navSlice.actions;
+export const { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn } = navSlice.actions;
 export default navSlice.reducer
