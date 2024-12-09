@@ -239,11 +239,11 @@ const NavBar = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         className="absolute w-[300px] h-[275px] overflow-y-auto left-0 bg-white shadow-md px-3 rounded-md"
                       >
-                        { (
+                        {(
                           link.sublinks.map((sublink, subIndex) => (
                             <div
                               key={subIndex}
-                              onClick={() =>  handlePartnersClick()}
+                              onClick={() => handlePartnersClick()}
                               className="flex items-center p-2 text-gray-500 hover:text-black cursor-pointer gap-2"
                             >
                               <img
@@ -491,7 +491,11 @@ const NavBar = () => {
                   )}
                   {link.sublinks && activeMobileDropdown === index && (
                     <div className="flex flex-col h-[217px] mt-2 bg-gray-100 rounded-xl py-2 overflow-y-auto">
-                      {link.sublinks.map((sublink, subIndex) => (
+                      {isLoading ? (
+                        <div className="flex justify-center items-center h-32">
+                          <Spinner size="lg" color="danger" />
+                        </div>
+                      ) : (link.sublinks.map((sublink, subIndex) => (
                         <a
                           key={subIndex}
                           href="#"
@@ -503,7 +507,8 @@ const NavBar = () => {
                         >
                           {sublink.name}
                         </a>
-                      ))}
+                      ))
+                      )}
                     </div>
                   )}
                 </div>

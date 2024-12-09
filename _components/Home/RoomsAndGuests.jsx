@@ -86,7 +86,7 @@ const IncDecfunc = ({ title, description, onChange, value, ageSelect, maxchilds 
             variant="shadow"
             color="primary"
             size="sm"
-            isDisabled={value === Number(maxchilds)}
+            // isDisabled={value === Number(maxchilds)}
             onClick={increment}
           >
             <GoPlus />
@@ -149,7 +149,7 @@ const AdultsRoomfunc = ({ title, description, onChange, value, maxadults }) => {
           variant="shadow"
           color="primary"
           size="sm"
-          isDisabled={value === Number(maxadults)}
+          // isDisabled={value === Number(maxadults)}
           onClick={increment}
         >
           <GoPlus />

@@ -36,7 +36,8 @@ const SelectMonth = ({
     checkInDataForSum,
     checkOutDataForSum,
     roomdetPayload,
-    roombaseprice
+    roombaseprice,
+    onRoomAvailableClicked
 }
 ) => {
 
@@ -50,6 +51,8 @@ const SelectMonth = ({
 
     const [adultsSelect, setAdultsSelect] = useState();
     const [childSelect, setChildSelect] = useState();
+
+    const [roomAvailableClicked, setRoomAvailableClicked] = useState(false);
 
     const formatDate = (date) => {
         const day = String(date.day).padStart(2, "0");
@@ -137,9 +140,42 @@ const SelectMonth = ({
 
     };
 
-    const searchAction = () => {
+    useEffect(() => {
+        if (roomAvailableClicked) {
+            onRoomAvailableClicked(roomAvailableClicked)
+        }
+    }, [roomAvailableClicked])
+
+
+    const searchActionMobile = () => {
         try {
 
+            setRoomAvailableClicked(true)
+            const filteredRooms = allRoomsDet.filter((item) => {
+
+                const isAdultValid = item.base_adult <= adultsSelect && item.max_adult >= adultsSelect;
+
+                const isChildValid = (item.base_child <= childSelect && item.max_child >= childSelect) || (childSelect === 0 && item.base_child >= 1);
+
+                return isAdultValid && isChildValid;
+
+            });
+
+            onFilteredResults(filteredRooms)
+            onCheckindate(checkindate);
+            onCheckoutdate(checkoutdate);
+            onSelectedDateRange(selectedDateRange);
+            onAdultsSelect(adultsSelect);
+            onChildSelect(childSelect);
+
+        } catch (error) {
+            console.log("Error:::::>", error)
+        }
+
+    }
+
+    const searchActionLarge = () => {
+        try {
             const filteredRooms = allRoomsDet.filter((item) => {
 
                 const isAdultValid = item.base_adult <= adultsSelect && item.max_adult >= adultsSelect;
@@ -207,68 +243,88 @@ const SelectMonth = ({
 
         try {
 
-            const searchResult = await Promise.resolve(searchAction());
-
-            const formatDate = (date) => {
+            const formatDateeee = (date) => {
                 const day = String(date.getDate()).padStart(2, "0");
                 const month = String(date.getMonth() + 1).padStart(2, "0");
                 const year = date.getFullYear();
                 return `${day}-${month}-${year}`;
             };
 
-            const formattedStartDate = formatDate(selectedDateRange[0].startDate);
-            const formattedEndDate = formatDate(selectedDateRange[0].endDate);
+            const formattedStartDateeee = formatDateeee(selectedDateRange[0].startDate);
+            const formattedEndDateeee = formatDateeee(selectedDateRange[0].endDate);
 
-            const abc = differenceInDays(formattedStartDate, formattedEndDate)
+            const abcc = differenceInDays(formattedStartDateeee, formattedEndDateeee)
 
-            let payload = {
-                user_id: "",
-                booking_id: await generateUniqueID(),
-                salutation: "Mr",
-                username: "",
-                email: "",
-                phone: "",
-                Hotel_Id: "123456",
-                Hotel_name: "Hotel Rajdhani",
-                booking_date: getCurrentDateTime(),
-                roomDet: [roomdetPayload],
-                price: (roombaseprice * abc),
-                status: "inprocess",
-                city: '',
-                zip: '',
-                adults_count: adultsSelect,
-                checkin_date: formatDatee(formattedStartDate),
-                checkout_date: formatDatee(formattedEndDate),
-                checkin_dateF: formattedStartDate,
-                checkout_dateF: formattedEndDate,
-                rooms_count: 1,
-                childrens_count: childSelect,
-                pflag0: 0,
-                pflag1: 0,
-                pflag2: 0,
-                pflag3: 0,
-                payment_id: "",
-                order_id: "",
-                signature: "",
-                refund_flag: 0,
-                created_date: getCurrentDateTime(),
-                last_update_on: getCurrentDateTime(),
-            };
+            if(roomprice === (roombaseprice * abcc)) {
+                const searchResult = await Promise.resolve(searchActionLarge());
 
-            const response = await fetch("/api/userApi/booking_details", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
-            const result = await response.json();
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, "0");
+                    const month = String(date.getMonth() + 1).padStart(2, "0");
+                    const year = date.getFullYear();
+                    return `${day}-${month}-${year}`;
+                };
+    
+                const formattedStartDate = formatDate(selectedDateRange[0].startDate);
+                const formattedEndDate = formatDate(selectedDateRange[0].endDate);
+    
+                const abc = differenceInDays(formattedStartDate, formattedEndDate)
+    
+                let payload = {
+                    user_id: "",
+                    booking_id: await generateUniqueID(),
+                    salutation: "Mr",
+                    username: "",
+                    email: "",
+                    phone: "",
+                    Hotel_Id: "123456",
+                    Hotel_name: "Hotel Rajdhani",
+                    booking_date: getCurrentDateTime(),
+                    roomDet: [roomdetPayload],
+                    price: (roombaseprice * abc),
+                    status: "inprocess",
+                    city: '',
+                    zip: '',
+                    adults_count: adultsSelect,
+                    checkin_date: formatDatee(formattedStartDate),
+                    checkout_date: formatDatee(formattedEndDate),
+                    checkin_dateF: formattedStartDate,
+                    checkout_dateF: formattedEndDate,
+                    rooms_count: 1,
+                    childrens_count: childSelect,
+                    pflag0: 0,
+                    pflag1: 0,
+                    pflag2: 0,
+                    pflag3: 0,
+                    payment_id: "",
+                    order_id: "",
+                    signature: "",
+                    refund_flag: 0,
+                    created_date: getCurrentDateTime(),
+                    last_update_on: getCurrentDateTime(),
+                };
+    
+                const response = await fetch("/api/userApi/booking_details", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const result = await response.json();
+    
+                if (Object.keys(result.user_bookings).length > 0) {
+                    router.push(
+                        `/filterpage/checkout?id=${result.user_bookings.booking_id}`
+                    );
+                }
+            }else {
 
-            if (Object.keys(result.user_bookings).length > 0) {
-                router.push(
-                    `/filterpage/checkout?id=${result.user_bookings.booking_id}`
-                );
+                alert("First check the availability!");
+
             }
+
+    
         } catch (error) {
             console.error("Checkout failed", error);
         } finally {
@@ -324,8 +380,21 @@ const SelectMonth = ({
                                         <Button
                                             isIconOnly
                                             size="lg"
-                                            onClick={(e) => searchAction()}
-                                            className="w-full p-4 bg-[#333333] border border-black border-b-medium hover:bg-red-300 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
+                                            onClick={(e) => searchActionMobile()}
+                                            className="flex lg:hidden w-full p-4 bg-[#333333] border border-black border-b-medium hover:bg-red-300 transition-all duration-200 text-white rounded-lg items-center justify-center gap-2"
+                                        >
+                                            <div className='flex flex-row gap-2 justify-center items-center'>
+                                                <Search className="text-white size-5" />
+                                                <span className="text-white">Check Availability</span>
+                                            </div>
+
+                                        </Button>
+
+                                        <Button
+                                            isIconOnly
+                                            size="lg"
+                                            onClick={(e) => searchActionLarge()}
+                                            className="hidden lg:flex w-full p-4 bg-[#333333] border border-black border-b-medium hover:bg-red-300 transition-all duration-200 text-white rounded-lg items-center justify-center gap-2"
                                         >
                                             <div className='flex flex-row gap-2 justify-center items-center'>
                                                 <Search className="text-white size-5" />
@@ -657,6 +726,7 @@ const RoomsTemplate = (props) => {
 
     const [diffindayss, setDiffindayss] = useState(1);
 
+    const [roomAvailableClicked, setRoomAvailableClicked] = useState(false);
 
     function formatDate(dateString) {
         const [day, month, year] = dateString.split("-");
@@ -1249,15 +1319,25 @@ const RoomsTemplate = (props) => {
         roomimage: roomDetails?.roomimage
     }
 
+    const scrollToDiv = (id) => {
+        const targetDiv = document.getElementById(id);
+        if (targetDiv) {
+            targetDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
 
-
+    useEffect(() => {
+        if (roomAvailableClicked) {
+            scrollToDiv("room_det")
+        }
+    }, [roomAvailableClicked])
 
     return (
         isLoading
             ? <div className="flex justify-center items-center h-screen">
                 <Spinner size="lg" color='danger' />
             </div>
-            : <div className="w-full">
+            : <div className="w-full" id="room_det">
                 <div className="w-full flex flex-col md:flex-row justify-center items-center h-auto md:h-[10rem] bg-slate-50 lg:bg-slate-100 lg:mb-16 mb-8 lg:pb-0 lg:pt-0 pb-4 pt-8">
                     <div className="w-full md:w-[80%] flex flex-col justify-center items-center">
                         <div
@@ -1456,6 +1536,7 @@ const RoomsTemplate = (props) => {
                                 checkOutDataForSum={checkOutDataForSum}
                                 roomdetPayload={roomdetPayload}
                                 roombaseprice={roomDetails.price}
+                                onRoomAvailableClicked={setRoomAvailableClicked}
                             />
                         </div>
                     </div>
