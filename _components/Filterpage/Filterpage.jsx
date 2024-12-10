@@ -1459,13 +1459,13 @@ const Filterpage = () => {
                                             <div className="flex flex-col gap-2">
                                                 <p>Check in</p>
                                                 <div>
-                                                    19-10-2024
+                                                    {searchedCheckInDate}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <p>Check out</p>
                                                 <div>
-                                                    19-10-2024
+                                                    {searchedCheckOutDate}
                                                 </div>
                                             </div>
                                         </div>

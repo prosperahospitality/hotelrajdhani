@@ -546,13 +546,13 @@ const SelectMonth = ({
                                             <div className="flex flex-col gap-2">
                                                 <p>Check in</p>
                                                 <div>
-                                                    19-10-2024
+                                                    {checkindate}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <p>Check out</p>
                                                 <div>
-                                                    19-10-2024
+                                                    {checkoutdate}
                                                 </div>
                                             </div>
                                         </div>
