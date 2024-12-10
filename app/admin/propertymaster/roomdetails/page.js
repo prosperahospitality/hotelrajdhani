@@ -193,6 +193,10 @@ const RoomDetailsPage = () => {
                 bed_type: selectedBedtype,
                 number_of_beds: selectedNum,
                 bed_size: selectedBedSize,
+                roomimages: [],
+                roomdesc: "",
+                extra_person:"1",
+                rooms_available:"1",
                 creation_date: getCurrentDateTime,
                 last_update_on: getCurrentDateTime,
             };

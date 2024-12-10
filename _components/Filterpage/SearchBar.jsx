@@ -127,7 +127,7 @@ const SearchBar = ({ checkindateParam,
                 <div className="flex w-full bg-slate-100 lg:bg-slate-200 flex-col lg:flex-row p-4 rounded-xl gap-5">
 
                     {/* Check-in / Check-out Date Range */}
-                    <div className="w-full lg:w-[50%] gap-2">
+                    <div className="w-full lg:w-[40%] gap-2">
                         <p className="flex gap-2 justify-center items-center pb-2 text-black">
                             <CalendarRange className="size-8" />
                             Check In-Check Out

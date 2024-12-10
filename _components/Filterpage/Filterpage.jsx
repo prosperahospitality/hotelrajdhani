@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import {
-    BedDouble, Bus, Camera, Plane, Utensils, UsersRound, Moon, Wifi, Cctv,
+    BedDouble, Bus, Camera, Plane, Utensils, UsersRound, UserRound, Moon, Wifi, Cctv,
     Droplets,
     CircleParking,
     GlassWater,
     ArrowUpRight
 } from "lucide-react";
-import { Button, Switch, VisuallyHidden, useSwitch } from "@nextui-org/react";
+import { Button, Switch, VisuallyHidden, useSwitch, Autocomplete, AutocompleteItem, Checkbox } from "@nextui-org/react";
 import Image from "next/image";
 import Sitefilter from "@/_components/Filterpage/Sitefilter";
 import IMAGES from "@/public/index";
@@ -21,7 +21,14 @@ import { FreeMode, Navigation } from 'swiper/modules';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import '@/app/styles/rooms.css';
-import { Spinner } from "@nextui-org/react";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    useDisclosure,
+} from "@nextui-org/modal";
 
 const generateUniqueID = async () => {
     const response = await fetch("/api/userApi/booking_details", {
@@ -114,6 +121,12 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                 order_id: "",
                 signature: "",
                 refund_flag: 0,
+                selectedGuestPerRoom: displayBookingSum.selectedGuestPerRoom,
+                selectedRoomCount: displayBookingSum.selectedRoomCount,
+                selectedExtraperson: displayBookingSum.selectedExtraperson,
+                totalExtraGuest: displayBookingSum.totalExtraGuest,
+                totalGuestWithExtraPerson: displayBookingSum.totalGuestWithExtraPerson,
+                totalroomamountwithextraguest: displayBookingSum.totalroomamountwithextraguest,
                 created_date: getCurrentDateTime(),
                 last_update_on: getCurrentDateTime(),
             };
@@ -172,27 +185,21 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                             />
                         </svg>
                         <span>
-                            Rooms: {bookingSum.filter((item) => item.value !== true).length}
+                            Rooms: {displayBookingSum.selectedRoomCount}
                         </span>
                     </div>
+                    {console.log("displayBookingSum:::::::>", displayBookingSum)}
 
                     {/* Guests */}
                     <div className="flex items-center space-x-2 text-black">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M5 20h14M12 14c3.866 0 7-3.134 7-7S15.866 0 12 0 5 3.134 5 7s3.134 7 7 7zm0 0c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7z"
-                            />
-                        </svg>
-                        <span>Guests: {displayBookingSum.adultCount + displayBookingSum.childCount}</span>
+                        <UsersRound />
+                        <span>Guests: {displayBookingSum.totalGuestWithExtraPerson}</span>
+                    </div>
+
+                    {/* Extra person */}
+                    <div className="flex items-center space-x-2 text-black">
+                        <UserRound />
+                        <span>Extra Guest: {displayBookingSum.totalExtraGuest}</span>
                     </div>
                 </div>
             </div>
@@ -201,7 +208,7 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
             <div className="flex items-center lg:items-end justify-center lg:justify-end gap-5 flex-1 ">
                 <div className="flex gap-5 justify-between place-self-center  lg:justify-end w-full">
                     <div className="text-black text-xl flex place-self-center">
-                        Total: ₹ {displayBookingSum.amount}
+                        Total: ₹ {displayBookingSum.totalroomamountwithextraguest}
                         {/* <span className="text-sm text-pink-100 block cursor-pointer">
                             Price Breakup
                         </span> */}
@@ -238,7 +245,7 @@ const SimpleSwitch = ({ isSelected, onValueChange }) => {
     return (
         <div className="flex flex-col gap-2 w-[33%]">
             <button
-                onClick={() => onValueChange(!isSelected)} // Toggle the value when clicked
+                onClick={() => onValueChange(!isSelected)}
                 className={`w-[100px] h-[47px] flex items-center justify-center rounded-lg ${isSelected ? "bg-[#333333] text-white hover:bg-gray-600 hover:text-white" : "bg-default-100 text-black hover:bg-default-200 hover:text-black font-semibold"
                     }`}
             >
@@ -255,6 +262,8 @@ const Filterpage = () => {
     const [isSelected, setIsSelected] = useState([]);
     const [displayBookingSum, setDisplayBookingSum] = useState({});
     const [allRoomsDet, setAllRoomsDet] = useState([]);
+
+    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
     const searchParams = useSearchParams();
 
@@ -275,6 +284,13 @@ const Filterpage = () => {
     const [selectedPrice, setSelectedPrice] = useState(5000);
     const [diffindayss, setDiffindayss] = useState(1);
     const [highestRoomRate, setHighestRoomRate] = useState(5000);
+
+    const [selectedRoomId, setSelectedRoomId] = useState();
+    const [selectedRoomCount, setSelectedRoomCount] = useState("1");
+    const [selectedExtraperson, setSelectedExtraperson] = useState("0");
+    const [selectedGuestPerRoom, setSelectedGuestPerRoom] = useState("1");
+
+    const [checked, setChecked] = useState(false);
 
 
 
@@ -470,7 +486,7 @@ const Filterpage = () => {
 
 
     useEffect(() => {
-        console.log("isSelected:::::::::>", isSelected)
+        console.log("isSelected booking:::::::::>", isSelected)
 
         if (isSelected?.length > 0) {
             const total = isSelected
@@ -480,9 +496,19 @@ const Filterpage = () => {
                         acc.amount += parseInt(item.amount);
                         acc.adultCount += parseInt(item.adultCount, 10);
                         acc.childCount += parseInt(item.childCount, 10);
+                        acc.selectedGuestPerRoom += parseInt(item.selectedGuestPerRoom, 10);
+                        acc.selectedRoomCount += parseInt(item.selectedRoomCount, 10);
+                        acc.selectedExtraperson += parseInt(item.selectedExtraperson, 10);
+
+                        acc.totalExtraGuest += parseInt(item.totalExtraGuest, 10);
+                        acc.totalGuestWithExtraPerson += parseInt(item.totalGuestWithExtraPerson, 10);
+                        acc.totalroomamountwithextraguest += parseInt(item.totalroomamountwithextraguest, 10);
                         return acc;
                     },
-                    { amount: 0, adultCount: 0, childCount: 0 }
+                    {
+                        amount: 0, adultCount: 0, childCount: 0, selectedGuestPerRoom: 0, selectedRoomCount: 0, selectedExtraperson: 0, totalExtraGuest: 0,
+                        totalGuestWithExtraPerson: 0, totalroomamountwithextraguest: 0
+                    }
                 );
             console.log("isSelected::::::1", total)
 
@@ -780,22 +806,74 @@ const Filterpage = () => {
             const maxRate = parseFloat(max.room_rate);
             const currentRate = parseFloat(room.room_rate);
             return currentRate > maxRate ? room : max;
-          }, newFilteredRoomDetails[0]);
-          
-          console.log("highestRateRoom", (parseInt(highestRateRoom?.room_rate) * diffindayss));
-          setHighestRoomRate(
+        }, newFilteredRoomDetails[0]);
+
+        //   console.log("highestRateRoom", (parseInt(highestRateRoom?.room_rate) * diffindayss));
+        console.log("highestRateRoom", (parseInt(highestRateRoom?.room_rate)));
+        setHighestRoomRate(
             highestRateRoom?.room_rate && diffindayss
-              ? parseInt(highestRateRoom.room_rate, 10) * diffindayss
-              : 0
-          );
-          setSelectedPrice(
+                //   ? parseInt(highestRateRoom.room_rate, 10) * diffindayss
+                ? parseInt(highestRateRoom.room_rate, 10)
+                : 0
+        );
+        setSelectedPrice(
             highestRateRoom?.room_rate && diffindayss
-              ? parseInt(highestRateRoom.room_rate, 10) * diffindayss
-              : 0
-          )
-          
+                //   ? parseInt(highestRateRoom.room_rate, 10) * diffindayss
+                ? parseInt(highestRateRoom.room_rate, 10)
+                : 0
+        )
+
     }, [diffindayss, newFilteredRoomDetails])
-    
+
+
+    const handleRoomChange = () => {
+        console.log("Abcd:::::::", selectedRoomId, selectedRoomCount, selectedExtraperson, selectedGuestPerRoom, isSelected)
+
+        const updatedIsSelected = isSelected.map((item) =>
+            item.main_id === selectedRoomId
+                ? {
+                    ...item,
+                    value: false,
+                    totalroomamount: parseInt(item.amount) * parseInt(selectedRoomCount),
+                    selectedRoomCount: selectedRoomCount,
+                    selectedExtraperson: selectedExtraperson,
+                    selectedGuestPerRoom: selectedGuestPerRoom,
+                    totalGuest: parseInt(selectedGuestPerRoom) * parseInt(selectedRoomCount),
+                    totalExtraGuest: parseInt(selectedExtraperson) * parseInt(selectedRoomCount),
+                    totalroomamountwithextraguest: (parseInt(item.amount) * parseInt(selectedRoomCount)) + ((parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200),
+                    totalExtraGuestAmount: (parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200,
+                    guestWithExtraPerson: parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson),
+                    totalGuestWithExtraPerson: (parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson)) * parseInt(selectedRoomCount),
+                }
+                : item
+        );
+
+        console.log("Updated isSelected:", updatedIsSelected);
+
+        setIsSelected(updatedIsSelected)
+
+        setSelectedRoomId("")
+        setSelectedRoomCount("1")
+        setSelectedExtraperson("0")
+        setSelectedGuestPerRoom("1")
+
+        onClose()
+
+
+    }
+
+    useEffect(() => {
+        if (selectedRoomId) {
+            setSelectedGuestPerRoom(newFilteredRoomDetails.find((item) => item._id === selectedRoomId).max_adult)
+        }
+    }, [selectedRoomId, newFilteredRoomDetails])
+
+    useEffect(() => {
+        console.log("isSelectedisSelected: ", isSelected)
+    }, [isSelected])
+
+
+
 
 
     return (
@@ -818,7 +896,7 @@ const Filterpage = () => {
                 </div>
                 <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-5 pt-4">
                     <div className="col-span-1 lg:h-full">
-                        <Sitefilter onselectedprice={handleSelectedPrice} highestRoomRate={highestRoomRate}/>
+                        <Sitefilter onselectedprice={handleSelectedPrice} highestRoomRate={highestRoomRate} />
                     </div>
 
                     {
@@ -831,7 +909,8 @@ const Filterpage = () => {
                                     <div className="w-full flex justify-between items-center">
                                         <div className="w-full lg:w-[55%]">
                                             <p className="font-semibold mt-2 text-xl text-gray-600">
-                                                ({newFilteredRoomDetails?.filter((items) => Number(items.room_rate * diffindayss) <= selectedPrice).length} Rooms Available)
+                                                {/* ({newFilteredRoomDetails?.filter((items) => Number(items.room_rate * diffindayss) <= selectedPrice).length} Rooms Available) */}
+                                                ({newFilteredRoomDetails?.filter((items) => Number(items.room_rate) <= selectedPrice).length} Rooms Available)
                                             </p>
                                         </div>
                                     </div>
@@ -840,7 +919,9 @@ const Filterpage = () => {
                                     {loading ? (
                                         <SkeletonCard />
                                     ) : (
-                                        newFilteredRoomDetails && newFilteredRoomDetails?.filter((items) => Number(items.room_rate * diffindayss) <= selectedPrice).map((item, index) => {
+                                        // newFilteredRoomDetails && newFilteredRoomDetails?.filter((items) => Number(items.room_rate * diffindayss) <= selectedPrice).map((item, index) => {
+
+                                        newFilteredRoomDetails && newFilteredRoomDetails?.filter((items) => Number(items.room_rate) <= selectedPrice).map((item, index) => {
 
 
                                             let sum = 0;
@@ -1220,42 +1301,101 @@ const Filterpage = () => {
                                                                                             fontWeight: "bold",
                                                                                         }}>
                                                                                         {/* &#8377; {sum ? sum : "0"}* */}
-                                                                                        &#8377; {item.room_rate ? (item.room_rate * diffindayss) : sum}*
+                                                                                        {/* &#8377; {item.room_rate ? (item.room_rate * diffindayss) : sum}* */}
+
+                                                                                        &#8377; {item.room_rate ? item.room_rate : sum}*
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
                                                                             <SimpleSwitch
                                                                                 isSelected={isSelected?.find(sel => sel.id === item.id)?.value ?? true}
                                                                                 onValueChange={(value) => {
-                                                                                    console.log("Value:::::::::>", value);
+                                                                                    console.log("Value:::::::::>", value, item._id);
+                                                                                    setSelectedRoomId(item._id)
+
                                                                                     setIsSelected(prevval => {
                                                                                         const existingIndex = prevval?.findIndex(sel => sel.id === item.id);
 
                                                                                         if (existingIndex !== -1) {
                                                                                             const updatedArray = [...prevval];
-                                                                                            updatedArray[existingIndex] = {
-                                                                                                id: item.id,
-                                                                                                name: item.room_name,
-                                                                                                value: value,
-                                                                                                // amount: sum,
-                                                                                                amount: (item.room_rate * diffindayss),
-                                                                                                adultCount: adultsSelectCompp,
-                                                                                                childCount: childSelectCompp,
-                                                                                                roomimage: item.roomimages[0]
-                                                                                            };
-                                                                                            return updatedArray;
+
+                                                                                            if (value === false && updatedArray[existingIndex].value === true) {
+                                                                                                onOpen()
+                                                                                                updatedArray[existingIndex] = {
+                                                                                                    id: item.id,
+                                                                                                    main_id: item._id,
+                                                                                                    name: item.room_name,
+                                                                                                    value: !value,
+                                                                                                    // amount: sum,
+                                                                                                    // amount: (item.room_rate * diffindayss),
+                                                                                                    amount: item.room_rate,
+                                                                                                    totalroomamount: parseInt(item.room_rate) * parseInt(selectedRoomCount),
+                                                                                                    totalroomamountwithextraguest: (parseInt(item.room_rate) * parseInt(selectedRoomCount)) + ((parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200),
+                                                                                                    adultCount: adultsSelectCompp,
+                                                                                                    childCount: childSelectCompp,
+                                                                                                    roomimage: item.roomimages[0],
+                                                                                                    selectedRoomCount: selectedRoomCount,
+                                                                                                    selectedExtraperson: selectedExtraperson,
+                                                                                                    selectedGuestPerRoom: selectedGuestPerRoom,
+                                                                                                    totalGuest: parseInt(selectedGuestPerRoom) * parseInt(selectedRoomCount),
+                                                                                                    totalExtraGuest: parseInt(selectedExtraperson) * parseInt(selectedRoomCount),
+                                                                                                    totalExtraGuestAmount: (parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200,
+                                                                                                    guestWithExtraPerson: parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson),
+                                                                                                    totalGuestWithExtraPerson: (parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson)) * parseInt(selectedRoomCount),
+                                                                                                };
+                                                                                                return updatedArray;
+                                                                                            } else {
+                                                                                                updatedArray[existingIndex] = {
+                                                                                                    id: item.id,
+                                                                                                    main_id: item._id,
+                                                                                                    name: item.room_name,
+                                                                                                    value: value,
+                                                                                                    // amount: sum,
+                                                                                                    // amount: (item.room_rate * diffindayss),
+                                                                                                    amount: item.room_rate,
+                                                                                                    totalroomamount: parseInt(item.room_rate) * parseInt(selectedRoomCount),
+                                                                                                    adultCount: adultsSelectCompp,
+                                                                                                    childCount: childSelectCompp,
+                                                                                                    roomimage: item.roomimages[0],
+                                                                                                    selectedRoomCount: selectedRoomCount,
+                                                                                                    selectedExtraperson: selectedExtraperson,
+                                                                                                    selectedGuestPerRoom: selectedGuestPerRoom,
+                                                                                                    totalGuest: parseInt(selectedGuestPerRoom) * parseInt(selectedRoomCount),
+                                                                                                    totalExtraGuest: parseInt(selectedExtraperson) * parseInt(selectedRoomCount),
+                                                                                                    totalroomamountwithextraguest: (parseInt(item.room_rate) * parseInt(selectedRoomCount)) + ((parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200),
+                                                                                                    totalExtraGuestAmount: (parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200,
+                                                                                                    guestWithExtraPerson: parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson),
+                                                                                                    totalGuestWithExtraPerson: (parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson)) * parseInt(selectedRoomCount),
+                                                                                                };
+                                                                                                return updatedArray;
+                                                                                            }
+
+
                                                                                         } else {
+                                                                                            onOpen()
                                                                                             return [
                                                                                                 ...prevval,
                                                                                                 {
                                                                                                     id: item.id,
+                                                                                                    main_id: item._id,
                                                                                                     name: item.room_name,
-                                                                                                    value: value,
+                                                                                                    value: !value,
                                                                                                     // amount: sum,
-                                                                                                    amount: (item.room_rate * diffindayss),
+                                                                                                    // amount: (item.room_rate * diffindayss),
+                                                                                                    amount: item.room_rate,
+                                                                                                    totalroomamount: parseInt(item.room_rate) * parseInt(selectedRoomCount),
                                                                                                     adultCount: adultsSelectCompp,
                                                                                                     childCount: childSelectCompp,
-                                                                                                    roomimage: item.roomimages[0]
+                                                                                                    roomimage: item.roomimages[0],
+                                                                                                    selectedRoomCount: selectedRoomCount,
+                                                                                                    selectedExtraperson: selectedExtraperson,
+                                                                                                    selectedGuestPerRoom: selectedGuestPerRoom,
+                                                                                                    totalGuest: parseInt(selectedGuestPerRoom) * parseInt(selectedRoomCount),
+                                                                                                    totalExtraGuest: parseInt(selectedExtraperson) * parseInt(selectedRoomCount),
+                                                                                                    totalroomamountwithextraguest: (parseInt(item.room_rate) * parseInt(selectedRoomCount)) + ((parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200),
+                                                                                                    totalExtraGuestAmount: (parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200,
+                                                                                                    guestWithExtraPerson: parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson),
+                                                                                                    totalGuestWithExtraPerson: (parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson)) * parseInt(selectedRoomCount),
                                                                                                 }
                                                                                             ];
                                                                                         }
@@ -1297,8 +1437,170 @@ const Filterpage = () => {
 
 
                 </div>
+
+                <Modal
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    scrollBehavior="inside"
+                    backdrop="blur"
+                    placement="center"
+                >
+                    <ModalContent>
+                        {(onClose) => (
+                            <>
+                                <ModalHeader className="flex flex-col gap-2">
+                                    <div className="flex justify-between items-start">
+
+                                    </div>
+                                </ModalHeader>
+                                <ModalBody className="mx-6">
+                                    <div className="flex flex-col gap-4">
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="flex flex-col gap-2">
+                                                <p>Check in</p>
+                                                <div>
+                                                    19-10-2024
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <p>Check out</p>
+                                                <div>
+                                                    19-10-2024
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="flex flex-col gap-2">
+                                                <p>Rooms</p>
+                                                <div>
+                                                    <Autocomplete
+                                                        key={selectedRoomCount}
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        defaultSelectedKey={selectedRoomCount}
+                                                        className="w-full"
+                                                        inputProps={{
+                                                            classNames: {
+                                                                inputWrapper: "w-[100%]",
+                                                            },
+                                                        }}
+                                                        value={selectedRoomCount}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) =>
+                                                            setSelectedRoomCount(value)
+                                                        }
+                                                        onSelectionChange={(key) => {
+                                                            setSelectedRoomCount(key)
+                                                        }}
+                                                    >
+                                                        {Array.from({ length: newFilteredRoomDetails.find((item) => item._id === selectedRoomId).rooms_available }, (_, index) => index + 1).map((roomNumber) => (
+                                                            <AutocompleteItem
+                                                                key={roomNumber.toString()}
+                                                                value={roomNumber.toString()}
+                                                            >
+                                                                {roomNumber.toString()}
+                                                            </AutocompleteItem>
+                                                        ))}
+                                                    </Autocomplete>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <p>Guest Per Room</p>
+                                                <div>
+                                                    <Autocomplete
+                                                        key={newFilteredRoomDetails.find((item) => item._id === selectedRoomId).max_adult}
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        defaultSelectedKey={newFilteredRoomDetails.find((item) => item._id === selectedRoomId).max_adult}
+                                                        className="w-full"
+                                                        inputProps={{
+                                                            classNames: {
+                                                                inputWrapper: "w-[100%]",
+                                                            },
+                                                        }}
+                                                        value={newFilteredRoomDetails.find((item) => item._id === selectedRoomId).max_adult}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) =>
+                                                            setSelectedGuestPerRoom(value)
+                                                        }
+                                                        onSelectionChange={(key) => {
+                                                            setSelectedGuestPerRoom(key)
+                                                        }}
+                                                    >
+                                                        {Array.from({ length: 1 }, (_, index) => index + parseInt(newFilteredRoomDetails.find((item) => item._id === selectedRoomId).max_adult)).map((guestCount) => (
+                                                            <AutocompleteItem
+                                                                key={guestCount.toString()}
+                                                                value={guestCount.toString()}
+                                                            >
+                                                                {guestCount.toString()}
+                                                            </AutocompleteItem>
+                                                        ))}
+                                                    </Autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col gap-2">
+                                            <Checkbox isSelected={checked} color="default" onChange={(e) => setChecked((prevVal) => !prevVal)}>
+                                                Add extra person
+                                            </Checkbox>
+                                            <div>
+                                                {
+                                                    checked
+                                                        ? <div className="flex flex-col gap-1">
+                                                            <Autocomplete
+                                                                key={selectedExtraperson}
+                                                                size="sm"
+                                                                variant="bordered"
+                                                                defaultSelectedKey={selectedExtraperson}
+                                                                className="w-full"
+                                                                inputProps={{
+                                                                    classNames: {
+                                                                        inputWrapper: "w-[50%]",
+                                                                    },
+                                                                }}
+                                                                value={selectedExtraperson}
+                                                                allowsCustomValue={true}
+                                                                onInputChange={(value) => setSelectedExtraperson(value)}
+                                                                onSelectionChange={(key) => {
+                                                                    setSelectedExtraperson(key);
+                                                                }}
+                                                            >
+                                                                {Array.from({ length: parseInt(newFilteredRoomDetails.find((item) => item._id === selectedRoomId).extra_person) + 1 }, (_, index) => index).map((extraCount) => (
+                                                                    <AutocompleteItem
+                                                                        key={extraCount.toString()}
+                                                                        value={extraCount.toString()}
+                                                                    >
+                                                                        {extraCount.toString()}
+                                                                    </AutocompleteItem>
+                                                                ))}
+                                                            </Autocomplete>
+                                                            <p className="text-sm text-gray-700">₹ 200 (extra mattress) per extra person</p>
+                                                        </div>
+                                                        : ""
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary" variant="solid" onClick={(e) => handleRoomChange()}>
+                                        Add
+                                    </Button>
+                                    <Button color="danger" variant="light" onClick={onClose}>
+                                        Close
+                                    </Button>
+                                </ModalFooter>
+                            </>
+                        )}
+                    </ModalContent>
+                </Modal>
             </div>
         </div>
+
+
     );
 };
 

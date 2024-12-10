@@ -32,6 +32,12 @@ const user_booking_detailsModel = new mongoose.Schema({
         signature: String,
         invoice_id: String,
         refund_flag: Number,
+        selectedGuestPerRoom: Number,
+        selectedRoomCount: Number,
+        selectedExtraperson: Number,
+        totalExtraGuest: Number,
+        totalGuestWithExtraPerson: Number,
+        totalroomamountwithextraguest: Number,
         created_date: String,
         last_update_on: String,
 });

@@ -11,7 +11,7 @@ import { CalendarRange, Search, NotebookPen } from "lucide-react"
 import Daterangepickerreact from "@/_components/Home/Daterangepickerreact"
 import { PiUsersLight } from "react-icons/pi";
 import RoomsAndGuests from '@/_components/Home/RoomsAndGuests'
-import { Button, Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react'
+import { Button, Card, CardHeader, CardBody, CardFooter, Autocomplete, AutocompleteItem, Checkbox } from '@nextui-org/react'
 import { today, getLocalTimeZone } from "@internationalized/date";
 import { AlarmClockCheck, Moon, BedDouble, CircleArrowRight, Clock, MapPin, Plane, IndianRupee, Wifi, Cctv, Droplets, CircleParking, Dish, GlassWater, UsersRound } from "lucide-react";
 import Image from "next/image";
@@ -20,6 +20,14 @@ import { motion } from "framer-motion";
 import IMAGES from '@/public';
 import { format, parse, eachDayOfInterval } from "date-fns";
 import { Spinner } from "@nextui-org/react";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    useDisclosure,
+} from "@nextui-org/modal";
 
 
 const SelectMonth = ({
@@ -35,22 +43,30 @@ const SelectMonth = ({
     roomprice,
     checkInDataForSum,
     checkOutDataForSum,
-    roomdetPayload,
     roombaseprice,
-    onRoomAvailableClicked
+    onRoomAvailableClicked,
+    roomDetails,
+    selectedRoomIdd
 }
 ) => {
 
+    const [selectedRoomId, setSelectedRoomId] = useState(selectedRoomIdd);
+    const [selectedRoomCount, setSelectedRoomCount] = useState("1");
+    const [selectedExtraperson, setSelectedExtraperson] = useState("0");
+    const [selectedGuestPerRoom, setSelectedGuestPerRoom] = useState("1");
 
-    console.log("Checkout::::::::>",)
+    const [checked, setChecked] = useState(false);
+
+    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
     let defaultDate = today(getLocalTimeZone());
+
     const nextDay = defaultDate.add({ days: 1 });
 
     const router = useRouter();
 
-    const [adultsSelect, setAdultsSelect] = useState();
-    const [childSelect, setChildSelect] = useState();
+    const [adultsSelect, setAdultsSelect] = useState("1");
+    const [childSelect, setChildSelect] = useState("0");
 
     const [roomAvailableClicked, setRoomAvailableClicked] = useState(false);
 
@@ -242,6 +258,8 @@ const SelectMonth = ({
     const handleCheckout = async () => {
 
         try {
+            
+
 
             const formatDateeee = (date) => {
                 const day = String(date.getDate()).padStart(2, "0");
@@ -255,76 +273,82 @@ const SelectMonth = ({
 
             const abcc = differenceInDays(formattedStartDateeee, formattedEndDateeee)
 
-            if(roomprice === (roombaseprice * abcc)) {
-                const searchResult = await Promise.resolve(searchActionLarge());
+            // if(roomprice === (roombaseprice * abcc)) {
+            const searchResult = await Promise.resolve(searchActionLarge());
 
-                const formatDate = (date) => {
-                    const day = String(date.getDate()).padStart(2, "0");
-                    const month = String(date.getMonth() + 1).padStart(2, "0");
-                    const year = date.getFullYear();
-                    return `${day}-${month}-${year}`;
-                };
-    
-                const formattedStartDate = formatDate(selectedDateRange[0].startDate);
-                const formattedEndDate = formatDate(selectedDateRange[0].endDate);
-    
-                const abc = differenceInDays(formattedStartDate, formattedEndDate)
-    
-                let payload = {
-                    user_id: "",
-                    booking_id: await generateUniqueID(),
-                    salutation: "Mr",
-                    username: "",
-                    email: "",
-                    phone: "",
-                    Hotel_Id: "123456",
-                    Hotel_name: "Hotel Rajdhani",
-                    booking_date: getCurrentDateTime(),
-                    roomDet: [roomdetPayload],
-                    price: (roombaseprice * abc),
-                    status: "inprocess",
-                    city: '',
-                    zip: '',
-                    adults_count: adultsSelect,
-                    checkin_date: formatDatee(formattedStartDate),
-                    checkout_date: formatDatee(formattedEndDate),
-                    checkin_dateF: formattedStartDate,
-                    checkout_dateF: formattedEndDate,
-                    rooms_count: 1,
-                    childrens_count: childSelect,
-                    pflag0: 0,
-                    pflag1: 0,
-                    pflag2: 0,
-                    pflag3: 0,
-                    payment_id: "",
-                    order_id: "",
-                    signature: "",
-                    refund_flag: 0,
-                    created_date: getCurrentDateTime(),
-                    last_update_on: getCurrentDateTime(),
-                };
-    
-                const response = await fetch("/api/userApi/booking_details", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                });
-                const result = await response.json();
-    
-                if (Object.keys(result.user_bookings).length > 0) {
-                    router.push(
-                        `/filterpage/checkout?id=${result.user_bookings.booking_id}`
-                    );
-                }
-            }else {
+            const formatDate = (date) => {
+                const day = String(date.getDate()).padStart(2, "0");
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            };
 
-                alert("First check the availability!");
+            const formattedStartDate = formatDate(selectedDateRange[0].startDate);
+            const formattedEndDate = formatDate(selectedDateRange[0].endDate);
 
+            const abc = differenceInDays(formattedStartDate, formattedEndDate)
+
+            let payload = {
+                user_id: "",
+                booking_id: await generateUniqueID(),
+                salutation: "Mr",
+                username: "",
+                email: "",
+                phone: "",
+                Hotel_Id: "123456",
+                Hotel_name: "Hotel Rajdhani",
+                booking_date: getCurrentDateTime(),
+                roomDet: [roomdetPayload],
+                price: (roombaseprice * abc),
+                status: "inprocess",
+                city: '',
+                zip: '',
+                adults_count: adultsSelect,
+                checkin_date: formatDatee(formattedStartDate),
+                checkout_date: formatDatee(formattedEndDate),
+                checkin_dateF: formattedStartDate,
+                checkout_dateF: formattedEndDate,
+                rooms_count: 1,
+                childrens_count: childSelect,
+                pflag0: 0,
+                pflag1: 0,
+                pflag2: 0,
+                pflag3: 0,
+                payment_id: "",
+                order_id: "",
+                signature: "",
+                refund_flag: 0,
+                selectedGuestPerRoom: selectedGuestPerRoom,
+                selectedRoomCount: selectedRoomCount,
+                selectedExtraperson: selectedExtraperson,
+                totalExtraGuest: roomdetPayload.totalExtraGuest,
+                totalGuestWithExtraPerson: roomdetPayload.totalGuestWithExtraPerson,
+                totalroomamountwithextraguest: roomdetPayload.totalroomamountwithextraguest,
+                created_date: getCurrentDateTime(),
+                last_update_on: getCurrentDateTime(),
+            };
+
+            const response = await fetch("/api/userApi/booking_details", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+            const result = await response.json();
+
+            if (Object.keys(result.user_bookings).length > 0) {
+                router.push(
+                    `/filterpage/checkout?id=${result.user_bookings.booking_id}`
+                );
             }
+            // }else {
 
-    
+            //     alert("First check the availability!");
+
+            // }
+
+
         } catch (error) {
             console.error("Checkout failed", error);
         } finally {
@@ -332,8 +356,77 @@ const SelectMonth = ({
         }
     };
 
+    const handleRoomChange = () => {
+    //     console.log("Abcd:::::::", selectedRoomId, selectedRoomCount, selectedExtraperson, selectedGuestPerRoom)
+
+    //     const updatedIsSelected = roomdetPayload.map((item) =>
+    //         item.main_id === selectedRoomId
+    //             ? {
+    //                 ...item,
+    //                 value: false,
+    //                 totalroomamount: parseInt(item.amount) * parseInt(selectedRoomCount),
+    //                 selectedRoomCount: selectedRoomCount,
+    //                 selectedExtraperson: selectedExtraperson,
+    //                 selectedGuestPerRoom: selectedGuestPerRoom,
+    //                 totalGuest: parseInt(selectedGuestPerRoom) * parseInt(selectedRoomCount),
+    //                 totalExtraGuest: parseInt(selectedExtraperson) * parseInt(selectedRoomCount),
+    //                 totalroomamountwithextraguest: (parseInt(item.amount) * parseInt(selectedRoomCount)) + ((parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200),
+    //                 totalExtraGuestAmount: (parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200,
+    //                 guestWithExtraPerson: parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson),
+    //                 totalGuestWithExtraPerson: (parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson)) * parseInt(selectedRoomCount),
+    //             }
+    //             : item
+    //     );
+
+    //     console.log("Updated isSelected:", updatedIsSelected);
+
+    //     setIsSelected(updatedIsSelected)
+
+    //     setSelectedRoomId("")
+    //     setSelectedRoomCount("1")
+    //     setSelectedExtraperson("0")
+    //     setSelectedGuestPerRoom("1")
+
+        onClose()
+
+        handleCheckout()
+
+
+    }
+
+    useEffect(() => {
+        if (selectedRoomId) {
+            setSelectedGuestPerRoom(roomDetails.max_adults)
+        }
+    }, [selectedRoomId, roomDetails])
+
+    const roomdetPayload = {
+        id: roomDetails.id,
+        main_id: roomDetails.mainid,
+        name: roomDetails.roomname,
+        value: true,
+        amount: roomDetails.price,
+        totalroomamount: parseInt(roomDetails.price) * parseInt(selectedRoomCount),
+        totalroomamountwithextraguest: (parseInt(roomDetails.price) * parseInt(selectedRoomCount)) + ((parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200),
+        adultCount: adultsSelect,
+        childCount: childSelect,
+        roomimage: roomDetails?.roomimage,
+        selectedRoomCount: selectedRoomCount,
+        selectedExtraperson: selectedExtraperson,
+        selectedGuestPerRoom: selectedGuestPerRoom,
+        totalGuest: parseInt(selectedGuestPerRoom) * parseInt(selectedRoomCount),
+        totalExtraGuest: parseInt(selectedExtraperson) * parseInt(selectedRoomCount),
+        totalExtraGuestAmount: (parseInt(selectedExtraperson) * parseInt(selectedRoomCount)) * 200,
+        guestWithExtraPerson: parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson),
+        totalGuestWithExtraPerson: (parseInt(selectedGuestPerRoom) + parseInt(selectedExtraperson)) * parseInt(selectedRoomCount),
+    }
+
+    const handleCheckoutt = () => {
+        onOpen()
+    }
+
     return (
-        <div className="w-full rounded-xl shadow-xl bg-rose-50 border flex flex-col gap-5 h-[25rem] overflow-hidden">
+        <div className="w-full rounded-xl shadow-xl bg-rose-50 border flex flex-col gap-5 h-[21rem] overflow-hidden">
             <div className="flex flex-col gap-2 w-full h-full">
                 {/* Optional Header */}
                 {/* <h2 className="text-base font-semibold">Tour Packages:</h2> */}
@@ -377,7 +470,7 @@ const SelectMonth = ({
 
                                     {/* Button Section */}
                                     <div className="flex flex-col items-center justify-center w-full gap-4">
-                                        <Button
+                                        {/* <Button
                                             isIconOnly
                                             size="lg"
                                             onClick={(e) => searchActionMobile()}
@@ -401,12 +494,12 @@ const SelectMonth = ({
                                                 <span className="text-white">Check Availability</span>
                                             </div>
 
-                                        </Button>
+                                        </Button> */}
 
                                         <Button
                                             isIconOnly
                                             size="lg"
-                                            onClick={(e) => handleCheckout()}
+                                            onClick={(e) => handleCheckoutt()}
                                             className="w-full p-4 border border-black border-b-medium bg-[#333333] hover:bg-red-300 transition-all duration-200 text-white rounded-lg flex items-center justify-center gap-2"
                                         >
 
@@ -431,6 +524,166 @@ const SelectMonth = ({
 
                     </div>
                 </div>
+
+                <Modal
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    scrollBehavior="inside"
+                    backdrop="blur"
+                    placement="center"
+                >
+                    <ModalContent>
+                        {(onClose) => (
+                            <>
+                                <ModalHeader className="flex flex-col gap-2">
+                                    <div className="flex justify-between items-start">
+
+                                    </div>
+                                </ModalHeader>
+                                <ModalBody className="mx-6">
+                                    <div className="flex flex-col gap-4">
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="flex flex-col gap-2">
+                                                <p>Check in</p>
+                                                <div>
+                                                    19-10-2024
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <p>Check out</p>
+                                                <div>
+                                                    19-10-2024
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="flex flex-col gap-2">
+                                                <p>Rooms</p>
+                                                <div>
+                                                    <Autocomplete
+                                                        key={selectedRoomCount}
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        defaultSelectedKey={selectedRoomCount}
+                                                        className="w-full"
+                                                        inputProps={{
+                                                            classNames: {
+                                                                inputWrapper: "w-[100%]",
+                                                            },
+                                                        }}
+                                                        value={selectedRoomCount}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) =>
+                                                            setSelectedRoomCount(value)
+                                                        }
+                                                        onSelectionChange={(key) => {
+                                                            setSelectedRoomCount(key)
+                                                        }}
+                                                    >
+                                                        {Array.from({ length: roomDetails.rooms_available }, (_, index) => index + 1).map((roomNumber) => (
+                                                            <AutocompleteItem
+                                                                key={roomNumber.toString()}
+                                                                value={roomNumber.toString()}
+                                                            >
+                                                                {roomNumber.toString()}
+                                                            </AutocompleteItem>
+                                                        ))}
+                                                    </Autocomplete>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <p>Guest Per Room</p>
+                                                <div>
+                                                    <Autocomplete
+                                                        key={roomDetails.max_adults}
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        defaultSelectedKey={roomDetails.max_adults}
+                                                        className="w-full"
+                                                        inputProps={{
+                                                            classNames: {
+                                                                inputWrapper: "w-[100%]",
+                                                            },
+                                                        }}
+                                                        value={roomDetails.max_adults}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) =>
+                                                            setSelectedGuestPerRoom(value)
+                                                        }
+                                                        onSelectionChange={(key) => {
+                                                            setSelectedGuestPerRoom(key)
+                                                        }}
+                                                    >
+                                                        {Array.from({ length: 1 }, (_, index) => index + parseInt(roomDetails.max_adults)).map((guestCount) => (
+                                                            <AutocompleteItem
+                                                                key={guestCount.toString()}
+                                                                value={guestCount.toString()}
+                                                            >
+                                                                {guestCount.toString()}
+                                                            </AutocompleteItem>
+                                                        ))}
+                                                    </Autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col gap-2">
+                                            <Checkbox isSelected={checked} color="default" onChange={(e) => setChecked((prevVal) => !prevVal)}>
+                                                Add extra person
+                                            </Checkbox>
+                                            <div>
+                                                {
+                                                    checked
+                                                        ? <div className="flex flex-col gap-1">
+                                                            <Autocomplete
+                                                                key={selectedExtraperson}
+                                                                size="sm"
+                                                                variant="bordered"
+                                                                defaultSelectedKey={selectedExtraperson}
+                                                                className="w-full"
+                                                                inputProps={{
+                                                                    classNames: {
+                                                                        inputWrapper: "w-[50%]",
+                                                                    },
+                                                                }}
+                                                                value={selectedExtraperson}
+                                                                allowsCustomValue={true}
+                                                                onInputChange={(value) => setSelectedExtraperson(value)}
+                                                                onSelectionChange={(key) => {
+                                                                    setSelectedExtraperson(key);
+                                                                }}
+                                                            >
+                                                                {Array.from({ length: parseInt(roomDetails.extra_person) + 1 }, (_, index) => index).map((extraCount) => (
+                                                                    <AutocompleteItem
+                                                                        key={extraCount.toString()}
+                                                                        value={extraCount.toString()}
+                                                                    >
+                                                                        {extraCount.toString()}
+                                                                    </AutocompleteItem>
+                                                                ))}
+                                                            </Autocomplete>
+                                                            <p className="text-sm text-gray-700">₹ 200 (extra mattress) per extra person</p>
+                                                        </div>
+                                                        : ""
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary" variant="solid" onClick={(e) => handleRoomChange()}>
+                                        Add
+                                    </Button>
+                                    <Button color="danger" variant="light" onClick={onClose}>
+                                        Close
+                                    </Button>
+                                </ModalFooter>
+                            </>
+                        )}
+                    </ModalContent>
+                </Modal>
             </div>
         </div>
     );
@@ -673,6 +926,8 @@ const BookingProcess = () => {
 
 const RoomsTemplate = (props) => {
 
+    const [selectedRoomId, setSelectedRoomId] = useState();
+
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
     const [roomDetails, setRoomDetails] = useState({});
@@ -805,8 +1060,11 @@ const RoomsTemplate = (props) => {
 
             setAllRoomsDet(allRoomInform)
 
+            setSelectedRoomId(roomInform?._id)
+
             const roomInfo = {
                 id: roomInform?.id,
+                mainid: roomInform?._id,
                 roomname: roomInform?.room_name,
                 price: roomInform?.room_rate,
                 images: roomInform?.roomimages,
@@ -847,7 +1105,9 @@ const RoomsTemplate = (props) => {
                         name: "Extra Matress"
                     },
                 ],
-                similarrooms: allRoomInform.filter((item) => item.room_name !== formatRoomName(roomnameuri))
+                similarrooms: allRoomInform.filter((item) => item.room_name !== formatRoomName(roomnameuri)),
+                rooms_available: roomInform?.rooms_available, 
+                extra_person: roomInform?.extra_person,
             }
 
             setRoomDetails(roomInfo)
@@ -1309,15 +1569,7 @@ const RoomsTemplate = (props) => {
 
 
 
-    const roomdetPayload = {
-        id: roomDetails.id,
-        name: roomDetails.roomname,
-        value: false,
-        amount: roomDetails.price ? (roomDetails.price * diffindayss) : finalPrice(),
-        adultCount: adultsSelectCompp,
-        childCount: childSelectCompp,
-        roomimage: roomDetails?.roomimage
-    }
+    
 
     const scrollToDiv = (id) => {
         const targetDiv = document.getElementById(id);
@@ -1365,7 +1617,8 @@ const RoomsTemplate = (props) => {
                                     }}
                                 >
                                     <IndianRupee className="flex justify-center text-center self-center" />
-                                    {roomDetails.price ? (roomDetails.price * diffindayss) : finalPrice()}
+                                    {/* {roomDetails.price ? (roomDetails.price * diffindayss) : finalPrice()} */}
+                                    {roomDetails.price ? roomDetails.price : finalPrice()}
                                 </div>
                             </div>
                             <div className="flex lg:justify-end lg:items-center text-sm md:text-base text-gray-500 mt-2">per night</div>
@@ -1531,15 +1784,19 @@ const RoomsTemplate = (props) => {
                                 onSelectedDateRange={setSelectedDateRange}
                                 maxadults={roomDetails.max_adults}
                                 maxchilds={roomDetails.max_childs}
-                                roomprice={roomDetails.price ? (roomDetails.price * diffindayss) : finalPrice()}
+                                // roomprice={roomDetails.price ? (roomDetails.price * diffindayss) : finalPrice()}
+                                roomprice={roomDetails.price ? roomDetails.price : finalPrice()}
                                 checkInDataForSum={checkInDataForSum}
                                 checkOutDataForSum={checkOutDataForSum}
-                                roomdetPayload={roomdetPayload}
+                                roomDetails={roomDetails}
                                 roombaseprice={roomDetails.price}
                                 onRoomAvailableClicked={setRoomAvailableClicked}
+                                selectedRoomIdd={selectedRoomId}
                             />
                         </div>
                     </div>
+
+
                 </div>
             </div>
 

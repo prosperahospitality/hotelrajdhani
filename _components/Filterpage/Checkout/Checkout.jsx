@@ -136,17 +136,14 @@ export default function Checkout() {
           const payload = {
             operation: "sendenquirymail",
             booking_id: booking_id,
-            checkindate: bookingDetails.checkin_dateF,
-            checkoutdate: bookingDetails.checkout_dateF,
             name: name,
             email: email,
             number: number.toString(),
             city: city,
             zip: zip,
             amt: finalAmount,
-            adultcount: bookingDetails.adults_count,
-            childrencount: bookingDetails.childrens_count,
-            roomdetails: bookingDetails.roomDet,
+            nights: nights,
+            bookingDetails: bookingDetails,
           }
 
           const emailresponse = await fetch(`/api/send-email`, {
@@ -256,28 +253,128 @@ export default function Checkout() {
               </div>
 
               {/* Room Details */}
-              <div className="mb-4 grid grid-cols-2 gap-4 w-full">
-                {bookingDetails?.roomDet.map((item, index) => (
-                  <div
-                    key={item.id || `room-${index}`}
-                    className="mb-4 flex gap-4 w-full flex-col md:flex-row"
-                  >
-                    <Image
-                      src={item.roomimage}
-                      alt="Superior Room"
-                      className="w-full md:w-1/4 h-32 object-cover rounded-lg"
-                      width={500}
-                      height={500}
-                    />
-                    <div>
-                      <p className="text-lg font-semibold">{item.name || ''}</p>
-                      <p>{item.adultCount || ''} Adult</p>
-                      <p>Room 1</p>
-                      <p>Base Price: ₹ {item.amount || ''}</p>
+              <div className="mb-4 w-full">
+                {/* Desktop/Table View */}
+                <div className="hidden md:block">
+                  <table className="w-full table-auto border-collapse border border-gray-200 text-sm">
+                    <thead>
+                      <tr className="bg-gray-100 text-left">
+                        {/* <th className="border border-gray-200 px-4 py-2 w-48">Room Image</th> */}
+                        <th className="border border-gray-200 px-4 py-2">Name</th>
+                        <th className="border border-gray-200 px-4 py-2">Room</th>
+                        <th className="border border-gray-200 px-4 py-2">Guest per Room</th>
+                        <th className="border border-gray-200 px-4 py-2">Base Price</th>
+                        <th className="border border-gray-200 px-4 py-2">Total Guest</th>
+                        <th className="border border-gray-200 px-4 py-2">Extra Guest</th>
+                        <th className="border border-gray-200 px-4 py-2">Total Room Amount</th>
+                        <th className="border border-gray-200 px-4 py-2">Total Extra Guest Amount</th>
+                        <th className="border border-gray-200 px-4 py-2">Total Guest Pay</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bookingDetails?.roomDet.map((item, index) => (
+                        <tr key={item.id || `room-${index}`} className="hover:bg-gray-50">
+                          {/* <td className="border border-gray-200 px-4 py-2 w-48">
+              <Image
+                src={item.roomimage}
+                alt="Room"
+                className="w-40 h-40 object-cover rounded-lg"
+                width={160}
+                height={160}
+              />
+            </td> */}
+                          <td className="border border-gray-200 px-4 py-2">{item.name || ''}</td>
+                          <td className="border border-gray-200 px-4 py-2">{item.selectedRoomCount || ''}</td>
+                          <td className="border border-gray-200 px-4 py-2">
+                            {item.selectedGuestPerRoom || ''} Adults, 0 Children
+                          </td>
+                          <td className="border border-gray-200 px-4 py-2">₹ {item.amount || ''}</td>
+                          <td className="border border-gray-200 px-4 py-2">{item.totalGuestWithExtraPerson || ''}</td>
+                          <td className="border border-gray-200 px-4 py-2">
+                            {item.totalExtraGuest || '0'} (₹200 extra mattress per extra guest)
+                          </td>
+                          <td className="border border-gray-200 px-4 py-2">₹ {item.totalroomamount || '0'}</td>
+                          <td className="border border-gray-200 px-4 py-2">₹ {item.totalExtraGuestAmount || '0'}</td>
+                          <td className="border border-gray-200 px-4 py-2">₹ {item.totalroomamountwithextraguest || '0'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile/Card View */}
+                <div className="block md:hidden">
+                  {bookingDetails?.roomDet.map((item, index) => (
+                    <div
+                      key={item.id || `room-${index}`}
+                      className="mb-4 border border-gray-200 rounded-lg shadow-sm"
+                    >
+                      <div className="flex flex-col">
+                        {/* Fixed-size image container */}
+                        <div className="w-full flex justify-center">
+                          <div className="w-full h-64">
+                            <Image
+                              src={item.roomimage}
+                              alt="Room"
+                              className="w-full h-full object-cover rounded-lg"
+                              width={256} // Matches w-64
+                              height={256} // Matches h-64
+                            />
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <h2 className="font-semibold text-lg mb-4 text-center">{item.name || 'Room'}</h2>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-gray-500 font-medium">Rooms:</span>
+                              <span className="text-gray-700">{item.selectedRoomCount || 'N/A'}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-gray-500 font-medium">Guests per Room:</span>
+                              <span className="text-gray-700">{item.selectedGuestPerRoom || 'N/A'} Adults</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-gray-500 font-medium">Base Price:</span>
+                              <span className="text-gray-700">₹ {item.amount || '0'}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-gray-500 font-medium">Total Guests:</span>
+                              <span className="text-gray-700">{item.totalGuestWithExtraPerson || '0'}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-gray-500 font-medium">Extra Guests:</span>
+                              <span className="text-gray-700">
+                                {item.totalExtraGuest || '0'} (₹200 per extra guest)
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div className="p-4 space-y-2">
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-500 font-medium">Total Room Amount:</span>
+                          <span className="text-gray-700">₹ {item.totalroomamount || '0'}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-500 font-medium">Total Extra Guest Amount:</span>
+                          <span className="text-gray-700">₹ {item.totalExtraGuestAmount || '0'}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-500 font-medium">Total Guest Pay:</span>
+                          <span className="text-gray-900 font-semibold">₹ {item.totalroomamountwithextraguest || '0'}</span>
+                        </div>
+                      </div>
+
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
               </div>
+
+
+
+
 
 
               <div className="w-full flex justify-center items-center md:justify-end">
@@ -293,35 +390,51 @@ export default function Checkout() {
                 </button>
               </div>
 
-              <div className="mb-5 bg-white p-6 rounded-lg border-t w-full mt-8">
+              <div className="mb-5 bg-white p-6 rounded-lg border-t w-full mt-8 shadow-md">
                 {/* <h2 className="text-lg font-semibold mb-4">Have a coupon code?</h2>
-                <div className="flex items-center">
-                  <input
-                    type="text"
-                    placeholder="Coupon"
-                    className="p-2 border border-gray-300 rounded-lg w-full" />
-                  <button className="bg-gray-500 text-white py-2 px-4 ml-2 rounded-lg">
-                    Apply
-                  </button>
-                </div> */}
-                <div className="flex justify-between items-center">
-                  <p>Room Total</p>
-                  <p>₹ {bookingDetails?.price}</p>
+  <div className="flex flex-col sm:flex-row items-center gap-2">
+    <input
+      type="text"
+      placeholder="Coupon"
+      className="p-2 border border-gray-300 rounded-lg w-full sm:w-auto flex-grow" />
+    <button className="bg-gray-500 text-white py-2 px-4 rounded-lg">
+      Apply
+    </button>
+  </div> */}
+
+                {bookingDetails?.roomDet.map((item, index) => (
+                  <div
+                    key={item.main_id}
+                    className="border-b border-gray-200 py-4 last:border-none"
+                  >
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-700 font-medium">{item.name}</p>
+                      <p className="text-gray-900 font-semibold">₹ {item?.totalroomamountwithextraguest}</p>
+                    </div>
+                  </div>
+                ))}
+
+                {/* <div className="flex justify-between items-center mt-4">
+    <p className="text-gray-500">GST</p>
+    <p className="text-gray-700 font-medium">₹ {(bookingDetails?.price * 18 / 100).toFixed(2)}</p>
+  </div> */}
+
+                <div
+                  className="border-b border-gray-200 py-4 last:border-none"
+                >
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-700 font-medium">Nights</p>
+                    <p className="text-gray-900 font-semibold">{nights}</p>
+                  </div>
                 </div>
-                {/* <div className="flex justify-between items-center">
-                            <p>GST</p>
-                            <p>₹ {(bookingDetails?.price * 18 / 100).toFixed(2)}</p>
-                        </div> */}
-                <div className="flex justify-between items-center font-semibold text-lg mt-2">
-                  <p>Total Price</p>
+
+                <div className="flex justify-between items-center font-semibold text-lg mt-4">
+                  <p className="text-gray-800">Total Price</p>
                   {/* <p>₹ {(bookingDetails?.price * (1 + 18 / 100)).toFixed(2)}</p> */}
-                  <p>₹ {bookingDetails?.price}</p>
+                  <p className="text-gray-900">₹ {bookingDetails?.totalroomamountwithextraguest * nights}</p>
                 </div>
-
               </div>
-
             </div>
-
 
             {/* Repeating Guest */}
             <div className="w-full lg:w-[30%] bg-white p-6 rounded-lg shadow-lg">
