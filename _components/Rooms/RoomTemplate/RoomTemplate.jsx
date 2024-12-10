@@ -537,20 +537,20 @@ const SelectMonth = ({
                             <>
                                 <ModalHeader className="flex flex-col gap-2">
                                     <div className="flex justify-between items-start">
-
+                                        Booking Details
                                     </div>
                                 </ModalHeader>
                                 <ModalBody className="mx-6">
                                     <div className="flex flex-col gap-4">
                                         <div className="grid grid-cols-2 gap-2">
                                             <div className="flex flex-col gap-2">
-                                                <p>Check in</p>
+                                                <p className='font-semibold'>Check in</p>
                                                 <div>
                                                     {checkindate}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col gap-2">
-                                                <p>Check out</p>
+                                                <p className='font-semibold'>Check out</p>
                                                 <div>
                                                     {checkoutdate}
                                                 </div>
@@ -559,7 +559,7 @@ const SelectMonth = ({
 
                                         <div className="grid grid-cols-2 gap-2">
                                             <div className="flex flex-col gap-2">
-                                                <p>Rooms</p>
+                                                <p className='font-semibold'>Rooms Count</p>
                                                 <div>
                                                     <Autocomplete
                                                         key={selectedRoomCount}
@@ -593,7 +593,7 @@ const SelectMonth = ({
                                                 </div>
                                             </div>
                                             <div className="flex flex-col gap-2">
-                                                <p>Guest Per Room</p>
+                                                <p className='font-semibold'>Guest Per Room</p>
                                                 <div>
                                                     <Autocomplete
                                                         key={roomDetails.max_adults}
