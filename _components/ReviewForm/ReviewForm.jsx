@@ -64,6 +64,8 @@ const ReviewForm = () => {
 
     const handleSubmit = async (e) => {
 
+        console.log("submit")
+
         e.preventDefault();
 
         try {

@@ -19,7 +19,13 @@ export default function Checkout() {
 
   const booking_id = searchParams.get("id");
 
-  const [bookingDetails, setBookingDetails] = useState();
+  const payload = searchParams.get("payload");
+
+  const parsedPayload = payload ? JSON.parse(decodeURIComponent(payload)) : null;
+
+  console.log("parsedPayload:::::::>", parsedPayload)
+
+  const [bookingDetails, setBookingDetails] = useState(parsedPayload);
 
   const [currectYear, setCurrentYear] = useState();
 
@@ -47,28 +53,38 @@ export default function Checkout() {
 
   const initialFxn = () => {
     let abc = async () => {
-      const response = await fetch(
-        `/api/userApi/booking_details?bookingId=${booking_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // const response = await fetch(
+      //   `/api/userApi/booking_details?bookingId=${booking_id}`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      // const result = await response.json();
+
+      // setBookingDetails(parsedPayload);
+
+      const response = await fetch("/api/userApi/booking_details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(parsedPayload),
+      });
       const result = await response.json();
 
-      setBookingDetails(result?.databyid);
       const checkinData =
-        result?.databyid?.checkin_date +
+        parsedPayload?.checkin_date +
         "," +
         " " +
-        extractYear(result?.databyid?.checkin_dateF);
+        extractYear(parsedPayload?.checkin_dateF);
       const checkoutData =
-        result?.databyid?.checkout_date +
+        parsedPayload?.checkout_date +
         "," +
         " " +
-        extractYear(result?.databyid?.checkin_dateF);
+        extractYear(parsedPayload?.checkin_dateF);
 
       const checkinDate = new Date(checkinData);
       const checkoutDate = new Date(checkoutData);
@@ -79,10 +95,10 @@ export default function Checkout() {
 
       setNights(numberOfNights);
 
-      setCurrentYear(extractYear(result?.databyid?.checkin_dateF));
+      setCurrentYear(extractYear(parsedPayload?.checkin_dateF));
 
 
-      if (result?.databyid?.pflag0 === 1) {
+      if (parsedPayload?.pflag0 === 1) {
         router.push(`/`)
       }
 

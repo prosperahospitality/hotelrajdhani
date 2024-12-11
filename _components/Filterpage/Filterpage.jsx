@@ -147,20 +147,20 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                 last_update_on: getCurrentDateTime(),
             };
 
-            const response = await fetch("/api/userApi/booking_details", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
-            const result = await response.json();
+            // const response = await fetch("/api/userApi/booking_details", {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify(payload),
+            // });
+            // const result = await response.json();
 
-            if (Object.keys(result.user_bookings).length > 0) {
+            // if (Object.keys(result.user_bookings).length > 0) {
                 router.push(
-                    `/filterpage/checkout?id=${result.user_bookings.booking_id}`
+                    `/filterpage/checkout?id=${payload?.booking_id}&&payload=${encodeURIComponent(JSON.stringify(payload))}`
                 );
-            }
+            // }
         } catch (error) {
             console.error("Checkout failed", error);
         } finally {
