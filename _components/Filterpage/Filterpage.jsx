@@ -41,20 +41,36 @@ const generateUniqueID = async () => {
 
     let abc = result.data;
 
+    let newId;
+    let isUnique = false;
+
     if (abc.length === 0) {
-        return `BK${String(0 + 1).padStart(5, "0")}`;
+        newId = `BK${String(0 + 1).padStart(5, "0")}`;
+        isUnique = true;
     } else {
         const lastElement = abc[abc.length - 1];
         const lastElementId = lastElement.booking_id;
 
-        // Updated regular expression without named capturing group
+        // Extract numeric part from the last booking ID
         const numericPartMatch = lastElementId.match(/BK0*(\d+)/);
-        const lastNumericId = numericPartMatch ? parseInt(numericPartMatch[1]) : null;
+        let lastNumericId = numericPartMatch ? parseInt(numericPartMatch[1]) : 0;
 
+        while (!isUnique) {
+            newId = `BK${String(lastNumericId + 1).padStart(5, "0")}`;
 
-        return `BK${String(lastNumericId + 1).padStart(5, "0")}`;
+            // Check if the new ID already exists in the database
+            if (!abc.some((item) => item.booking_id === newId)) {
+                isUnique = true;
+            } else {
+                // Increment numeric part and try again
+                lastNumericId++;
+            }
+        }
     }
+
+    return newId;
 };
+
 
 function getCurrentDateTime() {
     const today = new Date();
@@ -915,7 +931,6 @@ const Filterpage = () => {
                                             </p>
                                         </div>
                                     </div>
-                                    {console.log("newFilteredRoomDetails:::::::>", newFilteredRoomDetails)}
 
                                     {loading ? (
                                         <SkeletonCard />
@@ -1052,7 +1067,7 @@ const Filterpage = () => {
                                             return (
                                                 <div
                                                     key={index}
-                                                    className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] mb-16"
+                                                    className="rounded-lg w-full mt-7 grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-6 p-4 shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] mb-11"
                                                 >
                                                     <div className="col-span-1">
 

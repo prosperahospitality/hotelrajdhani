@@ -256,25 +256,9 @@ const SelectMonth = ({
 
 
     const handleCheckout = async () => {
-
         try {
             
-
-
-            const formatDateeee = (date) => {
-                const day = String(date.getDate()).padStart(2, "0");
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const year = date.getFullYear();
-                return `${day}-${month}-${year}`;
-            };
-
-            const formattedStartDateeee = formatDateeee(selectedDateRange[0].startDate);
-            const formattedEndDateeee = formatDateeee(selectedDateRange[0].endDate);
-
-            const abcc = differenceInDays(formattedStartDateeee, formattedEndDateeee)
-
-            // if(roomprice === (roombaseprice * abcc)) {
-            const searchResult = await Promise.resolve(searchActionLarge());
+            const { startDate, endDate } = selectedDateRange[0];
 
             const formatDate = (date) => {
                 const day = String(date.getDate()).padStart(2, "0");
@@ -283,11 +267,14 @@ const SelectMonth = ({
                 return `${day}-${month}-${year}`;
             };
 
-            const formattedStartDate = formatDate(selectedDateRange[0].startDate);
-            const formattedEndDate = formatDate(selectedDateRange[0].endDate);
+            await Promise.resolve(searchActionLarge());
+
+            const formattedStartDate = formatDate(startDate);
+            const formattedEndDate = formatDate(endDate);
 
             const abc = differenceInDays(formattedStartDate, formattedEndDate)
-
+    
+    
             let payload = {
                 user_id: "",
                 booking_id: await generateUniqueID(),
@@ -327,7 +314,7 @@ const SelectMonth = ({
                 created_date: getCurrentDateTime(),
                 last_update_on: getCurrentDateTime(),
             };
-
+    
             const response = await fetch("/api/userApi/booking_details", {
                 method: "POST",
                 headers: {
@@ -335,26 +322,18 @@ const SelectMonth = ({
                 },
                 body: JSON.stringify(payload),
             });
+    
             const result = await response.json();
-
-            if (Object.keys(result.user_bookings).length > 0) {
-                router.push(
-                    `/filterpage/checkout?id=${result.user_bookings.booking_id}`
-                );
+    
+            if (result.user_bookings && Object.keys(result.user_bookings).length > 0) {
+                router.push(`/filterpage/checkout?id=${result.user_bookings.booking_id}`);
             }
-            // }else {
-
-            //     alert("First check the availability!");
-
-            // }
-
-
         } catch (error) {
             console.error("Checkout failed", error);
-        } finally {
-            // setIsLoading(false);
         }
     };
+    
+    
 
     const handleRoomChange = () => {
     //     console.log("Abcd:::::::", selectedRoomId, selectedRoomCount, selectedExtraperson, selectedGuestPerRoom)

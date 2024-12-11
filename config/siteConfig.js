@@ -110,8 +110,8 @@ export const siteConfig = {
   ],
 
   socialItems : [
-    { label: "Facebook", href: "https://www.facebook.com/", icon: FaFacebookF },
-    { label: "Instagram", href: "https://www.instagram.com/", icon: FaInstagram },
+    { label: "Facebook", href: "https://www.facebook.com/share/15fydhXtLj/?mibextid=LQQJ4d", icon: FaFacebookF },
+    { label: "Instagram", href: "https://www.instagram.com/hotel_rajdhani_halol/profilecard/?igsh=aGlwaXVpY2k4ZW96", icon: FaInstagram },
     { label: "Twitter", href: "https://twitter.com/", icon: FaTwitter },
 ]
 };
