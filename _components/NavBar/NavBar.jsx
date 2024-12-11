@@ -102,7 +102,7 @@ const NavBar = () => {
     { name: "Home", url: "/" },
     { name: "About", url: "/aboutus" },
     { name: "Rooms", url: sublinks ? sublinks[0]?.url : "/rooms/single-bed-non-ac-room", sublinks: sublinks },
-    { name: "Partners", sublinks: sublinkss },
+    { name: "Company's Corporate Stays", sublinks: sublinkss },
     { name: "Testimonials", url: "/testimonials" },
     { name: "Blogs", url: "/blog" },
     { name: "Contact Us", url: "/contactus" },
