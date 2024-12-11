@@ -293,7 +293,7 @@ const TestCard = ({ packageReviews, allPackages }) => {
                         <div className="flex justify-between items-center">
                           <div>
                             <h3 className="font-semibold">{review?.name}</h3>
-                            <p className="text-xs">{review?.traveled_date}</p>
+                            <p className="text-xs">{review?.creation_date.split(" ")[0]}</p>
                           </div>
 
                         </div>
@@ -370,7 +370,7 @@ const TestCard = ({ packageReviews, allPackages }) => {
 
                     <p>
                       <span className="font-medium">Review Date:</span>{" "}
-                      {selectedReview.traveled_date}
+                      {selectedReview.creation_date.split(" ")[0]}
                     </p>
                     <p>{selectedReview.description}</p>
                     {/* <p className="flex gap-5 items-center">
