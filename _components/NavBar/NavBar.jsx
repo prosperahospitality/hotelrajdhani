@@ -102,7 +102,7 @@ const NavBar = () => {
     { name: "Home", url: "/" },
     { name: "About", url: "/aboutus" },
     { name: "Rooms", url: sublinks ? sublinks[0]?.url : "/rooms/single-bed-non-ac-room", sublinks: sublinks },
-    { name: "Company's Corporate Stays", sublinks: sublinkss },
+    { name: "Companies Corporate Stays", sublinks: sublinkss },
     { name: "Testimonials", url: "/testimonials" },
     { name: "Blogs", url: "/blog" },
     { name: "Contact Us", url: "/contactus" },
@@ -214,7 +214,7 @@ const NavBar = () => {
           <div className="hidden lg:flex space-x-6">
             {links.map((link, index) => {
 
-              if (link.name === "Partners") {
+              if (link.name === "Companies Corporate Stays") {
 
                 return (
                   <div
@@ -416,7 +416,7 @@ const NavBar = () => {
       {isMenuOpen && (
         <div className="lg:hidden flex flex-col bg-slate-200 w-[100%] h-[31rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
           {links.map((link, index) => {
-            if (link.name === "Partners") {
+            if (link.name === "Companies Corporate Stays") {
 
               return (
                 <div key={index} className="relative">
