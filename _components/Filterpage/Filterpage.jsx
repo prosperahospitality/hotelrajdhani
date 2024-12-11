@@ -856,6 +856,7 @@ const Filterpage = () => {
         setSelectedRoomCount("1")
         setSelectedExtraperson("0")
         setSelectedGuestPerRoom("1")
+        setChecked(false)
 
         onClose()
 
