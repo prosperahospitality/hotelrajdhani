@@ -1484,6 +1484,7 @@ const Filterpage = () => {
                                                             classNames: {
                                                                 inputWrapper: "w-[100%]",
                                                             },
+                                                            readOnly: true,
                                                         }}
                                                         value={selectedRoomCount}
                                                         allowsCustomValue={true}
@@ -1518,6 +1519,7 @@ const Filterpage = () => {
                                                             classNames: {
                                                                 inputWrapper: "w-[100%]",
                                                             },
+                                                            readOnly: true,
                                                         }}
                                                         value={newFilteredRoomDetails.find((item) => item._id === selectedRoomId).max_adult}
                                                         allowsCustomValue={true}
@@ -1559,6 +1561,7 @@ const Filterpage = () => {
                                                                     classNames: {
                                                                         inputWrapper: "w-[50%]",
                                                                     },
+                                                                    readOnly: true,
                                                                 }}
                                                                 value={selectedExtraperson}
                                                                 allowsCustomValue={true}

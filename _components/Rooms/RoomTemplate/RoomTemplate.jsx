@@ -571,6 +571,7 @@ const SelectMonth = ({
                                                             classNames: {
                                                                 inputWrapper: "w-[100%]",
                                                             },
+                                                            readOnly: true,
                                                         }}
                                                         value={selectedRoomCount}
                                                         allowsCustomValue={true}
@@ -605,6 +606,7 @@ const SelectMonth = ({
                                                             classNames: {
                                                                 inputWrapper: "w-[100%]",
                                                             },
+                                                            readOnly: true,
                                                         }}
                                                         value={roomDetails.max_adults}
                                                         allowsCustomValue={true}
@@ -646,6 +648,7 @@ const SelectMonth = ({
                                                                     classNames: {
                                                                         inputWrapper: "w-[50%]",
                                                                     },
+                                                                    readOnly: true,
                                                                 }}
                                                                 value={selectedExtraperson}
                                                                 allowsCustomValue={true}
