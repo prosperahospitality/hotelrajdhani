@@ -42,7 +42,7 @@ const Landing = (props) => {
 
 
     return (
-        <div className="relative w-full h-[36rem] md:h-[40rem]">
+        <div className="relative w-full h-[36rem] md:h-[43rem]">
             {/* Top Right Section */}
             <div className="absolute top-1 right-3 text-gray-600 z-20 font-serif">
                 
@@ -102,16 +102,19 @@ const Landing = (props) => {
                     className="mySwiper w-full h-full"
                 >
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing3} alt="landing-bg" fill className="object-cover" />
+                        <Image src={IMAGES.landing3} alt="landing-bg" fill className="object-fill" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing1} alt="landing-bg" fill className="object-cover" />
+                        <Image src={IMAGES.landing1} alt="landing-bg" fill className="object-fill" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing6} alt="landing-bg" fill className="object-cover" />
+                        <Image src={IMAGES.landing6} alt="landing-bg" fill className="object-fill" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing5} alt="landing-bg" fill className="object-cover" />
+                        <Image src={IMAGES.landing5} alt="landing-bg" fill className="object-fill" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing7} alt="landing-bg" fill className="object-fill" />
                     </SwiperSlide>
                 </Swiper>
 
