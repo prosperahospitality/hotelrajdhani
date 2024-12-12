@@ -24,12 +24,12 @@ const BookingHistoryPage = () => {
     } catch (error) {
       console.error("Error::::::>", error);
     } finally {
-      setIsLoading(false); // Stop the loader once data is fetched
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    setIsClient(true); // Indicate that the component is running on the client
+    setIsClient(true);
     initialFxn();
   }, []);
 

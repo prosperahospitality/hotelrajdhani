@@ -11,6 +11,7 @@ const user_booking_detailsModel = new mongoose.Schema({
         Hotel_name: String,
         booking_date: String,
         booking_time: String,
+        arrival_time: String,
         roomDet: Array,
         price: String,
         status: String,

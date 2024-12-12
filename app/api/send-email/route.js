@@ -42,6 +42,7 @@ export async function POST(request) {
         amt,
         bookingDetails,
         nights,
+        selected
        } = payload;
 
 
@@ -56,6 +57,7 @@ export async function POST(request) {
         childrens_count,
         price,
         totalroomamountwithextraguest,
+        arrival_time,
       } = bookingDetails;
 
       // Generate HTML for the room details
@@ -72,6 +74,7 @@ export async function POST(request) {
   <p><strong>ZIP:</strong> ${zip}</p>
   <p><strong>Checkin Date:</strong> ${checkin_dateF}</p>
   <p><strong>Checkout Date:</strong> ${checkout_dateF}</p>
+  <p><strong>Arrival Time:</strong> ${selected}</p>
   <p><strong>Adults Count:</strong> ${adults_count}</p>
   <p><strong>Children Count:</strong> ${childrens_count}</p>
 

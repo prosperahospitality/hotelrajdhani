@@ -150,27 +150,71 @@ export default function RIMainCont() {
   }, [session]);
 
   const getData = async () => {
-    const response1 = await fetch(
-      `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoom=${selectedRoom}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const result1 = await response1.json();
+    try {
 
-    let databyid = result1?.databyid;
+      setIsLoading(true)
 
-    databyid = databyid?.filter((item) => {
-      return selectedDateRange.includes(item.booking_date);
-    });
+      const response1 = await fetch(
+        `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoom=${selectedRoom}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result1 = await response1.json();
 
-    const sortedData = databyid?.sort((a, b) => a.id - b.id);
+      let databyid = result1?.databyid;
 
-    setResult(sortedData);
+      databyid = databyid?.filter((item) => {
+        return selectedDateRange.includes(item.booking_date);
+      });
+
+      const sortedData = databyid?.sort((a, b) => a.id - b.id);
+
+      setResult(sortedData);
+
+    } catch (error) {
+
+    } finally {
+      setIsLoading(false)
+    }
+
   };
+
+  const getData1 = async () => {
+    try {
+
+      const response1 = await fetch(
+        `/api/admin/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoom=${selectedRoom}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result1 = await response1.json();
+
+      let databyid = result1?.databyid;
+
+      databyid = databyid?.filter((item) => {
+        return selectedDateRange.includes(item.booking_date);
+      });
+
+      const sortedData = databyid?.sort((a, b) => a.id - b.id);
+
+      setResult(sortedData);
+
+    } catch (error) {
+
+    } finally {
+
+    }
+
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataFxn = useCallback(
     async (
@@ -179,6 +223,9 @@ export default function RIMainCont() {
       quickSoldFormattedDate,
       editableSelectedRoom
     ) => {
+
+      setIsLoading(true);
+
       let roooomid;
 
       if (selectedRoom && selectedRoom !== undefined) {
@@ -251,7 +298,7 @@ export default function RIMainCont() {
           standardDateRange?.map(async (item) => {
             const date = parse(item, "dd-MM-yyyy", new Date());
 
-           
+
             lstID = lstID + 1;
 
             if (selectedRoom !== " " || selectedRoom !== undefined) {
@@ -556,6 +603,8 @@ export default function RIMainCont() {
         setResult(sortedData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
   );
@@ -719,11 +768,11 @@ export default function RIMainCont() {
   useEffect(() => { }, [updateRoomArray]);
 
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); 
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 2000); 
+  // }, []);
 
   const start = startOfMonth(new Date());
   const end = endOfMonth(new Date());
@@ -743,12 +792,12 @@ export default function RIMainCont() {
 
       const dateA = new Date(a.booking_date.split("-").reverse().join("-"));
       const dateB = new Date(b.booking_date.split("-").reverse().join("-"));
-    
+
       return dateA - dateB;
     });
 
 
-    
+
     console.log(dates);
 
 
@@ -795,7 +844,7 @@ export default function RIMainCont() {
       );
       const result = await response.json();
 
-      getData();
+      getData1();
     }
   };
 
@@ -872,7 +921,7 @@ export default function RIMainCont() {
         const result1 = await response1.json();
 
 
-        getData();
+        getData1();
       } catch (error) { }
     };
 
@@ -892,9 +941,8 @@ export default function RIMainCont() {
             {dates.map((item) => (
               <th
                 key={item.date}
-                className={`border bg-background ${
-                  isSaturday(new Date(item.date)) || isSunday(new Date(item.date)) ? 'font-bold' : ''
-                } max-w-[80px] lg:w-[200px] `}
+                className={`border bg-background ${isSaturday(new Date(item.date)) || isSunday(new Date(item.date)) ? 'font-bold' : ''
+                  } max-w-[80px] lg:w-[200px] `}
               >
                 <div className="flex justify-center items-center flex-col py-2">
                   <div className="font-semibold">{item.day}</div>
@@ -945,7 +993,7 @@ export default function RIMainCont() {
                   </td>
                 ))}
               </tr>
-  
+
               <tr>
                 <td className="sticky left-0 z-10 bg-background border p-2">
                   Net Booked
@@ -956,7 +1004,7 @@ export default function RIMainCont() {
                   </td>
                 ))}
               </tr>
-  
+
               <tr>
                 <td className="sticky left-0 z-10 bg-background border p-2">
                   <div className="flex flex-col">
@@ -978,7 +1026,7 @@ export default function RIMainCont() {
                     </button>
                   </div>
                 </td>
-  
+
                 {dates.map((item) => (
                   <td key={item.date} className="border bg-background">
                     <div className="text-center pr-4 text-[14px] pt-1">INR</div>
@@ -1008,7 +1056,7 @@ export default function RIMainCont() {
                   </td>
                 ))}
               </tr>
-  
+
               {showAdditionalRows && (
                 <>
                   {pricePerGuest
@@ -1054,16 +1102,16 @@ export default function RIMainCont() {
                               </span>
                             </div>
                           </td>
-  
+
                           {dates.map((item) => {
                             let priceToDisplay;
-  
+
                             if (price.key === item.id) {
                               if (item1.reduction === 'Normal price increased by') {
                                 if (item1.type === 'INR') {
                                   priceToDisplay = parseInt(price.value) + parseInt(item1.amount);
                                 }
-  
+
                                 if (item1.type === '%') {
                                   const increase =
                                     parseInt(price.value) * (parseInt(item1.amount) / 100);
@@ -1074,7 +1122,7 @@ export default function RIMainCont() {
                                 if (item1.type === 'INR') {
                                   priceToDisplay = parseInt(price.value) - parseInt(item1.amount);
                                 }
-  
+
                                 if (item1.type === '%') {
                                   const discount =
                                     parseInt(price.value) * (parseInt(item1.amount) / 100);
@@ -1082,7 +1130,7 @@ export default function RIMainCont() {
                                   priceToDisplay = newPrice.toFixed(2);
                                 }
                               }
-  
+
                               if (item1.isActive === false) {
                                 priceToDisplay = price.value;
                               }
@@ -1091,7 +1139,7 @@ export default function RIMainCont() {
                                 if (item1.type === 'INR') {
                                   priceToDisplay = parseInt(item.rate_24hr) + parseInt(item1.amount);
                                 }
-  
+
                                 if (item1.type === '%') {
                                   const increase =
                                     parseInt(item.rate_24hr) * (parseInt(item1.amount) / 100);
@@ -1102,7 +1150,7 @@ export default function RIMainCont() {
                                 if (item1.type === 'INR') {
                                   priceToDisplay = parseInt(item.rate_24hr) - parseInt(item1.amount);
                                 }
-  
+
                                 if (item1.type === '%') {
                                   const discount =
                                     parseInt(item.rate_24hr) * (parseInt(item1.amount) / 100);
@@ -1110,12 +1158,12 @@ export default function RIMainCont() {
                                   priceToDisplay = newPrice.toFixed(2);
                                 }
                               }
-  
+
                               if (item1.isActive === false) {
                                 priceToDisplay = item.rate_24hr;
                               }
                             }
-  
+
                             return (
                               <td
                                 key={`${item.date}-${item1.id || index}`}
@@ -1136,5 +1184,5 @@ export default function RIMainCont() {
       </table>
     </div>
   );
-  
+
 }

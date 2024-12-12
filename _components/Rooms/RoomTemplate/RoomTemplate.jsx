@@ -285,6 +285,7 @@ const SelectMonth = ({
                 Hotel_Id: "123456",
                 Hotel_name: "Hotel Rajdhani",
                 booking_date: getCurrentDateTime(),
+                arrival_time:'',
                 roomDet: [roomdetPayload],
                 price: (roombaseprice * abc),
                 status: "inprocess",

@@ -105,7 +105,7 @@ const Landing = (props) => {
                         <Image src={IMAGES.landing3} alt="landing-bg" fill className="object-fill" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing1} alt="landing-bg" fill className="object-fill" />
+                        <Image src={IMAGES.landing1} alt="landing-bg" fill className="object-cover lg:object-fill" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
                         <Image src={IMAGES.landing6} alt="landing-bg" fill className="object-fill" />

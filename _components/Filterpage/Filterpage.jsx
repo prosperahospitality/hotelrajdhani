@@ -117,6 +117,7 @@ const BookingSummary = ({ displayBookingSum, searchedCheckInDate, searchedCheckO
                 Hotel_Id: "123456",
                 Hotel_name: "Hotel Rajdhani",
                 booking_date: getCurrentDateTime(),
+                arrival_time: '',
                 roomDet: bookingSum.filter((item) => item.value !== true),
                 price: displayBookingSum.amount,
                 status: "inprocess",
