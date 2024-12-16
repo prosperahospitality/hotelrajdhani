@@ -137,7 +137,7 @@ export async function POST(req) {
       const records = await Pms_Ratesandinventory_Managerateandinventory.find();
 
       const oldRecords = records.filter(record => {
-        const bookingDate = parse(record.booking_date, 'EEE dd MMM', new Date());
+        const bookingDate = parse(record.booking_dateF, 'dd-MM-yyyy', new Date());
         return isBefore(bookingDate, currentDate);
       });
   
