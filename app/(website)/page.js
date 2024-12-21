@@ -8,6 +8,7 @@ import Testimonials from '@/_components/Home/Testimonials'
 import CorporateGuestsSection from '@/_components/Home/Companies'
 import { useSelector, useDispatch } from 'react-redux'
 import { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn } from "@/app/redux/slices/navSlice";
+import Process from '@/_components/Home/Process'
 
 const Home = () => {
 
@@ -95,6 +96,8 @@ const Home = () => {
       </div>
 
       <Testimonials />
+
+      <Process />
 
     </div>
   )
