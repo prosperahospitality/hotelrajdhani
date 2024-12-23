@@ -7,7 +7,7 @@ import Placestovisit from '@/_components/Home/Placestovisit'
 import Testimonials from '@/_components/Home/Testimonials'
 import CorporateGuestsSection from '@/_components/Home/Companies'
 import { useSelector, useDispatch } from 'react-redux'
-import { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn } from "@/app/redux/slices/navSlice";
+import { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn, handleRajdhaniRestaurantFxn } from "@/app/redux/slices/navSlice";
 import Process from '@/_components/Home/Process'
 
 const Home = () => {
@@ -18,7 +18,11 @@ const Home = () => {
 
   const scrollTourist = useSelector((state) => state.nav.scrollTourist);
 
+  const scrollRestaurant = useSelector((state) => state.nav.scrollRestaurant);
+
   const partnersClick = useSelector((state) => state.nav.partnersClick);
+
+
 
   const scrollToDiv = (id) => {
     const targetDiv = document.getElementById(id);
@@ -55,6 +59,13 @@ const Home = () => {
       dispatch(handlePartnersClickFxn(false))
     }
   }, [partnersClick])
+
+  useEffect(() => {
+    if (scrollRestaurant) {
+      scrollToDiv("target-restaurant")
+      dispatch(handleRajdhaniRestaurantFxn(false))
+    }
+  }, [scrollRestaurant])
 
 
 
@@ -97,7 +108,9 @@ const Home = () => {
 
       <Testimonials />
 
-      <Process />
+      <div id="target-restaurant">
+        <Process />
+      </div>
 
     </div>
   )

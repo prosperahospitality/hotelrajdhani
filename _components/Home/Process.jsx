@@ -11,25 +11,51 @@ const Process = () => {
                         <p className='text-gray-500 text-sm mt-2'>At Hotel Rajdhani, indulge in the authentic flavors of <span className='font-semibold text-md'>Gujarati Thali</span> for just <span className='font-semibold text-md'>₹99/-</span> and <span className='font-semibold text-md'>Punjabi Thali</span> for <span className='font-semibold text-md'>₹150/-</span>. Our <span className='font-semibold text-md'>AC Hall</span> offers a comfortable and aesthetic setting, perfect for enjoying traditional meals with fresh ingredients and spices that transport you to the heart of Gujarat and Punjab. With expertly crafted thalis, we ensure an unmatched dining experience. Located in Halol, near Pavagadh, our <span className='font-semibold text-md'>AC Dining Hall</span> provides the perfect ambiance for a memorable meal that will leave you craving more!</p>
                     </div>
                     <div className='w-full grid grid-cols-2 gap-5'>
-                        <div className='p-1 h-52 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-2'>
+                        <div className='p-2 h-60 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-1'>
 
-                            <img src="/img/rest1.jpeg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='google' />
+                            {/* <img src="/img/rest1.jpeg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='google' /> */}
+                            <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
+                                <img src="/img/rest1.jpeg" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                            </div>
+                            <div className="flex flex-col gap-0 w-full">
+                                <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>AC Dining Hall</h2>
+                            </div>
+
+                        </div>
+                        <div className='p-2 h-60 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-1'>
+
+                            {/* <img src="/img/gujratiThali.jpg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='meta' /> */}
+
+                            <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
+                                <img src="/img/gujratiThali.jpg" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                            </div>
+                            <div className="flex flex-col gap-0 w-full">
+                                <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>Gujrati Thali at ₹99/-</h2>
+                            </div>
+
+                        </div>
+                        <div className='p-2 h-60 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-1'>
+
+                            {/* <img src="/img/punjabiThali.avif" className='object-fill md:object-cover h-full w-full rounded-xl' alt='amazon' /> */}
+
+                            <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
+                                <img src="/img/punjabiThali.avif" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                            </div>
+                            <div className="flex flex-col gap-0 w-full">
+                                <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>Punjabi Thali at ₹150/-</h2>
+                            </div>
 
 
                         </div>
-                        <div className='p-1 h-52 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-2'>
+                        <div className='p-2 h-60 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-1'>
+                            {/* <img src="/img/rest2.jpeg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='linked' /> */}
 
-                            <img src="/img/gujratiThali.jpg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='meta' />
-
-                        </div>
-                        <div className='p-1 h-52 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-2'>
-
-                            <img src="/img/punjabiThali.avif" className='object-fill md:object-cover h-full w-full rounded-xl' alt='amazon' />
-
-
-                        </div>
-                        <div className='p-1 h-52 bg-white shadow-xl rounded-xl flex flex-col justify-between gap-2'>
-                            <img src="/img/rest2.jpeg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='linked' />
+                            <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
+                                <img src="/img/rest2.jpeg" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                            </div>
+                            <div className="flex flex-col gap-0 w-full">
+                                <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>AC Dining Hall</h2>
+                            </div>
                         </div>
                     </div>
                 </div>

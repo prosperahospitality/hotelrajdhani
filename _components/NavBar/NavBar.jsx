@@ -10,7 +10,7 @@ import { Phone, Mail } from "lucide-react";
 import { today, getLocalTimeZone } from "@internationalized/date";
 import { Spinner } from "@nextui-org/react";
 import { useDispatch } from "react-redux";
-import { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn } from "@/app/redux/slices/navSlice";
+import { handleLocateUsFxn, handleTouristSpotsFxn, handlePartnersClickFxn, handleRajdhaniRestaurantFxn } from "@/app/redux/slices/navSlice";
 
 
 const NavBar = () => {
@@ -158,6 +158,10 @@ const NavBar = () => {
 
   const handleTouristSpot = () => {
     dispatch(handleTouristSpotsFxn(true))
+  }
+
+  const handleRajdhaniRestaurant = () => {
+    dispatch(handleRajdhaniRestaurantFxn(true))
   }
 
   const handlePartnersClick = () => {
@@ -414,7 +418,7 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden flex flex-col bg-slate-200 w-[100%] h-[31rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
+        <div className="lg:hidden flex flex-col bg-slate-200 w-[100%] h-[36rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
           {links.map((link, index) => {
             if (link.name === "Companies Corporate Stays") {
 
@@ -542,7 +546,8 @@ const NavBar = () => {
                       }}
                     >
                       Locate Us
-                    </Button><Button
+                    </Button>
+                    <Button
                       radius="full"
                       className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
                       onClick={(e) => {
@@ -556,6 +561,24 @@ const NavBar = () => {
                   : ""
               }
             </div>
+            {
+              lastPart === undefined
+                ? <>
+                  <div className="flex justify-center items-center w-full">
+                    <Button
+                      radius="full"
+                      className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-32"
+                      onClick={(e) => {
+                        handleLinkClick();
+                        handleRajdhaniRestaurant();
+                      }}
+                    >
+                      Rajdhani Restaurant
+                    </Button>
+                  </div>
+                </>
+                : ""
+            }
           </div>
 
         </div>
