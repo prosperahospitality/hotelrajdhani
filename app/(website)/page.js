@@ -30,7 +30,7 @@ const Home = () => {
   const revenuedata = [
     {
       "key": "1",
-      "title": " Growth Made Easy.",
+      "title": "Growth Made Easy.",
       "description": "At Prospera Hospitality, we create simple, tailored strategies that address your hotel’s unique needs. Our data-driven insights empower you to optimize pricing and maximize occupancy for sustainable revenue growth."
     }
   ]
