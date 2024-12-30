@@ -6,9 +6,9 @@ import IMAGES from "@/public";
 import { Providers } from "@/app/providers";
 
 export const metadata = {
-  title: "Hotel Rajdhani",
+  title: "Hotel Rajdhani - Best Family Hotel in Halol Near Pavagadh",
   description: "Best Family Hotel in Halol Near Pavagadh",
-  icons: IMAGES.sitelogo
+  icons: IMAGES.sitelogo,
 };
 
 export default function RootLayout({ children }) {

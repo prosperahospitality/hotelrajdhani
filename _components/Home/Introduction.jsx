@@ -50,7 +50,7 @@ const Introduction = () => {
             fontWeight: "bold",
         }}
           >
-            Hotel Rajdhani, The Best Family Hotel In Pavaghad And Halol
+            Hotel Rajdhani And Guest House Gujarat, The Best Family Hotel In Pavaghad And Halol
           </p>
           <div className="flex justify-start w-full ">
             <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Where Luxury Meets Comfort</h1>
@@ -157,7 +157,7 @@ const Introduction = () => {
         </div>
         <div className="flex flex-col w-full lg:w-[50%] justify-center h-full items-center gap-10 ">
           <div className="flex justify-start w-full ">
-            <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Perfect Place To Stay</h1>
+            <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Hotel in Halol, Perfect Place To Stay</h1>
           </div>
           <div className="flex flex-col gap-8">
 
