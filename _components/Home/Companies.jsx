@@ -77,7 +77,7 @@ const CorporateGuestsSection = () => {
           {companies.map((company, index) => (
             <div
               key={index}
-              className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-center"
+              className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-center transform transition duration-300 hover:scale-105 hover:shadow-xl"
             >
               <img
                 src={company.logo}

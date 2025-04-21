@@ -76,28 +76,28 @@ const OurProcessData = [
     summary:
       "Surrounded by lush greenery and tranquil vibes, the temple is a popular spot for religious gatherings and festivals, especially during Mahashivaratri, when devotees come in large numbers to offer prayers. The location of the temple, away from the hustle and bustle of city life, makes it a perfect place for meditation and finding spiritual solace. A visit to Mangleshwar Mahadev Temple offers a blend of spirituality, history, and natural beauty, providing a peaceful retreat for all.",
   },
-//   {
-//     id: 7,
-//     img: IMAGES.kihim,
-//     title: "Kihim Beach",
-//     svg1: <Clock className="w-[20px] h-[20px] text-[#B76E79]" />,
-//     para1: "30 mins by car",
-//     svg2: <MapPin className="w-[20px] h-[20px] text-[#B76E79]" />,
-//     para2: "15 km from Ocean’s Pearl Resort",
-//     summary:
-//       "A rocky beach of immense beauty, Kihim is known to delight visitors with its sands and surf for the past many years. The climate of Kihim village and beach is mainly tropical with heavy rainfall during the Monsoons. You can easily reach Kihim Beach from Alibaug as it is located just 12km away between Alibaug and Mandwa beaches. Deemed as a bird watcher’s paradise, Kihim still sees a healthy inflow of migratory birds due to the dense cover of trees and forests. The combination of warm sands, rocky outcrops, and rare seashells has been known to have a soothing effect on visitors! If you are more of the adventurous kind, you can also enjoy a tented holiday sojourn right on the shores of Kihim. A walk in the woods across the beach in Alibaug is highly recommended if you want to see rare birds and butterflies flit by. You can also take a short trip to Kihim Pond, Kanakeshwar Temple or Karmarkar Museum.",
-//   },
-//   {
-//     id: 8,
-//     img: IMAGES.alibaug,
-//     title: "Nagaon Beach",
-//     svg1: <Clock className="w-[20px] h-[20px] text-[#B76E79]" />,
-//     para1: "5 mins by car",
-//     svg2: <MapPin className="w-[20px] h-[20px] text-[#B76E79]" />,
-//     para2: "700m from Ocean’s Pearl Resort",
-//     summary:
-//       "Nagaon Beach, located near Alibaug in Maharashtra, is a serene and picturesque coastal destination known for its tranquil atmosphere and natural beauty. Stretching along the Arabian Sea, the beach features soft golden sands, clear waters, and lush palm trees that create a perfect setting for relaxation and leisure. Unlike some of the more crowded beaches, Nagaon Beach offers a peaceful retreat where visitors can enjoy swimming, beach volleyball, and local seafood delicacies from nearby shacks. The calm waves and gentle breeze make it an ideal spot for families, couples, and nature enthusiasts seeking a serene escape from the city.",
-//   },
+  //   {
+  //     id: 7,
+  //     img: IMAGES.kihim,
+  //     title: "Kihim Beach",
+  //     svg1: <Clock className="w-[20px] h-[20px] text-[#B76E79]" />,
+  //     para1: "30 mins by car",
+  //     svg2: <MapPin className="w-[20px] h-[20px] text-[#B76E79]" />,
+  //     para2: "15 km from Ocean’s Pearl Resort",
+  //     summary:
+  //       "A rocky beach of immense beauty, Kihim is known to delight visitors with its sands and surf for the past many years. The climate of Kihim village and beach is mainly tropical with heavy rainfall during the Monsoons. You can easily reach Kihim Beach from Alibaug as it is located just 12km away between Alibaug and Mandwa beaches. Deemed as a bird watcher’s paradise, Kihim still sees a healthy inflow of migratory birds due to the dense cover of trees and forests. The combination of warm sands, rocky outcrops, and rare seashells has been known to have a soothing effect on visitors! If you are more of the adventurous kind, you can also enjoy a tented holiday sojourn right on the shores of Kihim. A walk in the woods across the beach in Alibaug is highly recommended if you want to see rare birds and butterflies flit by. You can also take a short trip to Kihim Pond, Kanakeshwar Temple or Karmarkar Museum.",
+  //   },
+  //   {
+  //     id: 8,
+  //     img: IMAGES.alibaug,
+  //     title: "Nagaon Beach",
+  //     svg1: <Clock className="w-[20px] h-[20px] text-[#B76E79]" />,
+  //     para1: "5 mins by car",
+  //     svg2: <MapPin className="w-[20px] h-[20px] text-[#B76E79]" />,
+  //     para2: "700m from Ocean’s Pearl Resort",
+  //     summary:
+  //       "Nagaon Beach, located near Alibaug in Maharashtra, is a serene and picturesque coastal destination known for its tranquil atmosphere and natural beauty. Stretching along the Arabian Sea, the beach features soft golden sands, clear waters, and lush palm trees that create a perfect setting for relaxation and leisure. Unlike some of the more crowded beaches, Nagaon Beach offers a peaceful retreat where visitors can enjoy swimming, beach volleyball, and local seafood delicacies from nearby shacks. The calm waves and gentle breeze make it an ideal spot for families, couples, and nature enthusiasts seeking a serene escape from the city.",
+  //   },
 ];
 const Placestovisit = () => {
   return (
@@ -179,7 +179,7 @@ const Placestovisit = () => {
             <div key={item.id}>
               {index % 2 === 0 ? (
                 <div className="grid grid-cols-2 gap-8 p-5">
-                  <div className="relative h-[20rem]">
+                  {/* <div className="relative h-[20rem]">
                     <Image
                       alt={"Mountains"}
                       src={item.img}
@@ -189,6 +189,16 @@ const Placestovisit = () => {
                         objectFit: "cover",
                         borderRadius: "20px", // cover, contain, none
                       }}
+                      className="group-hover:scale-105"
+                    />
+                  </div> */}
+                  <div className="w-full h-[20rem] relative group overflow-hidden rounded-xl shadow-lg">
+                    <Image
+                      src={item.img}
+                      fill
+                      sizes="(width: 100%)"
+                      alt={"Mountains"}
+                      className="w-full h-full object-cover transition-all group-hover:scale-105 aspect-[300/300]"
                     />
                   </div>
                   <div className="flex flex-col justify-center text-left">
@@ -246,16 +256,14 @@ const Placestovisit = () => {
                       {item.summary}
                     </p>
                   </div>
-                  <div className="relative h-[20rem]">
+                  <div className="w-full h-[20rem] relative group overflow-hidden rounded-xl shadow-lg">
                     <Image
-                      alt="Mountains"
                       src={item.img}
-                      fill
-                      sizes="(width: 100%)"
-                      style={{
-                        objectFit: "cover",
-                        borderRadius: "20px", // cover, contain, none
-                      }}
+                      width={800}
+                      height={800}
+                      alt="special-tours"
+                      className="w-full h-full object-cover transition-all group-hover:scale-105 aspect-[300/300]"
+                      loading="lazy"
                     />
                   </div>
                 </div>

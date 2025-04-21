@@ -79,27 +79,28 @@ const Facilities = () => {
                             Experience Our Hospitality
                         </h3>
                     </div>
-                    <div className=" mt-2 w-full lg:w-[95%] gap-10 p-5 grid grid-cols-1 md:grid-cols-4  place-items-center xl:mt-8 ">
-                        {data &&
-                            data?.map((e, i) => (
-                                <div
-                                    key={i}
-                                    className="w-[100%] gap-2 flex justify-evenly flex-col h-full border shadow-lg p-5 rounded-xl"
-                                >
-                                    <div className="flex justify-center items-center">
-                                        <div className="size-[60px] rounded-full flex justify-center items-center bg-[#F5F5DC]">
-                                            {e.svg}
-                                        </div>
-                                    </div>
-                                    <div className="text-lg font-medium text-center">
-                                        <p>{e.heading}</p>
-                                    </div>
-                                    <div className="text-gray-500 text-center">
-                                        <p>{e.para}</p>
-                                    </div>
-                                </div>
-                            ))}
-                    </div>
+                    <div className="mt-2 w-full lg:w-[95%] gap-10 p-5 grid grid-cols-1 md:grid-cols-4 place-items-center xl:mt-8">
+  {data &&
+    data?.map((e, i) => (
+      <div
+        key={i}
+        className="w-full gap-2 flex justify-evenly flex-col h-full border shadow-lg p-5 rounded-xl transform transition duration-300 hover:scale-105 hover:shadow-xl"
+      >
+        <div className="flex justify-center items-center">
+          <div className="size-[60px] rounded-full flex justify-center items-center bg-[#F5F5DC]">
+            {e.svg}
+          </div>
+        </div>
+        <div className="text-lg font-medium text-center">
+          <p>{e.heading}</p>
+        </div>
+        <div className="text-gray-500 text-center">
+          <p>{e.para}</p>
+        </div>
+      </div>
+    ))}
+</div>
+
                 </div>
             </div>
         </div>

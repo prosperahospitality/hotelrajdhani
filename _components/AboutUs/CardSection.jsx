@@ -55,7 +55,7 @@ const CardSection = () => {
 
     return (
         <div className="">
-            <div className="flex justify-center items-center w-[95%] mx-auto gap-10 my-10">
+            <div className="flex justify-center items-center w-[95%] mx-auto gap-10 my-32 lg:my-16">
                 <div className="flex justify-center items-center flex-col gap-10 w-full ">
                     <div>
                         <h1 className="text-4xl font-semibold w-full  text-center">

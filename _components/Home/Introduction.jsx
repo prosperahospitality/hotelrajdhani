@@ -41,8 +41,8 @@ const Introduction = () => {
   const limitY = (animateY) => Math.min(Math.max(animateY, -maxY), maxY);
 
   return (
-    <div className="flex flex-col gap-20 py-5 lg:pb-10">
-      <div className="h-full  w-[95%] mx-auto flex justify-center items-center flex-col lg:flex-row gap-5 ">
+    <div className="flex flex-col gap-40 py-5 lg:pb-10 mt-16 lg:gap-44">
+      <div className="h-full  w-[95%] mx-auto flex justify-center items-center flex-col lg:flex-row gap-32 ">
         <div className="flex flex-col w-full lg:w-[50%] justify-center h-full items-center gap-2 ">
           <p className="flex justify-start w-full text-[#333333] text-2xl leading-relaxed"
           style={{
@@ -92,7 +92,7 @@ const Introduction = () => {
             </div> */}
           </div>
         </div>
-        <div className="flex w-full lg:w-[50%] h-full  justify-center items-center relative mt-24 lg:my-0">
+        <div className="flex w-full lg:w-[50%] h-full  justify-center items-center relative lg:my-0">
           <div className="flex justify-center items-center h-full w-full translate-x-2 lg:translate-x-16 z-10 mx-auto">
             <motion.div
               className="w-full h-full  text-white flex items-center justify-center "
@@ -124,8 +124,8 @@ const Introduction = () => {
         </div>
       </div>
 
-      <div className="h-full w-[95%] mx-auto flex justify-center items-center flex-col-reverse lg:flex-row gap-5">
-        <div className="flex w-full lg:w-[50%] h-full  justify-center items-center relative mt-24 lg:mt-10">
+      <div className="h-full w-[95%] mx-auto flex justify-center items-center flex-col-reverse lg:flex-row gap-32">
+        <div className="flex w-full lg:w-[50%] h-full  justify-center items-center relative">
           <div className="flex justify-center items-center h-full w-full translate-x-2 lg:translate-x-16 z-10 mx-auto">
             <motion.div
               className="w-full h-full  text-white flex items-center justify-center "

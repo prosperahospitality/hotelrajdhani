@@ -1,8 +1,9 @@
 import React from 'react'
+import Image from 'next/image'
 
 const Process = () => {
     return (
-        <div className='relative flex w-full justify-center item-center md:mt-10 md:mb-10 mb-16'>
+        <div className='relative flex w-full justify-center item-center mb-32 lg:my-16'>
             <div className='w-[90%] lg:w-[80%] mx-auto z-30'>
                 <div className='flex flex-col lg:flex-row justify-center items-center w-full gap-5 py-'>
                     <div className='flex flex-col w-full gap-2'>
@@ -15,7 +16,19 @@ const Process = () => {
 
                             {/* <img src="/img/rest1.jpeg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='google' /> */}
                             <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
-                                <img src="/img/rest1.jpeg" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                                {/* <img src="/img/rest1.jpeg" 
+                                className='object-fill md:object-cover h-[12rem] w-full rounded-xl' 
+                                alt='google' /> */}
+                                <div className="w-full h-[12rem] relative group overflow-hidden rounded-xl">
+                                    <Image
+                                        src={'/img/rest1.jpeg'}
+                                        width={800}
+                                        height={800}
+                                        alt="special-tours"
+                                        className="w-full h-full object-fill lg:object-cover transition-all group-hover:scale-105 aspect-[300/300]"
+                                        loading="lazy"
+                                    />
+                                </div>
                             </div>
                             <div className="flex flex-col gap-0 w-full">
                                 <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>AC Dining Hall</h2>
@@ -27,7 +40,20 @@ const Process = () => {
                             {/* <img src="/img/gujratiThali.jpg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='meta' /> */}
 
                             <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
-                                <img src="/img/gujratiThali.jpg" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                                {/* <img src="/img/gujratiThali.jpg" 
+                                className='object-fill md:object-cover h-[12rem] w-full rounded-xl' 
+                                alt='google' 
+                                /> */}
+                                <div className="w-full h-[12rem] relative group overflow-hidden rounded-xl">
+                                    <Image
+                                        src={'/img/gujratiThali.jpg'}
+                                        width={800}
+                                        height={800}
+                                        alt="special-tours"
+                                        className="w-full h-full object-fill lg:object-cover transition-all group-hover:scale-105 aspect-[300/300]"
+                                        loading="lazy"
+                                    />
+                                </div>
                             </div>
                             <div className="flex flex-col gap-0 w-full">
                                 <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>Gujrati Thali at ₹99/-</h2>
@@ -39,7 +65,19 @@ const Process = () => {
                             {/* <img src="/img/punjabiThali.avif" className='object-fill md:object-cover h-full w-full rounded-xl' alt='amazon' /> */}
 
                             <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
-                                <img src="/img/punjabiThali.avif" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                                {/* <img src="/img/punjabiThali.avif" 
+                                className='object-fill md:object-cover h-[12rem] w-full rounded-xl' 
+                                alt='google' /> */}
+                                <div className="w-full h-[12rem] relative group overflow-hidden rounded-xl">
+                                    <Image
+                                        src={'/img/punjabiThali.avif'}
+                                        width={800}
+                                        height={800}
+                                        alt="special-tours"
+                                        className="w-full h-full object-fill lg:object-cover transition-all group-hover:scale-105 aspect-[300/300]"
+                                        loading="lazy"
+                                    />
+                                </div>
                             </div>
                             <div className="flex flex-col gap-0 w-full">
                                 <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>Punjabi Thali at ₹150/-</h2>
@@ -51,7 +89,19 @@ const Process = () => {
                             {/* <img src="/img/rest2.jpeg" className='object-fill md:object-cover h-full w-full rounded-xl' alt='linked' /> */}
 
                             <div className='h-full w-full rounded-xl flex justify-center items-center mt-0'>
-                                <img src="/img/rest2.jpeg" className='object-fill md:object-cover h-[12rem] w-full rounded-xl' alt='google' />
+                                {/* <img src="/img/rest2.jpeg" 
+                                className='object-fill md:object-cover h-[12rem] w-full rounded-xl' 
+                                alt='google' /> */}
+                                <div className="w-full h-[12rem] relative group overflow-hidden rounded-xl">
+                                    <Image
+                                        src={'/img/rest2.jpeg'}
+                                        width={800}
+                                        height={800}
+                                        alt="special-tours"
+                                        className="w-full h-full object-cover transition-all group-hover:scale-105 aspect-[300/300]"
+                                        loading="lazy"
+                                    />
+                                </div>
                             </div>
                             <div className="flex flex-col gap-0 w-full">
                                 <h2 className='text-sm md:text-lg font-semibold text-[#800000] text-center'>AC Dining Hall</h2>

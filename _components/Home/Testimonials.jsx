@@ -50,96 +50,108 @@ export default function Testimonials({ }) {
 
 
     return (
-        <div className="w-[90%] lg:w-[90%] h-full relative mx-auto pb-16 lg:py-16">
-            <Image src={IMAGES.testimonialsBG} alt='prospera-hospitality' fill className='flex w-full h-full object-cover' />
-            <Swiper
-                className="mySwiper flex justify-center items-center"
-                navigation={{
-                    nextEl: ".swiper-next",
-                    prevEl: ".swiper-prev",
-                }}
-                loop={true}
-                autoplay={{
-                    delay: 5000,
-                    disableOnInteraction: false,
-                }}
-                style={{
-                    "--swiper-navigation-size": "20px",
-                }}
-                modules={[Navigation, Autoplay]}
-                breakpoints={{
-                    0: {
-                        slidesPerView: 1,
-                        spaceBetween: 20,
-                    },
-                    1024: {
-                        slidesPerView: 2,
-                        spaceBetween: 20,
-                    },
-                }}
-                onSlideChange={(swiper) => {
-                    setIsBeginning(swiper.isBeginning);
-                    setIsEnd(swiper.isEnd);
-                }}
-            >
-                <div className="w-full h-full flex justify-center items-center ">
+        <div className="w-full h-full flex flex-col justify-center items-center">
+            <div className="mb-10 lg:mb-16">
+                <div className="flex justify-center items-center">
+                    <div className="border-b border-gray-500  inline-block pb-1">
+                        <p className="text-center text-gray-500 text-2xl lg:text-2xl font-semibold">Testimonials</p>
+                    </div>
+                </div>
+                <h3 className="text-center text-2xl lg:text-4xl leading-snug mt-6 font-semibold ">
+                    Guest Reviews & Experiences
+                </h3>
+            </div>
+            <div className="w-[90%] lg:w-[90%] h-full relative mx-auto pb-16 lg:py-16">
+                <Image src={IMAGES.testimonialsBG} alt='prospera-hospitality' fill className='flex w-full h-full object-cover' />
+                <Swiper
+                    className="mySwiper flex justify-center items-center"
+                    navigation={{
+                        nextEl: ".swiper-next",
+                        prevEl: ".swiper-prev",
+                    }}
+                    loop={true}
+                    autoplay={{
+                        delay: 5000,
+                        disableOnInteraction: false,
+                    }}
+                    style={{
+                        "--swiper-navigation-size": "20px",
+                    }}
+                    modules={[Navigation, Autoplay]}
+                    breakpoints={{
+                        0: {
+                            slidesPerView: 1,
+                            spaceBetween: 20,
+                        },
+                        1024: {
+                            slidesPerView: 2,
+                            spaceBetween: 20,
+                        },
+                    }}
+                    onSlideChange={(swiper) => {
+                        setIsBeginning(swiper.isBeginning);
+                        setIsEnd(swiper.isEnd);
+                    }}
+                >
+                    <div className="w-full h-full flex justify-center items-center ">
 
-                    {testimonials.map((testimonial, index) => (
-                        <SwiperSlide key={index} className='w-full h-full flex justify-center items-center'>
-                            <div className=" w-full h-96 flex justify-center items-center">
-                                <div className="h-96 w-96 p-5">
-                                    <div className="relative h-full w-full flex justify-center items-center">
+                        {testimonials.map((testimonial, index) => (
+                            <SwiperSlide key={index} className='w-full h-full flex justify-center items-center'>
+                                <div className=" w-full h-96 flex justify-center items-center">
+                                    <div className="h-96 w-96 p-5">
+                                        <div className="relative h-full w-full flex justify-center items-center">
 
-                                        <div className="absolute bottom-0 right-0 w-[95%] h-[95%] bg-white rounded-br-[50%] shadow-xl border ">
-                                            <div className="w-full h-full flex justify-between items-center flex-col">
-                                                <div className="flex justify-end items-center w-full py-5">
-                                                    <div className="w-[65%] flex flex-col">
-                                                        <h2 className="text-xl font-semibold text-[#800000]">{testimonial.name}</h2>
-                                                        <span className='text-sm text-gray-400'>{testimonial.title}</span>
-                                                        <div className='flex gap-1'>
-                                                            {[...Array(5)].map((_, i) => (
-                                                                <span key={i}>
-                                                                    <FaStar className={`size-3 ${i < testimonial.rating ? 'text-[#800000]' : 'text-gray-400'}`} />
-                                                                </span>
-                                                            ))}
+                                            <div className="absolute bottom-0 right-0 w-[95%] h-[95%] bg-white rounded-br-[50%] shadow-xl border ">
+                                                <div className="w-full h-full flex justify-between items-center flex-col">
+                                                    <div className="flex justify-end items-center w-full py-5">
+                                                        <div className="w-[65%] flex flex-col">
+                                                            <h2 className="text-xl font-semibold text-[#800000]">{testimonial.name}</h2>
+                                                            <span className='text-sm text-gray-400'>{testimonial.title}</span>
+                                                            <div className='flex gap-1'>
+                                                                {[...Array(5)].map((_, i) => (
+                                                                    <span key={i}>
+                                                                        <FaStar className={`size-3 ${i < testimonial.rating ? 'text-[#800000]' : 'text-gray-400'}`} />
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+
                                                         </div>
-
+                                                    </div>
+                                                    <div className="w-full h-full flex justify-center items-center p-5">
+                                                        <p className="flex justify-center items-center text-sm text-gray-500">{testimonial.text}</p>
                                                     </div>
                                                 </div>
-                                                <div className="w-full h-full flex justify-center items-center p-5">
-                                                    <p className="flex justify-center items-center text-sm text-gray-500">{testimonial.text}</p>
-                                                </div>
-                                            </div>
 
-                                        </div>
-                                        <div className="absolute top-0 left-0 w-[35%] h-[35%] bg-gray-200 overflow-hidden rounded-br-[50%]">
-                                        <UserRound className="text-gray-600 w-full h-full"/>
-                                        {/* <Image alt="abgg" src={testimonial.image} fill className='w-full h-full object-cover' /> */}
+                                            </div>
+                                            <div className="absolute top-0 left-0 w-[35%] h-[35%] bg-gray-200 overflow-hidden rounded-br-[50%]">
+                                                <UserRound className="text-gray-600 w-full h-full" />
+                                                {/* <Image alt="abgg" src={testimonial.image} fill className='w-full h-full object-cover' /> */}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </SwiperSlide>
-                    ))}
-                </div>
-            </Swiper>
+                            </SwiperSlide>
+                        ))}
+                    </div>
+                </Swiper>
 
-            <div className="hidden lg:flex top-0 bottom-0 justify-between gap-5 w-full">
-                <div className="absolute flex justify-center items-center -translate-x-5 z-40 left-0 top-0 bottom-0 my-auto">
-                    <button
-                        className={`swiper-prev p-2 rounded-full bg-gray-300 text-gray-500 ${isBeginning ? "opacity-50" : ""}`}
-                        disabled={isBeginning}
-                    >
-                        <ChevronLeft className="w-6 h-6" />
-                    </button>
-                </div>
-                <div className="absolute flex justify-center items-center translate-x-5 z-40 right-0 top-0 bottom-0 my-auto">
-                    <button
-                        className={`swiper-next p-2 rounded-full bg-gray-300 text-gray-500 ${isEnd ? "opacity-50" : ""}`}
-                        disabled={isEnd}
-                    >
-                        <ChevronRight className="w-6 h-6" />
-                    </button>
+                <div className="hidden lg:flex top-0 bottom-0 justify-between gap-5 w-full">
+                    <div className="absolute flex justify-center items-center -translate-x-5 z-40 left-0 top-0 bottom-0 my-auto">
+                        <button
+                            className={`swiper-prev p-2 rounded-full bg-gray-300 text-gray-500 ${isBeginning ? "opacity-50" : ""}`}
+                            disabled={isBeginning}
+                        >
+                            <ChevronLeft className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="absolute flex justify-center items-center translate-x-5 z-40 right-0 top-0 bottom-0 my-auto">
+                        <button
+                            className={`swiper-next p-2 rounded-full bg-gray-300 text-gray-500 ${isEnd ? "opacity-50" : ""}`}
+                            disabled={isEnd}
+                        >
+                            <ChevronRight className="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

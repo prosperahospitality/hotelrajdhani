@@ -1,7 +1,7 @@
 import React from 'react'
 const AboutUs = () => {
     return (
-      <div className="w-[95%] mx-auto h-full lg:h-52 bg-[#F5F5DC] flex flex-col lg:flex-row ">
+      <div className="w-[95%] mx-auto h-full lg:h-52 bg-[#F5F5DC] flex flex-col lg:flex-row my-16">
         <div className="bg-[#333333] p-5 flex justify-center items-center w-full lg:w-[10%] relative">
           <div
             className={`absolute w-5 h-5 transform rotate-45 bg-[#333333] 

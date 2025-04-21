@@ -169,9 +169,9 @@ const NavBar = () => {
   }
 
   return (
-    <div className="h-auto sticky top-0 bg-white z-50 border-b">
+    <div className="h-auto sticky top-0 bg-white z-50 border-b shadow-md">
       {/* Top Info Bar */}
-      <div className="w-full border-b py-1">
+      <div className="w-full border-b py-1 z-50">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 w-[95%] mx-auto text-sm text-gray-400">
           {/* Welcome Message */}
           <span className="justify-self-center md:justify-self-start">
@@ -346,57 +346,13 @@ const NavBar = () => {
 
 
           {/* Hamburger icon for small devices */}
-          <div className="lg:hidden self-baseline text-end">
+          <div className="lg:hidden self-baseline text-end z-50">
             <button onClick={toggleMenu} className="text-gray-500 text-2xl">
               {isMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
 
-          {/* Links for large devices */}
-          <div className="hidden lg:flex space-x-6">
-            {links.map((link, index) => (
-              <div
-                key={index}
-                className="relative"
-                onMouseEnter={() => handleMouseEnter(index)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <div
-                  onClick={() => (window.location.href = link.url || "#")}
-                  className={`p-2 ${isLinkActive(link)
-                    ? "text-black font-bold"
-                    : "text-gray-500 hover:text-black cursor-pointer"
-                    }`}
-                >
-                  {link.name}
-                </div>
 
-                {link.sublinks && activeDropdown === index && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="absolute w-[270px] left-0 bg-white shadow-md px-3 rounded-md"
-                  >
-                    {isLoading ? (
-                      <div className="flex justify-center items-center h-32">
-                        <Spinner size="lg" color="danger" />
-                      </div>
-                    ) : (
-                      link.sublinks.map((sublink, subIndex) => (
-                        <div
-                          key={subIndex}
-                          onClick={() => (window.location.href = sublink.url)}
-                          className="block p-2 text-gray-500 hover:text-black cursor-pointer"
-                        >
-                          {sublink.name}
-                        </div>
-                      ))
-                    )}
-                  </motion.div>
-                )}
-              </div>
-            ))}
-          </div>
 
 
 
@@ -416,18 +372,28 @@ const NavBar = () => {
       </div>
 
 
+
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden flex flex-col bg-slate-200 w-[100%] h-[36rem] space-y-4 absolute z-50 top-[8rem] left-0 p-6 rounded-xl overflow-y-auto">
-          {links.map((link, index) => {
-            if (link.name === "Companies Corporate Stays") {
+        <div className="lg:hidden fixed top-0 left-0 w-full h-[100vh] bg-slate-200 z-40 flex flex-col p-6 overflow-y-auto gap-10">
+
+          <img
+            src={IMAGES.logowithoutbg}
+            alt="hotelrajdhanilogo"
+            className="w-56 lg:w-60 h-auto object-contain"
+          />
+
+          {/* Navigation Links */}
+          <div className="h-[100vh] w-full flex flex-col justify-start items-start uppercase">
+            {links.map((link, index) => {
+              if (link.name === "Companies Corporate Stays") return null;
 
               return (
-                <div key={index} className="relative">
+                <div key={index} className="relative w-full">
                   {link.sublinks ? (
                     <button
                       onClick={() => toggleMobileDropdown(index)}
-                      className="flex justify-between w-full p-2 text-gray-500 hover:text-black"
+                      className="flex justify-between w-full p-2 text-gray-500 hover:text-black uppercase"
                     >
                       {link.name}
                       {activeMobileDropdown === index ? <ChevronUp /> : <ChevronDown />}
@@ -437,150 +403,115 @@ const NavBar = () => {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
+                        window.location.href = link.url;
                       }}
-                      className="block p-2 text-gray-500 hover:text-black"
+                      className="block px-2 py-3 text-gray-500 hover:text-black w-full"
                     >
                       {link.name}
                     </a>
                   )}
-                  {link.sublinks && activeMobileDropdown === index && (
-                    <div className="flex flex-col h-[217px] mt-2 bg-gray-100 rounded-xl py-2 overflow-y-auto">
-                      {link.sublinks.map((sublink, subIndex) => (
-                        <a
-                          key={subIndex}
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleLinkClick();
-                            handlePartnersClick();
-                          }}
-                          className="flex items-center p-3 rounded-lg hover:bg-gray-100 transition gap-3"
-                        >
-                          <img
-                            src={sublink.logo}
-                            alt={sublink.name}
-                            className="w-12 h-12 rounded-full object-fill border border-gray-300"
-                          />
-                          <p className="text-gray-600 hover:text-black font-medium">{sublink.name}</p>
-                        </a>
 
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )
-
-            } else {
-              return (
-                <div key={index} className="relative">
-                  {link.sublinks ? (
-                    <button
-                      onClick={() => toggleMobileDropdown(index)}
-                      className="flex justify-between w-full p-2 text-gray-500 hover:text-black"
-                    >
-                      {link.name}
-                      {activeMobileDropdown === index ? <ChevronUp /> : <ChevronDown />}
-                    </button>
-                  ) : (
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault(); // Prevent default anchor behavior
-                        window.location.href = link.url; // Navigate to the desired URL
-                      }}
-                      className="block p-2 text-gray-500 hover:text-black"
-                    >
-                      {link.name}
-                    </a>
-                  )}
+                  {/* Dropdown Sublinks */}
                   {link.sublinks && activeMobileDropdown === index && (
-                    <div className="flex flex-col h-[217px] mt-2 bg-gray-100 rounded-xl py-2 overflow-y-auto">
+                    <div className="flex flex-col max-h-[217px] mt-2 bg-gray-100 rounded-xl py-2 overflow-y-auto">
                       {isLoading ? (
                         <div className="flex justify-center items-center h-32">
                           <Spinner size="lg" color="danger" />
                         </div>
-                      ) : (link.sublinks.map((sublink, subIndex) => (
-                        <a
-                          key={subIndex}
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            window.location.href = sublink.url;
-                          }}
-                          className="block p-2 pl-4 text-gray-500 hover:text-black"
-                        >
-                          {sublink.name}
-                        </a>
-                      ))
+                      ) : (
+                        link.sublinks.map((sublink, subIndex) => (
+                          <a
+                            key={subIndex}
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              window.location.href = sublink.url;
+                            }}
+                            className="block p-2 pl-4 text-gray-500 hover:text-black"
+                          >
+                            {sublink.name}
+                          </a>
+                        ))
                       )}
                     </div>
                   )}
                 </div>
-              )
-            }
+              );
+            })}
 
-          })}
 
-          <div>
-            <div className="inline-flex gap-4">
-              <Link
-                href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
-                className="flex mt-4 pb-4"
-              >
-                <Button
-                  radius="full"
-                  className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
+            <div>
+              <div className="inline-flex gap-4">
+                <Link
+                  href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
+                  className="flex mt-4 pb-4"
                 >
-                  Book Now
-                </Button>
-              </Link>
+                  <Button
+                    radius="full"
+                    className="bg-[#F5F5DC] text-[#333333] font-semibold px-4"
+                  >
+                    Book Now
+                  </Button>
+                </Link>
+                {
+                  lastPart === undefined
+                    ? <>
+                      <Button
+                        radius="full"
+                        className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
+                        onClick={(e) => {
+                          handleLinkClick();
+                          handleLocateus();
+                        }}
+                      >
+                        Locate Us
+                      </Button>
+                      <Button
+                        radius="full"
+                        className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
+                        onClick={(e) => {
+                          handleLinkClick();
+                          handleTouristSpot();
+                        }}
+                      >
+                        Tourist spots
+                      </Button>
+                    </>
+                    : ""
+                }
+              </div>
               {
                 lastPart === undefined
                   ? <>
-                    <Button
-                      radius="full"
-                      className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
-                      onClick={(e) => {
-                        handleLinkClick();
-                        handleLocateus();
-                      }}
-                    >
-                      Locate Us
-                    </Button>
-                    <Button
-                      radius="full"
-                      className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-4"
-                      onClick={(e) => {
-                        handleLinkClick();
-                        handleTouristSpot();
-                      }}
-                    >
-                      Tourist spots
-                    </Button>
+                    <div className="flex justify-center items-center w-full">
+                      <Button
+                        radius="full"
+                        className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-28"
+                        onClick={(e) => {
+                          handleLinkClick();
+                          handleRajdhaniRestaurant();
+                        }}
+                      >
+                        Rajdhani Restaurant
+                      </Button>
+                    </div>
                   </>
                   : ""
               }
             </div>
-            {
-              lastPart === undefined
-                ? <>
-                  <div className="flex justify-center items-center w-full">
-                    <Button
-                      radius="full"
-                      className="bg-[#F5F5DC] text-[#333333] font-semibold flex mt-4 px-32"
-                      onClick={(e) => {
-                        handleLinkClick();
-                        handleRajdhaniRestaurant();
-                      }}
-                    >
-                      Rajdhani Restaurant
-                    </Button>
-                  </div>
-                </>
-                : ""
-            }
           </div>
 
+
+
+          {/* Social Icons */}
+          {/* <div className="flex space-x-4 w-full justify-center items-center">
+                <a href="https://www.facebook.com/Sanikabaugfarmhouse/" className="hover:text-[#c47a5a]">
+                  <Facebook />
+                </a>
+                <a href="https://www.instagram.com/sanika_baug/" className="hover:text-[#c47a5a]">
+                  <Instagram />
+                </a>
+              </div> */}
         </div>
       )}
     </div>

@@ -8,15 +8,25 @@ import Image from 'next/image';
 
 const Landing = (props) => {
   return (
-    <div className="relative w-full h-[38rem] md:h-[38rem] lg:h-[40rem]">
+    <div className="relative w-full h-[75vh] md:h-[85vh] lg:h-[90vh]">
 
       {/* Title and Subtitle Section */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 drop-shadow-2xl z-20 font-serif px-4 text-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 drop-shadow-2xl z-20 font-serif px-4 text-center lg:hidden">
         <span className="text-2xl md:text-4xl lg:text-5xl bg-black text-gray-100 p-2 rounded-lg px-4 bg-opacity-30">
           About Us
         </span>
         <span className="text-sm md:text-lg lg:text-2xl bg-black text-gray-100 mt-4 p-2 rounded-lg px-4 bg-opacity-30">
           Discover the story of Hotel Rajdhani and experience the perfect blend of tradition, luxury, and exceptional hospitality.
+        </span>
+      </div>
+
+      {/* Desktop Central Text Section */}
+      <div className="absolute inset-0 lg:flex flex-col items-center justify-center text-center text-gray-600 drop-shadow-2xl z-20 px-4 hidden">
+        <span className="text-lg md:text-5xl p-2 px-4 text-white font-serif drop-shadow-2xl">
+        About Us
+        </span>
+        <span className="text-sm md:text-xl text-white p-2 px-4 drop-shadow-2xl italic">
+        Discover the story of Hotel Rajdhani and experience the perfect blend of tradition, luxury, and exceptional hospitality.
         </span>
       </div>
 
@@ -68,8 +78,11 @@ const Landing = (props) => {
           </div>
         </div>
 
-        {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 h-8 md:h-10 w-full z-10 bg-gradient-to-t from-white via-white to-transparent"></div>
+        {/* Background Overlay for Desktop */}
+        <div className="absolute inset-0 bg-black bg-opacity-20 z-10 lg:block hidden" />
+
+        {/* Bottom Gradient for Mobile */}
+        <div className="absolute bottom-0 left-0 h-8 md:h-10 w-full z-10 bg-gradient-to-t from-white via-white to-transparent lg:hidden"></div>
       </div>
     </div>
   );
