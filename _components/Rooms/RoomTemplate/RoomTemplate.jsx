@@ -1624,8 +1624,11 @@ const RoomsTemplate = (props) => {
                             thumbs={{ swiper: thumbsSwiper }}
                             modules={[FreeMode, Navigation, Thumbs]}
                             className="mySwiper2"
+                            
                         >
+                            {console.log("Images:::::::>", roomDetails)}
                             {roomDetails?.images?.filter(Boolean).map((item, index) => (
+                                
                                 <SwiperSlide key={`main-${index}`}>
                                     <Image
                                         src={item}
