@@ -50,7 +50,7 @@ const Introduction = () => {
             fontWeight: "bold",
         }}
           >
-            Hotel Rajdhani And Guest House Gujarat, The Best Family Hotel In Pavaghad And Halol
+            Hotel Rajdhani And Guest House Gujarat, The Best Family Hotel In Pavagadh And Halol
           </p>
           <div className="flex justify-start w-full ">
             <h1 className="text-2xl lg:text-4xl font-semibold text-gray-600">Where Luxury Meets Comfort</h1>
@@ -58,7 +58,7 @@ const Introduction = () => {
           <div className="flex flex-col gap-8">
 
             <p className="mt-6 text-justify text-gray-800 leading-relaxed">
-              Welcome to Our Hotel in Halol, best family hotel in pavaghad, best family hotel in halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
+              Welcome to Our Hotel in Halol, best family hotel in pavagadh, best family hotel in halol, your perfect escape in the heart of the town. Located just 300 meters from the bus stand, our family-friendly hotel offers a blend of comfort and convenience. Whether you’re here for relaxation or adventure, enjoy cozy rooms, delicious meals, and secure parking, all while being close to local attractions like the Pavagadh Mahakali Temple.
             </p>
             <Link
               href={`/filterpage?checkindate=${checkindate}&checkoutdate=${checkoutdate}&adultsSelect=1&childSelect=0`}
