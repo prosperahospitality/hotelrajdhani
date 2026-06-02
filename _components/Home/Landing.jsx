@@ -92,6 +92,9 @@ const Landing = (props) => {
                     className="mySwiper w-full h-full"
                 >
                     <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing13} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
                         <Image src={IMAGES.landing3} alt="landing-bg" fill className="object-cover" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
@@ -105,6 +108,21 @@ const Landing = (props) => {
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
                         <Image src={IMAGES.landing7} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing8} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing9} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing10} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing11} alt="landing-bg" fill className="object-cover" />
+                    </SwiperSlide>
+                    <SwiperSlide className="relative w-full h-full">
+                        <Image src={IMAGES.landing12} alt="landing-bg" fill className="object-cover" />
                     </SwiperSlide>
                 </Swiper>
 
