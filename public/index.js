@@ -34,7 +34,13 @@ const IMAGES = {
     Adminloginbg:'/img/Adminloginbg.jpg',
     logowithoutbg: '/img/logowithoutbg.png',
     parking1: '/img/parking1.jpg',
-    parking2: '/img/parking2.jpg'
+    parking2: '/img/parking2.jpg',
+    landing8: '/img/IMG_2400.png',
+    landing9: '/img/IMG_2407.png',
+    landing10: '/img/IMG_2409.png',
+    landing11: '/img/IMG_2410.png',
+    landing12: '/img/IMG_2412.png',
+    landing13: '/img/IMG_2413.png',
 }
 
 export default IMAGES;
