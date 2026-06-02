@@ -11,13 +11,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify(function (error, success) {
-  if (error) {
-    console.error("SMTP connection error:", error);
-  } else {
-    console.log("SMTP connection successful");
-  }
-});
+// transporter.verify(function (error, success) {
+//   if (error) {
+//     console.error("SMTP connection error:", error);
+//   } else {
+//     console.log("SMTP connection successful");
+//   }
+// });
+
+console.log("EMAIL_USER:", process.env.EMAIL_USER);
+console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
 
 export async function POST(request) {
   const payload = await request.json();
