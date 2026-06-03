@@ -92,7 +92,7 @@ const Landing = (props) => {
                     className="mySwiper w-full h-full"
                 >
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing13} alt="landing-bg" fill className="object-cover" />
+                        <Image src={IMAGES.landing11} alt="landing-bg" fill className="object-cover" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
                         <Image src={IMAGES.landing3} alt="landing-bg" fill className="object-cover" />
@@ -119,7 +119,7 @@ const Landing = (props) => {
                         <Image src={IMAGES.landing10} alt="landing-bg" fill className="object-cover" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
-                        <Image src={IMAGES.landing11} alt="landing-bg" fill className="object-cover" />
+                        <Image src={IMAGES.landing13} alt="landing-bg" fill className="object-cover" />
                     </SwiperSlide>
                     <SwiperSlide className="relative w-full h-full">
                         <Image src={IMAGES.landing12} alt="landing-bg" fill className="object-cover" />
