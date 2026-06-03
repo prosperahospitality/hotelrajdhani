@@ -134,7 +134,7 @@ const Introduction = () => {
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
               <img
-                src={IMAGES.room2}
+                src={IMAGES.room5}
                 alt="sdf"
                 className="w-full h-full object-contain shadow-xl"
               />
@@ -148,7 +148,7 @@ const Introduction = () => {
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
               <img
-                src={IMAGES.room1}
+                src={IMAGES.room6}
                 alt="werwe"
                 className="w-full h-full object-contain shadow-xl"
               />
