@@ -40,7 +40,13 @@ const IMAGES = {
     landing10: '/img/IMG_2409.PNG',
     landing11: '/img/IMG_2410.PNG',
     landing12: '/img/IMG_2412.PNG',
-    landing13: '/img/IMG_2413.PNG'
+    landing13: '/img/IMG_2413.PNG',
+    room3: '/img/IMG_2393.PNG',
+    room4: '/img/IMG_2394.PNG',
+    room5: '/img/IMG_2396.PNG',
+    room6: '/img/IMG_2399.PNG',
+    room7: '/img/IMG_2415.PNG',
+    room8: '/img/IMG_2416.PNG'
 }
 
 export default IMAGES;
